@@ -1,0 +1,52 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getPublishedCases, getServices } from '../../lib/content';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const cases = await getPublishedCases();
+  return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const c = entry.data;
+const { Content } = await render(entry);
+const services = await getServices();
+const related = services.filter((s) => c.services.includes(s.id as (typeof c.services)[number]));
+---
+<Base title={c.seo?.title ?? c.title} description={c.seo?.description ?? c.excerpt} noindex={c.placeholder}>
+  <article class="section wrap">
+    <p class="eyebrow">{c.sector} · {c.year}</p>
+    <h1>{c.title}</h1>
+    <p>{c.promise}</p>
+    {c.placeholder && <p><span class="placeholder-flag">Placeholder, niet publiceren</span></p>}
+    <div class="media" role="img" aria-label={c.heroAlt || undefined}>{c.heroImage ? '' : 'Hero-beeld volgt'}</div>
+
+    <dl class="facts">
+      <div><dt>Klant</dt><dd>{c.client}</dd></div>
+      <div><dt>Jaar</dt><dd>{c.year}</dd></div>
+      <div><dt>Sector</dt><dd>{c.sector}</dd></div>
+      <div><dt>Scope</dt><dd>{c.scope.join(', ')}</dd></div>
+      {c.technology && <div><dt>Techniek</dt><dd>{c.technology.join(', ')}</dd></div>}
+    </dl>
+
+    <h2>Vraagstuk</h2><p>{c.challenge}</p>
+    <h2>Aanpak en keuzes</h2><p>{c.approach}</p>
+    <h2>Uitvoering</h2><Content />
+    <h2>Resultaat</h2><p>{c.result}</p>
+    {c.metrics && (<ul>{c.metrics.map((m) => <li><strong>{m.value}</strong> {m.label}</li>)}</ul>)}
+    {c.quote && (<blockquote><p>{c.quote.text}</p><footer>{c.quote.author}, {c.quote.role}</footer></blockquote>)}
+
+    {related.length > 0 && (
+      <aside>
+        <h2>Gerelateerde diensten</h2>
+        <ul>{related.map((s) => <li><a href={`/wat-we-doen/${s.id}`}>{s.data.title}</a></li>)}</ul>
+      </aside>
+    )}
+    <p><a class="btn" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
+  </article>
+</Base>
+<style>
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: var(--space-3); margin-block: var(--space-5); border-block: 1px solid var(--color-line); padding-block: var(--space-3); }
+  dt { font-size: 0.85rem; color: var(--color-muted); } dd { margin: 0; font-weight: 600; }
+</style>

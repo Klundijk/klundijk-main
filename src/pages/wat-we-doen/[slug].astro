@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getServices, getPublishedCases } from '../../lib/content';
+import { site } from '../../data/site';
+import CaseCard from '../../components/CaseCard.astro';
+
+export async function getStaticPaths() {
+  const services = await getServices();
+  return services.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const s = entry.data;
+const cases = (await getPublishedCases()).filter((c) => c.data.services.includes(entry.id as never));
+---
+<Base title={s.seo?.title ?? s.title} description={s.seo?.description ?? s.shortIntro}>
+  <section class="section wrap">
+    <p class="eyebrow"><a href="/wat-we-doen">Wat we doen</a></p>
+    <h1>{s.title}</h1>
+    <p>{s.heroStatement}</p>
+
+    <h2>Wanneer dit relevant is</h2>
+    <ul>{s.situations.map((x) => <li>{x}</li>)}</ul>
+    <h2>Wat het oplevert</h2>
+    <ul>{s.outcomes.map((x) => <li>{x}</li>)}</ul>
+    <h2>Wat we kunnen leveren</h2>
+    <ul>{s.deliverables.map((x) => <li>{x}</li>)}</ul>
+    <h2>Hoe we bepalen wat nodig is</h2>
+    <ol>{s.approach.map((x) => <li>{x}</li>)}</ol>
+
+    {cases.length > 0 && (<><h2>Gerelateerd werk</h2><div class="grid grid--2">{cases.map((c) => <CaseCard entry={c} />)}</div></>)}
+    <p><a class="btn" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
+  </section>
+</Base>

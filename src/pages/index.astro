@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import CaseCard from '../components/CaseCard.astro';
+import { site } from '../data/site';
+import { getPublishedCases, getServices } from '../lib/content';
+
+const cases = await getPublishedCases();
+const featured = cases.filter((c) => c.data.featured).slice(0, 4);
+const services = await getServices();
+const situations = [
+  'Je merk past niet meer bij het bedrijf dat je bent geworden.',
+  'Je website ziet er redelijk uit, maar helpt commercieel te weinig.',
+  'Je webshop of digitale omgeving is ingewikkelder geworden dan nodig.',
+  'Je weet dat processen slimmer kunnen, maar nog niet welke techniek daarbij past.',
+];
+const steps = [
+  ['Begrijpen', 'Eerst het vraagstuk, dan de oplossing.'],
+  ['Kiezen', 'De aanpak en techniek die passen, niet meer dan nodig.'],
+  ['Maken', 'Ontwerpen en bouwen met heldere scope.'],
+  ['Verbeteren', 'Na oplevering blijven meten en bijsturen.'],
+];
+---
+<Base>
+  <!-- Volgorde volgt de acceptatiecriteria uit het ontwikkelplan (9 blokken). Copy is concept. -->
+  <section class="section wrap" aria-labelledby="hero">
+    <p class="eyebrow">{site.name}</p>
+    <h1 id="hero">{site.tagline}</h1>
+    <p>{site.description}</p>
+    <div class="actions">
+      <a class="btn" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+      <a class="btn btn--ghost" href={site.secondaryCta.href}>{site.secondaryCta.label}</a>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="work">
+    <h2 id="work">Geselecteerd werk</h2>
+    {featured.length ? (
+      <div class="grid grid--2">{featured.map((c) => <CaseCard entry={c} />)}</div>
+    ) : (
+      <p class="muted">Cases volgen zodra ze toonbaar zijn.</p>
+    )}
+  </section>
+
+  <section class="section wrap" aria-labelledby="situations">
+    <h2 id="situations">Waar je ons voor inschakelt</h2>
+    <ul>{situations.map((s) => <li>{s}</li>)}</ul>
+  </section>
+
+  <section class="section wrap" aria-labelledby="what">
+    <h2 id="what">Wat we doen</h2>
+    <div class="grid grid--4">
+      {services.map((s) => (
+        <a class="card" href={`/wat-we-doen/${s.id}`}>
+          <h3>{s.data.title}</h3>
+          <p>{s.data.shortIntro}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="section wrap" aria-labelledby="feature">
+    <h2 id="feature">Uitgelicht: probleem, keuze, resultaat</h2>
+    <p class="muted">Uitgebreide case volgt zodra de launch-cases zijn vastgesteld.</p>
+  </section>
+
+  <section class="section wrap" aria-labelledby="how">
+    <h2 id="how">Zo werken we</h2>
+    <ol class="grid grid--4" style="list-style:none;padding:0">
+      {steps.map(([t, d], i) => (<li><p class="eyebrow">{i + 1}</p><h3>{t}</h3><p>{d}</p></li>))}
+    </ol>
+  </section>
+
+  <section class="section wrap" aria-labelledby="studio">
+    <h2 id="studio">Kleine studio, direct contact</h2>
+    <p>Klundijk is bewust compact. Je werkt rechtstreeks met degene die meedenkt over strategie, ontwerp en bouw. Waar specialistische expertise nodig is, voegen we die passend toe.</p>
+    <p class="muted">Conceptcopy. Zichtbaarheid van Levi (foto) hangt af van een open besluit.</p>
+  </section>
+
+  <section class="section wrap" aria-labelledby="proof">
+    <h2 id="proof">Bewijs</h2>
+    <p class="muted">Alleen echte testimonials, klantlogo's met toestemming en aantoonbare resultaten. Volgt met de cases.</p>
+  </section>
+
+  <section class="section wrap" aria-labelledby="contact">
+    <h2 id="contact">Heb je iets dat digitaal beter kan?</h2>
+    <a class="btn" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+  </section>
+</Base>

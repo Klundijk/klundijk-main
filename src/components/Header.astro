@@ -1,0 +1,27 @@
+---
+import { site } from '../data/site';
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label={`${site.name}, naar de homepage`}>{site.name}</a>
+    <nav aria-label="Hoofdnavigatie">
+      <ul>
+        {site.nav.map((item) => (
+          <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <a class="btn cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+  </div>
+</header>
+<style>
+  .site-header { border-bottom: 1px solid var(--color-line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding-block: var(--space-3); flex-wrap: wrap; }
+  .brand { font-weight: 800; font-size: var(--step-1); text-decoration: none; letter-spacing: -0.03em; }
+  ul { display: flex; gap: var(--space-4); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+  nav a { text-decoration: none; padding-block: var(--space-2); display: inline-block; }
+  nav a[aria-current='page'] { text-decoration: underline; text-underline-offset: 0.3em; }
+  .cta { padding: 0.6em 1.1em; }
+</style>

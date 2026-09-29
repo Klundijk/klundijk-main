@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getServices } from '../../lib/content';
+const services = await getServices();
+---
+<Base title="Wat we doen" description="Merk, websites, webshops en slimme digitale processen: waarvoor je Klundijk inschakelt.">
+  <section class="section wrap">
+    <h1>Wat we doen</h1>
+    <p>Technologie volgt het vraagstuk, niet andersom. Vier gebieden waarin we je helpen.</p>
+    <div class="grid grid--2">
+      {services.map((s) => (
+        <a class="card" href={`/wat-we-doen/${s.id}`}>
+          <h2>{s.data.title}</h2>
+          <p>{s.data.shortIntro}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>

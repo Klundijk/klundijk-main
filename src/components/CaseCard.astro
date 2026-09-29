@@ -1,0 +1,13 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { entry: CollectionEntry<'cases'>; }
+const { entry } = Astro.props;
+const c = entry.data;
+---
+<a class="card" href={`/werk/${entry.id}`}>
+  <div class="media" role="img" aria-label={c.heroAlt || undefined}>{c.heroImage ? '' : 'Beeld volgt'}</div>
+  <p class="eyebrow">{c.sector} · {c.year}</p>
+  <h3>{c.title}</h3>
+  <p>{c.promise}</p>
+  {c.placeholder && <span class="placeholder-flag">Placeholder, niet publiceren</span>}
+</a>
