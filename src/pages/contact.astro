@@ -14,7 +14,7 @@ import { site } from '../data/site';
       <label>E-mail <input type="email" name="email" autocomplete="email" required /></label>
       <label>Waar wil je iets aan verbeteren? <textarea name="vraagstuk" required></textarea></label>
       <button class="btn" type="submit" disabled>Versturen</button>
-      <p id="form-note" class="muted">Formulier nog niet gekoppeld. Mail voorlopig naar {site.contact.email}.</p>
+      <p id="form-note" class="muted">Formulier nog niet gekoppeld. {site.contact.email ? <>Mail voorlopig naar {site.contact.email}.</> : <>E-mailadres volgt.</>}</p>
     </form>
   </section>
 </Base>

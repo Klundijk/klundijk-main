@@ -1,0 +1,26 @@
+---
+import { showPlaceholders } from '../../data/site';
+const cols = [
+  ['Vraagstuk', 'Een nieuwe naam en nieuwe locatie vroegen om een online uitstraling die weer klopt.'],
+  ['Belangrijkste keuze', null],
+  ['Uitvoering', 'Merk, website en content opnieuw op één lijn gebracht.'],
+  ['Resultaat', null],
+] as const;
+---
+<section class="case" aria-labelledby="case-h">
+  <p class="mono">Uitgelichte case</p>
+  <h2 id="case-h" class="h2">Niet alleen wat we maakten, maar waarom.</h2>
+  <div class="cols">
+    {cols.map(([k, v]) => (v || showPlaceholders) && (
+      <div><h3 class="mono">{k}</h3><p>{v ?? '[Nog aan te leveren door Levi en SEO & content.]'}</p></div>
+    ))}
+  </div>
+</section>
+<style>
+  .case { background: var(--k-ink); color: var(--k-paper); padding: var(--pad-y) var(--pad-x); }
+  .h2 { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: .5rem 0 2rem; max-width: 18ch; }
+  .cols { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .cols { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1100px) { .cols { grid-template-columns: repeat(4, 1fr); } }
+  .cols h3 { text-transform: uppercase; font-size: .8rem; margin: 0 0 .5rem; color: var(--k-muted-dark); }
+</style>

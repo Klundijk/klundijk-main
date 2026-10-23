@@ -1,32 +1,36 @@
-/* Designtokens. Voorlopig neutraal en bewust niet definitief: kleuren, typografie en grid
-   worden vastgesteld in de art-direction-fase. Alles verwijst naar deze variabelen. */
+/* Designtokens versie X v5.1. De wisselbare kleuren (--k-field, --k-accent, --k-on-field,
+   --k-accent-text) worden op build-tijd uit src/data/theme.ts in <head> gezet.
+   Hier staan de vaste waarden en veilige standaardwaarden. */
 :root {
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: var(--font-sans);
+  --k-field: #1f3bff;
+  --k-accent: #ff6a3d;
+  --k-accent-text: #ffd400;
+  --k-on-field: #ffffff;
+  --k-ink: #0e0e12;
+  --k-paper: #f3f1ea;
+  --k-white: #ffffff;
+  --k-line: #d9d5ca;
+  --k-muted: #57534b;
+  --k-muted-dark: #b9b5aa;
 
-  --color-bg: #ffffff;
-  --color-surface: #f4f4f2;
-  --color-text: #111111;
-  --color-muted: #55554f;
-  --color-line: #d9d9d4;
-  --color-accent: #111111;
-  --color-accent-contrast: #ffffff;
-  --color-focus: #1a5fff;
+  --f-sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-serif: 'Instrument Serif', Georgia, serif;
+  --f-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 1rem; --space-4: 1.5rem;
-  --space-5: 2.5rem; --space-6: 4rem; --space-7: 7rem;
+  /* Fluïde typografie: desktopontwerp 1440 px, mobiel 390 px. */
+  --t-hero: clamp(3.25rem, 10.28vw, 9.25rem);     /* 52 -> 148 px */
+  --t-hero-serif: 1.12em;
+  --t-display: clamp(2.25rem, 5vw, 4.5rem);        /* 36 -> 72 px */
+  --t-hub: clamp(2.75rem, 6.67vw, 6rem);           /* 44 -> 96 px */
+  --t-row: clamp(1.75rem, 3.34vw, 3rem);           /* 28 -> 48 px */
+  --t-lead: clamp(1.5rem, 3.06vw, 2.75rem);        /* 24 -> 44 px */
+  --t-card: clamp(1.375rem, 1.74vw, 1.5625rem);
+  --t-body: clamp(1.0625rem, 1.4vw, 1.25rem);      /* 17 -> 20 px */
+  --t-mono: 0.8125rem;
 
-  --step-0: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-  --step-1: clamp(1.25rem, 1.1rem + 0.7vw, 1.6rem);
-  --step-2: clamp(1.75rem, 1.3rem + 2vw, 2.75rem);
-  --step-3: clamp(2.5rem, 1.6rem + 4.5vw, 5.5rem);
-
-  --measure: 62ch;
-  --page-max: 78rem;
-  --gutter: clamp(1rem, 4vw, 3rem);
-  --radius: 0.25rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  /* Donker thema is nog geen besluit; token-plek voorbereid. */
+  --pad-x: clamp(1.25rem, 4.45vw, 4rem);           /* 20 -> 64 px */
+  --pad-y: clamp(3.5rem, 6.67vw, 6rem);            /* 56 -> 96 px */
+  --gap: clamp(1rem, 1.67vw, 1.5rem);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --page-max: 100rem;
 }

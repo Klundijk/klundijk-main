@@ -1,0 +1,35 @@
+---
+import { SERVICES as S } from '../../data/home';
+---
+<section class="wwd" aria-labelledby="wwd-h">
+  <div class="wwd__in">
+    <h2 id="wwd-h" class="h2">Wat we doen</h2>
+    <div class="hub">
+      <div>
+        <p class="mono">{S.hub.num}</p>
+        <h3 class="hub__t">{S.hub.title}</h3>
+        <ul class="hub__tags">{S.hub.tags.map((t) => <li class="tag">{t}</li>)}</ul>
+        <p class="acts"><a class="pill pill--accent pill--lg" href={S.hub.cta.href}>{S.hub.cta.label}</a> <a class="link-strong" href={S.hub.more.href}>{S.hub.more.label}</a></p>
+      </div>
+      <figure class="hub__img" role="img" aria-label={S.hub.image}><figcaption class="mono">{S.hub.image}</figcaption></figure>
+    </div>
+    <ul class="srows">
+      {S.rows.map((r) => <li><span class="mono">{r.num}</span> <span class="srows__t">{r.title}</span></li>)}
+    </ul>
+  </div>
+</section>
+<style>
+  .wwd { background: var(--k-field); color: var(--k-on-field); padding: var(--pad-y) var(--pad-x); }
+  .wwd__in { max-width: var(--page-max); margin: 0 auto; }
+  .h2 { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: 0 0 2rem; }
+  .hub { display: grid; gap: 2rem; }
+  @media (min-width: 1100px) { .hub { grid-template-columns: 1.3fr 1fr; align-items: center; } }
+  .hub__t { font-size: var(--t-hub); font-weight: 800; font-stretch: 120%; line-height: .95; letter-spacing: -.04em; margin: .5rem 0 1rem; }
+  .hub__tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.5rem; }
+  .acts { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; }
+  .hub__img { margin: 0; min-height: 18rem; border-radius: 24px; background: repeating-linear-gradient(135deg, #ffffff22 0 12px, #ffffff0a 12px 24px); position: relative; }
+  .hub__img figcaption { position: absolute; left: 1rem; bottom: 1rem; font-size: .75rem; }
+  .srows { list-style: none; padding: 0; margin: 3rem 0 0; border-top: 1px solid currentColor; }
+  .srows li { padding: 1.25rem 0; border-bottom: 1px solid currentColor; display: flex; gap: 1.5rem; align-items: baseline; }
+  .srows__t { font-size: var(--t-row); font-weight: 800; font-stretch: 115%; }
+</style>

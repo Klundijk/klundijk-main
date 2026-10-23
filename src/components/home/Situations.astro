@@ -1,0 +1,59 @@
+---
+import { TILES } from '../../data/home';
+const order = [TILES[0], TILES[1], TILES[2], TILES[3]];
+const col = (c: string) => ({ FIELD: 'var(--k-field)', ACCENT: 'var(--k-accent)', INK: 'var(--k-ink)', PAPER: 'var(--k-paper)' } as Record<string,string>)[c];
+const style = (blk: any[]) => blk.map((b, i) => `--x${i}:${b[0]}%;--y${i}:${b[1]}%;--w${i}:${b[2]}%;--h${i}:${b[3]}%;--r${i}:${b[4]}deg;--c${i}:${col(b[5])};--b${i}:${b[6]}px`).join(';');
+---
+<section class="section sit" aria-labelledby="sit-h">
+  <div class="sit__head">
+    <h2 id="sit-h" class="sit__h">Waar kunnen we iets beter maken?</h2>
+    <p class="muted">Kies een situatie en zie wat ‘beter’ betekent.</p>
+    <button type="button" class="pill" id="sit-all" aria-pressed="false">Maak alles beter</button>
+  </div>
+  <div class="sit__grid">
+    {order.map((t) => (
+      <article class:list={['tile', { 'tile--lg': t.large }]} data-tile data-better="false">
+        <div class="tile__art" aria-hidden="true">
+          {t.b.map((_, i) => <i class="blk" style={`${style(t.b)}`} data-i={i} data-before={style(t.b)} data-after={style(t.a)}></i>)}
+        </div>
+        <p class="mono">{t.num} · {t.label}</p>
+        <h3>{t.heading}</h3>
+        <p class="tile__copy">{t.copy}</p>
+        <button type="button" class="pill" data-toggle aria-pressed="false">Maak het beter</button>
+      </article>
+    ))}
+  </div>
+</section>
+<script>
+  const tiles = [...document.querySelectorAll<HTMLElement>('[data-tile]')];
+  const all = document.getElementById('sit-all');
+  const apply = (t: HTMLElement, better: boolean) => {
+    t.dataset.better = String(better);
+    t.querySelectorAll<HTMLElement>('.blk').forEach((b) => b.setAttribute('style', (better ? b.dataset.after : b.dataset.before) || ''));
+    const btn = t.querySelector('[data-toggle]');
+    btn?.setAttribute('aria-pressed', String(better));
+    if (btn) btn.textContent = better ? 'Zie hoe het was' : 'Maak het beter';
+  };
+  tiles.forEach((t) => t.querySelector('[data-toggle]')?.addEventListener('click', () => apply(t, t.dataset.better !== 'true')));
+  all?.addEventListener('click', () => {
+    const go = all.getAttribute('aria-pressed') !== 'true';
+    tiles.forEach((t) => apply(t, go));
+    all.setAttribute('aria-pressed', String(go));
+    all.textContent = go ? 'Alles terug naar hoe het was' : 'Maak alles beter';
+  });
+</script>
+<style>
+  .sit__h { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: 0 0 .5rem; }
+  .sit__head { display: grid; gap: .75rem; justify-items: start; margin-bottom: 2rem; }
+  .sit__grid { display: grid; gap: var(--gap); grid-template-columns: 1fr; }
+  @media (min-width: 768px) { .sit__grid { grid-template-columns: repeat(2, 1fr); } .tile--lg { grid-column: span 2; } }
+  .tile { background: #fff; border-radius: 24px; padding: 1.5rem; display: grid; gap: .75rem; align-content: start; }
+  .tile h3 { font-size: var(--t-card); font-weight: 700; font-stretch: 110%; margin: 0; }
+  .tile__copy { margin: 0; color: var(--k-muted); }
+  .tile__art { position: relative; height: 12rem; background: var(--k-paper); border-radius: 16px; overflow: hidden; }
+  .blk { position: absolute; left: var(--x0); top: var(--y0); width: var(--w0); height: var(--h0); background: var(--c0); border-radius: var(--b0); transform: rotate(var(--r0)); transition: all .8s var(--ease); }
+  .blk[data-i="1"] { left: var(--x1); top: var(--y1); width: var(--w1); height: var(--h1); background: var(--c1); border-radius: var(--b1); transform: rotate(var(--r1)); }
+  .blk[data-i="2"] { left: var(--x2); top: var(--y2); width: var(--w2); height: var(--h2); background: var(--c2); border-radius: var(--b2); transform: rotate(var(--r2)); }
+  .blk[data-i="3"] { left: var(--x3); top: var(--y3); width: var(--w3); height: var(--h3); background: var(--c3); border-radius: var(--b3); transform: rotate(var(--r3)); }
+  @media (prefers-reduced-motion: reduce) { .blk { transition: none; } }
+</style>

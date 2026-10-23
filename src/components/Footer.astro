@@ -2,12 +2,18 @@
 import { site } from '../data/site';
 ---
 <footer class="site-footer">
-  <div class="wrap">
-    <p><strong>{site.name}</strong> · {site.contact.location}</p>
-    <p class="muted">{site.contact.email}</p>
-    <p class="muted">Bedrijfsgegevens (KvK, btw, privacyverklaring) volgen.</p>
-  </div>
+  <p class="brand">{site.name}</p>
+  <nav aria-label="Voettekst">
+    {site.nav.map((i) => <a href={i.href}>{i.label}</a>)}
+  </nav>
+  <p class="mono">
+    {site.contact.location}
+    {site.contact.email && <> · <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></>}
+  </p>
 </footer>
 <style>
-  .site-footer { border-top: 1px solid var(--color-line); padding-block: var(--space-5); margin-top: var(--space-6); }
+  .site-footer { background: var(--k-ink); color: var(--k-paper); padding: 3rem var(--pad-x); display: grid; gap: 1.5rem; }
+  .brand { font-weight: 800; font-stretch: 125%; font-size: 1.625rem; letter-spacing: -0.03em; }
+  nav { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.875rem; }
+  nav a { text-decoration: none; padding: 0.5rem 0; }
 </style>

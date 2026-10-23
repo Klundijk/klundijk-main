@@ -1,27 +1,59 @@
 ---
 import { site } from '../data/site';
-const path = Astro.url.pathname;
+interface Props { onHero?: boolean; }
+const { onHero = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
 ---
-<header class="site-header">
-  <div class="wrap bar">
-    <a class="brand" href="/" aria-label={`${site.name}, naar de homepage`}>{site.name}</a>
-    <nav aria-label="Hoofdnavigatie">
-      <ul>
-        {site.nav.map((item) => (
-          <li><a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a></li>
-        ))}
-      </ul>
+<header class:list={['site-header', { 'on-hero': onHero }]}>
+  <a class="brand" href="/" aria-label={`${site.name}, naar de homepage`}>{site.name}</a>
+
+  <nav class="nav-desktop" aria-label="Hoofdnavigatie">
+    {site.nav.map((i) => <a href={i.href} aria-current={isCurrent(i.href) ? 'page' : undefined}>{i.label}</a>)}
+    <a class="cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+  </nav>
+
+  <details class="nav-mobile" id="mobile-menu">
+    <summary><span class="sr-only">Menu</span><span class="bars" aria-hidden="true"></span></summary>
+    <nav aria-label="Hoofdnavigatie (mobiel)">
+      {site.nav.map((i) => <a href={i.href} aria-current={isCurrent(i.href) ? 'page' : undefined}>{i.label}</a>)}
+      <a class="cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
     </nav>
-    <a class="btn cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
-  </div>
+  </details>
 </header>
+<script is:inline>
+  // Mobiel menu: sluit met Escape en na het kiezen van een link (zonder JS blijft het gewoon een <details>).
+  (function () {
+    var d = document.getElementById('mobile-menu'); if (!d) return;
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && d.open) { d.open = false; d.querySelector('summary').focus(); } });
+    d.addEventListener('click', function (e) { if (e.target.closest('nav a')) d.open = false; });
+  })();
+</script>
 <style>
-  .site-header { border-bottom: 1px solid var(--color-line); }
-  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding-block: var(--space-3); flex-wrap: wrap; }
-  .brand { font-weight: 800; font-size: var(--step-1); text-decoration: none; letter-spacing: -0.03em; }
-  ul { display: flex; gap: var(--space-4); list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
-  nav a { text-decoration: none; padding-block: var(--space-2); display: inline-block; }
-  nav a[aria-current='page'] { text-decoration: underline; text-underline-offset: 0.3em; }
-  .cta { padding: 0.6em 1.1em; }
+  .site-header { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem var(--pad-x); position: relative; z-index: 5;
+    background: var(--k-paper); color: var(--k-ink); }
+  .site-header.on-hero { background: var(--hero-bg, var(--k-field)); color: var(--hero-fg, var(--k-on-field)); transition: background 0.9s ease, color 0.9s ease; }
+  .brand { font-weight: 800; font-stretch: 125%; font-size: 1.625rem; letter-spacing: -0.03em; text-decoration: none; }
+  .nav-desktop { display: flex; align-items: center; gap: 2.25rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .nav-desktop a { text-decoration: none; padding: 0.5rem 0; }
+  .nav-desktop a[aria-current='page'], .nav-mobile a[aria-current='page'] { text-decoration: underline; text-underline-offset: 6px; }
+  .cta { font-weight: 500; background: var(--hero-pill-bg, var(--k-accent)); color: var(--hero-pill-fg, var(--k-ink)); padding: 0.875rem 1.375rem !important; border-radius: var(--hero-radius, 999px);
+    transition: all 0.9s var(--ease); }
+  .nav-mobile { display: none; }
+  @media (max-width: 860px) {
+    .site-header { padding-block: 1.125rem; }
+    .brand { font-size: 1.375rem; }
+    .nav-desktop { display: none; }
+    .nav-mobile { display: block; }
+    .nav-mobile summary { list-style: none; cursor: pointer; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 999px; }
+    .nav-mobile summary::-webkit-details-marker { display: none; }
+    .bars, .bars::before, .bars::after { display: block; width: 24px; height: 2px; background: currentColor; content: ''; position: relative; }
+    .bars::before { position: absolute; top: -7px; } .bars::after { position: absolute; top: 7px; }
+    .nav-mobile[open] .bars { background: transparent; }
+    .nav-mobile[open] .bars::before { top: 0; transform: rotate(45deg); } .nav-mobile[open] .bars::after { top: 0; transform: rotate(-45deg); }
+    .nav-mobile nav { position: absolute; left: 0; right: 0; top: 100%; display: flex; flex-direction: column; gap: 0.25rem; padding: 1rem var(--pad-x) 1.75rem;
+      background: var(--k-ink); color: var(--k-paper); font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.04em; font-size: 1rem; }
+    .nav-mobile nav a { text-decoration: none; padding: 0.875rem 0; border-bottom: 1px solid rgba(243, 241, 234, 0.25); min-height: 48px; }
+    .nav-mobile nav a.cta { margin-top: 1rem; border: 0; text-align: center; background: var(--k-accent); color: var(--k-ink); border-radius: 999px; }
+  }
 </style>
