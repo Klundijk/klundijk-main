@@ -20,6 +20,20 @@ approach:
   - Kiezen platform en aanpak per situatie.
   - Maken en migreren met minimaal risico.
   - Verbeteren na livegang.
+heroText: Nieuwe shops, redesigns en migraties waarbij productdata, UX, SEO, techniek en beheer als één geheel worden bekeken. We adviseren eerst, en maken of regisseren daarna.
+momentsHeading: Vier momenten waarop een webshop beter kan.
+moments:
+  - title: Nieuwe webshops
+    text: "Van eerste idee tot lancering: assortiment, checkout, betaal- en verzendopties en de inrichting die past bij hoe jij verkoopt."
+  - title: Redesign & migratie
+    text: Een bestaande shop vernieuwen of verhuizen zonder je vindbaarheid, klanten of bestellingen kwijt te raken.
+  - title: Productdata & koppelingen
+    text: Productinformatie, voorraad, boekhouding en logistiek die met elkaar praten, zodat jij minder handwerk hebt.
+  - title: Beheer & optimalisatie
+    text: Meten wat werkt, verbeteren wat niet werkt, en een shop die meegroeit met je bedrijf.
+projectsHeading: Webshops die we maakten.
+contactHeading: Praten over je webshop?
+contactText: We denken mee, ook als het antwoord geen nieuwe webshop is. Vertel kort wat je nu hebt en waar je naartoe wilt.
 faq: []
 ---
 Conceptcopy op basis van de content blueprint. De Schrijver-rol herziet deze tekst.

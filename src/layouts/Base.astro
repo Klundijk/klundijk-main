@@ -6,8 +6,8 @@ import ContactBand from '../components/ContactBand.astro';
 import { site } from '../data/site';
 import { themeCss } from '../data/theme';
 
-interface Props { title?: string; description?: string; ogImage?: string; noindex?: boolean; heroHeader?: boolean; contactBand?: boolean; }
-const { title, description = site.description, ogImage, noindex = false, heroHeader = false, contactBand = true } = Astro.props;
+interface Props { title?: string; description?: string; ogImage?: string; noindex?: boolean; heroHeader?: boolean; contactBand?: boolean; band?: { heading?: string; text?: string; cta?: { label: string; href: string } }; }
+const { title, description = site.description, ogImage, noindex = false, heroHeader = false, contactBand = true, band } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name}: ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ld = {
@@ -41,7 +41,7 @@ const ld = {
     <a class="skip-link" href="#main">Ga naar de inhoud</a>
     <Header onHero={heroHeader} />
     <main id="main"><slot /></main>
-    {contactBand && <ContactBand />}
+    {contactBand && <ContactBand {...band} />}
     <Footer />
   </body>
 </html>

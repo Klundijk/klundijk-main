@@ -19,6 +19,16 @@ approach:
   - Kiezen welke techniek en structuur passen.
   - Maken, testen en live zetten.
   - Verbeteren met meetgegevens.
+momentsHeading: Wat we voor je doen.
+moments:
+  - title: Structuur, UX en ontwerp
+    text: Een opbouw waarin bezoekers snel vinden wat ze zoeken en weten wat de volgende stap is.
+  - title: Ontwikkeling en content
+    text: Een snelle, onderhoudbare site waarvan je de inhoud zelf kunt beheren.
+  - title: Performance en toegankelijkheid
+    text: Snel, toegankelijk en goed vindbaar, op elk apparaat.
+  - title: Livegang en doorontwikkeling
+    text: Veilig live en daarna verbeteren op basis van wat je ziet in de cijfers.
 faq: []
 ---
 Conceptcopy op basis van de content blueprint. De Schrijver-rol herziet deze tekst.
