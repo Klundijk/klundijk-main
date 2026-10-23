@@ -1,12 +1,96 @@
 ---
+// Contactpagina (bord X · Contact v5.3): hero op veldkleur met formulier en direct contact, daaronder "Zo gaat het verder".
+// Geen contactband op deze pagina (zou dubbelop zijn), wel de footer.
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
+import { site, showPlaceholders } from '../data/site';
+import { form } from '../data/form';
+
+const { phone, email, location } = site.contact;
+const tel = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
+const direct = Boolean(phone || email || showPlaceholders);
+const responseTitle = form.responseTime ? `We reageren binnen ${form.responseTime}` : 'We reageren persoonlijk';
+const steps = [
+  { t: 'Je vertelt kort wat er speelt', d: 'Via het formulier, per telefoon of per e-mail. Een paar zinnen is genoeg.' },
+  { t: responseTitle, d: 'Levi leest je vraagstuk zelf en komt terug met een eerste reactie of een vraag.' },
+  { t: 'We plannen een kennismaking', d: 'Samen kijken we wat er speelt en wat de verstandigste route is. Adviseren gaat voor maken.' },
+];
 ---
-<Base title="Contact" description="Bespreek je vraagstuk met Klundijk." contactBand={false}>
-  <!-- Tijdelijke opzet: de Contact-pagina is nog niet ontworpen. Het formulier zelf volgt bord X · Componenten (sectie 04). -->
-  <section class="section wrap">
-    <h1>Heb je iets dat digitaal beter kan?</h1>
-    <p>Vertel kort waar je iets aan wilt verbeteren. Je hoeft nog niet te weten welke oplossing nodig is.</p>
-    <ContactForm />
+<Base title="Contact" description="Bespreek je vraagstuk met Klundijk. Vertel kort waar je tegenaan loopt of naartoe wilt." contactBand={false} heroHeader>
+  <section class="hero on-field" aria-labelledby="contact-title">
+    <div class="intro">
+      <p class="mono kicker">Contact</p>
+      <h1 id="contact-title" class="title">Heb je iets dat digitaal beter kan?</h1>
+      <p class="lead">Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.</p>
+    </div>
+
+    <div class="formwrap">
+      <ContactForm bare submitLabel="Bespreek je vraagstuk" />
+    </div>
+
+    {direct && (
+      <aside class="direct" aria-labelledby="direct-h">
+        {showPlaceholders && <div class="portrait placeholder-flag" aria-hidden="true">[Portret Levi]</div>}
+        <div class="direct__txt">
+          <h2 id="direct-h" class="direct__t">Je praat direct met Levi.</h2>
+          {phone && tel ? <a class="mono" href={tel}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
+          {email ? <a class="mono" href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+          <span class="mono place">{location}</span>
+        </div>
+      </aside>
+    )}
+  </section>
+
+  <section class="next wrap-full" aria-labelledby="next-h">
+    <p class="mono kicker--dark">Wat gebeurt er daarna</p>
+    <h2 id="next-h" class="h2">Zo gaat het verder.</h2>
+    <ol class="steps">
+      {steps.map((s, i) => (
+        <li class="step">
+          <span class="mono kicker--dark">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="step__t">{s.t}</h3>
+          <p>{s.d}</p>
+        </li>
+      ))}
+    </ol>
+    {showPlaceholders && <p class="flag mono">Concepttekst · SEO &amp; content beoordeelt</p>}
   </section>
 </Base>
+
+<style>
+  .mono { font-family: var(--f-mono); letter-spacing: 0.04em; }
+  .kicker { margin: 0; font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
+  .kicker--dark { margin: 0; font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--k-muted); }
+
+  .hero { background: var(--k-field); color: var(--k-on-field); padding: 1.5rem var(--pad-x) var(--pad-y);
+    display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 1fr); }
+  .intro { display: flex; flex-direction: column; gap: 1.375rem; }
+  .title { margin: 0; font-weight: 800; font-stretch: 118%; font-size: clamp(2.5rem, 5.83vw, 5.25rem); line-height: 0.95; letter-spacing: -0.045em; text-wrap: balance; }
+  .lead { margin: 0; max-width: 32.5rem; font-size: clamp(1.125rem, 1.53vw, 1.375rem); line-height: 1.5; }
+  .formwrap { min-width: 0; }
+
+  .direct { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; border-top: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); padding-top: 1.5rem; }
+  .portrait { flex: none; width: 5.5rem; height: 5.5rem; border-radius: 50%; display: grid; place-items: center; text-align: center; font-size: 0.6875rem; }
+  .direct__txt { display: flex; flex-direction: column; gap: 0.25rem; font-size: 1.125rem; line-height: 1.4; }
+  .direct__t { margin: 0; font-size: 1.125rem; font-weight: 700; letter-spacing: 0; }
+  .direct__txt a { text-transform: none; display: inline-flex; align-items: center; min-height: 44px; font-size: 0.9375rem; color: var(--k-on-field); }
+  .place { font-size: 0.875rem; color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
+
+  @media (min-width: 1100px) {
+    .hero { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); row-gap: 3.5rem; grid-template-areas: none; align-items: start; padding-top: 2rem; }
+    .intro { grid-column: 1 / span 6; grid-row: 1; }
+    .direct { grid-column: 1 / span 6; grid-row: 2; align-self: end; }
+    .formwrap { grid-column: 8 / span 5; grid-row: 1 / span 2; padding-top: 3rem; }
+  }
+
+  .wrap-full { padding-inline: var(--pad-x); }
+  .next { padding-block: var(--pad-y); display: flex; flex-direction: column; gap: 2.5rem; }
+  .h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 0.98; letter-spacing: -0.04em; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.75rem; grid-template-columns: 1fr; }
+  .step { display: flex; flex-direction: column; gap: 0.75rem; border-top: 2px solid var(--k-ink); padding-top: 1rem; min-width: 0; }
+  .step p { margin: 0; color: var(--k-muted); font-size: 1rem; line-height: 1.5; }
+  .step__t { margin: 0; font-weight: 800; font-stretch: 112%; font-size: 1.5rem; line-height: 1.02; letter-spacing: -0.03em; overflow-wrap: anywhere; }
+  @media (min-width: 768px) { .step p { font-size: 1.125rem; } }
+  @media (min-width: 1100px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; } .step__t { font-size: clamp(1.5rem, 2.2vw, 2rem); font-stretch: 118%; } }
+  .flag { align-self: flex-start; margin: 0; border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: 0.75rem; text-transform: uppercase; }
+</style>
