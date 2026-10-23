@@ -1,7 +1,7 @@
 ---
 import { site } from '../../data/site';
 ---
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero on-field" aria-labelledby="hero-title">
   <div class="hero__inner">
     <p class="mono hero__eyebrow">Klundijk — digitale partner</p>
     <h1 id="hero-title" class="hero__title">
@@ -15,7 +15,7 @@ import { site } from '../../data/site';
     <p class="hero__text">Klundijk helpt bedrijven vooruit met sterke merken, websites, webshops en slimme digitale oplossingen. We beginnen bij het vraagstuk, niet bij het platform.</p>
     <p class="hero__actions">
       <a class="link-strong" href={site.secondaryCta.href}>{site.secondaryCta.label}</a>
-      <a class="pill pill--accent pill--lg hero__cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+      <a class="btn btn--primary btn--lg hero__cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
     </p>
     <button type="button" class="hero__toggle mono" id="hero-toggle" aria-pressed="false">Zie hoe het was</button>
   </div>
@@ -71,7 +71,7 @@ import { site } from '../../data/site';
   :global(html[data-intro="rough"]) .hero__title { opacity: 0; }
   :global(html[data-intro="rough"]) .hero__rough { opacity: 1; }
   :global(html[data-intro="rough"]) .hero__sub { opacity: .25; }
-  :global(html[data-intro="rough"]) .hero__cta { background: transparent; color: #1B6EC2; text-decoration: underline; }
+  :global(html[data-intro="rough"]) .hero__cta { background: transparent; color: #1B6EC2; border-color: transparent; text-decoration: underline; }
   :global(html[data-intro="rough"]) .hero__card { filter: grayscale(1) blur(2px); }
   @media (prefers-reduced-motion: reduce) { .hero, .hero__rough, .hero__sub, .hero__text, .hero__card { transition: none; } }
 </style>

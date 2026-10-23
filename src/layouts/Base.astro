@@ -2,11 +2,12 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ContactBand from '../components/ContactBand.astro';
 import { site } from '../data/site';
 import { themeCss } from '../data/theme';
 
-interface Props { title?: string; description?: string; ogImage?: string; noindex?: boolean; heroHeader?: boolean; }
-const { title, description = site.description, ogImage, noindex = false, heroHeader = false } = Astro.props;
+interface Props { title?: string; description?: string; ogImage?: string; noindex?: boolean; heroHeader?: boolean; contactBand?: boolean; }
+const { title, description = site.description, ogImage, noindex = false, heroHeader = false, contactBand = true } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name}: ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ld = {
@@ -39,6 +40,7 @@ const ld = {
     <a class="skip-link" href="#main">Ga naar de inhoud</a>
     <Header onHero={heroHeader} />
     <main id="main"><slot /></main>
+    {contactBand && <ContactBand />}
     <Footer />
   </body>
 </html>

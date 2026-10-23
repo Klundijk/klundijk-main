@@ -13,8 +13,19 @@ export const site = {
     { label: 'Over', href: '/over' },
     { label: 'Contact', href: '/contact' },
   ],
-  // Nog aan te leveren (Aanleverlijst in Notion): telefoon, e-mail, KvK/btw, socials.
+  // Dienstenpagina's onder "Wat we doen" (subnavigatie mobiel menu). Volgorde is een voorstel van de Designer
+  // (v5.2) en nog niet bevestigd door Levi en SEO & content.
+  services: [
+    { label: 'Webshops & commerce', href: '/wat-we-doen/webshops-commerce' },
+    { label: 'Websites', href: '/wat-we-doen/websites-digitale-ervaringen' },
+    { label: 'Groei & slimme processen', href: '/wat-we-doen/groei-slimme-processen' },
+    { label: 'Merk & identiteit', href: '/wat-we-doen/merk-identiteit' },
+  ],
+  footerLine: 'Digitale partner voor merk, websites, webshops en slimme processen.',
+  // Nog aan te leveren door Levi (Aanleverlijst in Notion): telefoon, e-mail, KvK. Zolang een waarde null is,
+  // wordt ze in productie niet getoond (alleen in dev als [placeholder]).
   contact: { email: null as string | null, phone: null as string | null, location: 'Veendam' },
+  legal: { kvk: null as string | null, privacyHref: null as string | null, termsHref: null as string | null },
 } as const;
 
 /** Placeholder-inhoud (nog te leveren) alleen tonen in dev of met PUBLIC_SHOW_PLACEHOLDERS=1. */

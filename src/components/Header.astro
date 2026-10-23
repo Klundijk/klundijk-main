@@ -1,59 +1,153 @@
 ---
-import { site } from '../data/site';
+import { site, showPlaceholders } from '../data/site';
 interface Props { onHero?: boolean; }
 const { onHero = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const isCurrent = (href: string) => path === href || path.startsWith(href + '/');
+const inSection = (href: string) => path === href || path.startsWith(href + '/');
+const isExact = (href: string) => path === href;
+const cur = (v: boolean) => (v ? 'page' : undefined);
+const hasServices = (href: string) => href === '/wat-we-doen';
+const { phone, email } = site.contact;
 ---
 <header class:list={['site-header', { 'on-hero': onHero }]}>
   <a class="brand" href="/" aria-label={`${site.name}, naar de homepage`}>{site.name}</a>
 
+  <!-- Desktop (vanaf 1100 px) -->
   <nav class="nav-desktop" aria-label="Hoofdnavigatie">
-    {site.nav.map((i) => <a href={i.href} aria-current={isCurrent(i.href) ? 'page' : undefined}>{i.label}</a>)}
+    {site.nav.map((i) => <a href={i.href} aria-current={cur(inSection(i.href))}>{i.label}</a>)}
     <a class="cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
   </nav>
 
-  <details class="nav-mobile" id="mobile-menu">
-    <summary><span class="sr-only">Menu</span><span class="bars" aria-hidden="true"></span></summary>
-    <nav aria-label="Hoofdnavigatie (mobiel)">
-      {site.nav.map((i) => <a href={i.href} aria-current={isCurrent(i.href) ? 'page' : undefined}>{i.label}</a>)}
-      <a class="cta" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+  <!-- Mobiel en tablet (tot 1099 px): zonder JS staan de links als gewone lijst onder de kop; met JS opent "Menu" een volledig scherm. -->
+  <button type="button" class="menu-btn" id="menu-open" aria-expanded="false" aria-controls="menu" aria-haspopup="dialog" hidden>
+    <span class="menu-btn__icon" aria-hidden="true"></span>Menu
+  </button>
+  <nav class="nav-fallback" aria-label="Hoofdnavigatie (zonder JavaScript)">
+    {site.nav.map((i) => <a href={i.href} aria-current={cur(inSection(i.href))}>{i.label}</a>)}
+  </nav>
+
+  <dialog id="menu" class="menu" aria-label="Menu" aria-modal="true">
+    <div class="menu__bar">
+      <span class="menu__brand">{site.name}</span>
+      <button type="button" class="menu-btn" id="menu-close"><span class="menu-btn__x" aria-hidden="true">×</span>Sluit</button>
+    </div>
+    <nav class="menu__nav" aria-label="Hoofdnavigatie">
+      <ul>
+        {site.nav.map((i, n) => (
+          <li>
+            <a class="menu__main" href={i.href} aria-current={cur(hasServices(i.href) ? isExact(i.href) : inSection(i.href))}>
+              <span class="menu__num" aria-hidden="true">{String(n + 1).padStart(2, '0')}</span>
+              <span class="menu__label">{i.label}</span>
+            </a>
+            {hasServices(i.href) && (
+              <ul class="menu__sub">
+                {site.services.map((s) => <li><a href={s.href} aria-current={cur(isExact(s.href))}>{s.label}</a></li>)}
+              </ul>
+            )}
+          </li>
+        ))}
+      </ul>
     </nav>
-  </details>
+    <div class="menu__foot">
+      <a class="btn btn--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+      {(phone || email || showPlaceholders) && (
+        <div class="menu__contact">
+          {phone ? <a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
+          {email ? <a href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+        </div>
+      )}
+    </div>
+  </dialog>
 </header>
-<script is:inline>
-  // Mobiel menu: sluit met Escape en na het kiezen van een link (zonder JS blijft het gewoon een <details>).
-  (function () {
-    var d = document.getElementById('mobile-menu'); if (!d) return;
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && d.open) { d.open = false; d.querySelector('summary').focus(); } });
-    d.addEventListener('click', function (e) { if (e.target.closest('nav a')) d.open = false; });
-  })();
+
+<script>
+  // Mobiel menu als modale dialoog: showModal() zorgt voor focus-trap, inert achtergrond en Escape.
+  const dlg = document.getElementById('menu') as HTMLDialogElement | null;
+  const open = document.getElementById('menu-open') as HTMLButtonElement | null;
+  const close = document.getElementById('menu-close') as HTMLButtonElement | null;
+  if (dlg && open && close && typeof dlg.showModal === 'function') {
+    document.documentElement.classList.add('has-menu');
+    open.hidden = false;
+    const desktop = matchMedia('(min-width: 1100px)');
+    const lock = (on: boolean) => document.documentElement.classList.toggle('menu-open', on);
+    const show = () => { dlg.showModal(); open.setAttribute('aria-expanded', 'true'); lock(true); close.focus(); };
+    const hide = () => { if (dlg.open) dlg.close(); };
+    open.addEventListener('click', show);
+    close.addEventListener('click', hide);
+    dlg.addEventListener('close', () => { open.setAttribute('aria-expanded', 'false'); lock(false); open.focus(); });
+    // Klik op een link in het paneel (ook een #anker op dezelfde pagina) sluit het paneel.
+    dlg.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a[href]')) hide(); });
+    // Breedte groeit tot desktop terwijl het paneel open staat: sluiten.
+    desktop.addEventListener('change', (e) => { if (e.matches) hide(); });
+  }
 </script>
+
 <style>
-  .site-header { display: flex; align-items: center; justify-content: space-between; padding: 1.75rem var(--pad-x); position: relative; z-index: 5;
+  .site-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 1.25rem var(--pad-x); position: relative; z-index: 5;
     background: var(--k-paper); color: var(--k-ink); }
   .site-header.on-hero { background: var(--hero-bg, var(--k-field)); color: var(--hero-fg, var(--k-on-field)); transition: background 0.9s ease, color 0.9s ease; }
-  .brand { font-weight: 800; font-stretch: 125%; font-size: 1.625rem; letter-spacing: -0.03em; text-decoration: none; }
-  .nav-desktop { display: flex; align-items: center; gap: 2.25rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
-  .nav-desktop a { text-decoration: none; padding: 0.5rem 0; }
-  .nav-desktop a[aria-current='page'], .nav-mobile a[aria-current='page'] { text-decoration: underline; text-underline-offset: 6px; }
-  .cta { font-weight: 500; background: var(--hero-pill-bg, var(--k-accent)); color: var(--hero-pill-fg, var(--k-ink)); padding: 0.875rem 1.375rem !important; border-radius: var(--hero-radius, 999px);
-    transition: all 0.9s var(--ease); }
-  .nav-mobile { display: none; }
-  @media (max-width: 860px) {
-    .site-header { padding-block: 1.125rem; }
-    .brand { font-size: 1.375rem; }
-    .nav-desktop { display: none; }
-    .nav-mobile { display: block; }
-    .nav-mobile summary { list-style: none; cursor: pointer; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 999px; }
-    .nav-mobile summary::-webkit-details-marker { display: none; }
-    .bars, .bars::before, .bars::after { display: block; width: 24px; height: 2px; background: currentColor; content: ''; position: relative; }
-    .bars::before { position: absolute; top: -7px; } .bars::after { position: absolute; top: 7px; }
-    .nav-mobile[open] .bars { background: transparent; }
-    .nav-mobile[open] .bars::before { top: 0; transform: rotate(45deg); } .nav-mobile[open] .bars::after { top: 0; transform: rotate(-45deg); }
-    .nav-mobile nav { position: absolute; left: 0; right: 0; top: 100%; display: flex; flex-direction: column; gap: 0.25rem; padding: 1rem var(--pad-x) 1.75rem;
-      background: var(--k-ink); color: var(--k-paper); font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.04em; font-size: 1rem; }
-    .nav-mobile nav a { text-decoration: none; padding: 0.875rem 0; border-bottom: 1px solid rgba(243, 241, 234, 0.25); min-height: 48px; }
-    .nav-mobile nav a.cta { margin-top: 1rem; border: 0; text-align: center; background: var(--k-accent); color: var(--k-ink); border-radius: 999px; }
+  .brand { font-weight: 800; font-stretch: 125%; font-size: 1.375rem; letter-spacing: -0.03em; text-decoration: none; }
+
+  /* Zonder JS (en tot 'has-menu' gezet is): links als rij onder de kop. */
+  .nav-fallback { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0 1.5rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .nav-fallback a { text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; border-bottom: 2px solid transparent; }
+  .nav-fallback a[aria-current='page'] { border-bottom-color: currentColor; }
+  :global(html.has-menu) .nav-fallback { display: none; }
+  .nav-desktop { display: none; }
+
+  /* Menuknop (gesloten: papier of hero) en sluitknop (veld): ronde rand in de tekstkleur. */
+  .menu-btn { min-height: 48px; display: inline-flex; align-items: center; gap: 0.625rem; background: transparent; color: inherit; border: 1.5px solid currentColor;
+    border-radius: 999px; padding: 0 1.125rem; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease; }
+  .menu-btn[hidden] { display: none; }
+  .menu-btn:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+  .menu-btn__icon { display: inline-block; width: 16px; height: 10px; border-block: 2px solid currentColor; }
+  .menu-btn__x { font-size: 1.25rem; line-height: 1; }
+
+  /* Menupaneel: volledig scherm in veldkleur. */
+  .menu { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0;
+    background: var(--k-field); color: var(--k-on-field); overflow-y: auto; }
+  .menu[open] { display: flex; flex-direction: column; }
+  .menu::backdrop { background: var(--k-field); }
+  .menu__bar { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem var(--pad-x) 0.75rem; }
+  .menu__brand { font-weight: 800; font-stretch: 125%; font-size: 1.375rem; letter-spacing: -0.03em; }
+  .menu__nav { padding: 0.5rem var(--pad-x) 0; }
+  .menu__nav ul { list-style: none; margin: 0; padding: 0; }
+  .menu__nav > ul { border-bottom: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); }
+  .menu__nav > ul > li { border-top: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); }
+  .menu__main { display: flex; align-items: baseline; gap: 1rem; min-height: 60px; padding: 0.625rem 0; text-decoration: none; }
+  .menu__num { font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.08em; color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
+  .menu__label { font-weight: 800; font-stretch: 112%; font-size: 2.125rem; line-height: 1.05; letter-spacing: -0.03em; }
+  .menu__sub { padding: 0 0 0.75rem 2.25rem !important; }
+  .menu__sub a { display: flex; align-items: center; min-height: 44px; font-size: 1.125rem; font-weight: 600; text-decoration: none; }
+  .menu__nav a[aria-current='page'] .menu__label, .menu__sub a[aria-current='page'] { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .menu__foot { margin-top: auto; padding: 1.25rem var(--pad-x); display: flex; flex-direction: column; gap: 0.875rem; }
+  .menu__foot .btn { width: 100%; }
+  .menu__contact { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; }
+  .menu__contact a { display: inline-flex; align-items: center; min-height: 44px; }
+  .menu .btn { --h-bg: var(--k-paper); --h-fg: var(--k-ink); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .menu[open] { animation: menu-in 250ms var(--ease); }
+    @keyframes menu-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
   }
+
+  @media (min-width: 1100px) {
+    .site-header { padding-block: 1.75rem; flex-wrap: nowrap; }
+    .brand { font-size: 1.625rem; }
+    .menu-btn, .nav-fallback, .menu { display: none !important; }
+    .nav-desktop { display: flex; align-items: center; gap: 2.25rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .nav-desktop a { text-decoration: none; display: inline-block; padding: 6px 0; border-bottom: 2px solid transparent; }
+    .nav-desktop a:hover { border-bottom-color: currentColor; }
+    .nav-desktop a[aria-current='page'] { border-bottom-color: currentColor; }
+    /* Navigatieknop in de header: kleurt mee met de hero-intro (ruw/verfijnd). */
+    .nav-desktop .cta { font-weight: 500; border: 0; padding: 0.875rem 1.375rem; border-radius: var(--hero-radius, 999px);
+      background: var(--hero-pill-bg, var(--k-accent)); color: var(--hero-pill-fg, var(--k-ink)); transition: all 0.9s var(--ease); }
+    .on-hero .cta:hover { background: var(--k-paper); color: var(--k-ink); }
+    .site-header:not(.on-hero) .cta:hover { background: var(--k-ink); color: var(--k-paper); }
+    .nav-desktop .cta:hover { transition-duration: 0.15s; }
+  }
+</style>
+<style is:global>
+  html.menu-open { overflow: hidden; }
 </style>

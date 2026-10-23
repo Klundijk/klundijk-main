@@ -28,6 +28,6 @@ const cases = (await getPublishedCases()).filter((c) => c.data.services.includes
     <ol>{s.approach.map((x) => <li>{x}</li>)}</ol>
 
     {cases.length > 0 && (<><h2>Gerelateerd werk</h2><div class="grid grid--2">{cases.map((c) => <CaseCard entry={c} />)}</div></>)}
-    <p><a class="btn" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
+    <p><a class="btn btn--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
   </section>
 </Base>

@@ -1,19 +1,46 @@
 ---
-import { site } from '../data/site';
+import { site, showPlaceholders } from '../data/site';
+const { phone, email, location } = site.contact;
+const { kvk, privacyHref, termsHref } = site.legal;
+const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
-  <p class="brand">{site.name}</p>
-  <nav aria-label="Voettekst">
-    {site.nav.map((i) => <a href={i.href}>{i.label}</a>)}
-  </nav>
-  <p class="mono">
-    {site.contact.location}
-    {site.contact.email && <> · <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></>}
-  </p>
+  <div class="cols">
+    <div class="about">
+      <p class="brand">{site.name}</p>
+      <p class="line">{site.footerLine}</p>
+    </div>
+    <nav class="pages" aria-label="Footernavigatie">
+      <p class="label mono">Pagina's</p>
+      {site.nav.map((i) => <a href={i.href}>{i.label}</a>)}
+    </nav>
+    <div class="contact">
+      <p class="label mono">Contact</p>
+      {phone ? <a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
+      {email ? <a href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+      <span>{location}</span>
+    </div>
+  </div>
+  <div class="legal mono">
+    <span>© {site.name} {year}</span>
+    {kvk ? <span>KvK {kvk}</span> : showPlaceholders && <span class="placeholder-flag">[KvK-nummer]</span>}
+    {privacyHref ? <a href={privacyHref}>Privacyverklaring</a> : showPlaceholders && <span class="placeholder-flag">[privacyverklaring]</span>}
+    {termsHref ? <a href={termsHref}>Algemene voorwaarden</a> : showPlaceholders && <span class="placeholder-flag">[algemene voorwaarden]</span>}
+  </div>
 </footer>
 <style>
-  .site-footer { background: var(--k-ink); color: var(--k-paper); padding: 3rem var(--pad-x); display: grid; gap: 1.5rem; }
-  .brand { font-weight: 800; font-stretch: 125%; font-size: 1.625rem; letter-spacing: -0.03em; }
-  nav { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; font-family: var(--f-mono); text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.875rem; }
-  nav a { text-decoration: none; padding: 0.5rem 0; }
+  .site-footer { background: var(--k-ink); color: var(--k-paper); padding: 2.5rem var(--pad-x); display: grid; gap: 3.5rem; }
+  .cols { display: grid; gap: 2.5rem; }
+  .brand { font-weight: 800; font-stretch: 125%; font-size: 2.5rem; letter-spacing: -0.03em; margin-bottom: 0.875rem; }
+  .line { max-width: 22.5rem; font-size: 1rem; line-height: 1.5; color: var(--k-muted-dark); }
+  .label { color: var(--k-muted-dark); font-size: 0.75rem; margin-bottom: 0.25rem; }
+  .pages, .contact { display: flex; flex-direction: column; gap: 0.125rem; }
+  .pages a { font-size: 1.125rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; min-height: 44px; }
+  .pages a:hover { text-decoration: underline; text-underline-offset: 6px; }
+  .contact { font-family: var(--f-mono); font-size: 0.9375rem; letter-spacing: 0.04em; }
+  .contact a { display: inline-flex; align-items: center; min-height: 44px; }
+  .legal { border-top: 1px solid var(--k-footer-line); padding-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1.75rem; text-transform: none; letter-spacing: 0.04em; color: var(--k-muted-dark); }
+  .legal a { display: inline-flex; align-items: center; min-height: 44px; }
+  @media (min-width: 768px) { .cols { grid-template-columns: 2fr 1fr 1fr; gap: 1.5rem; } }
+  @media (min-width: 1100px) { .cols { grid-template-columns: 5fr 3fr 3fr; } .site-footer { padding-block: 2.5rem; } }
 </style>
