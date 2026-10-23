@@ -8,7 +8,7 @@ const style = (blk: any[]) => blk.map((b, i) => `--x${i}:${b[0]}%;--y${i}:${b[1]
   <div class="sit__head">
     <h2 id="sit-h" class="sit__h">Waar kunnen we iets beter maken?</h2>
     <p class="muted">Kies een situatie en zie wat ‘beter’ betekent.</p>
-    <button type="button" class="pill" id="sit-all" aria-pressed="false">Maak alles beter</button>
+    <button type="button" class="btn btn--secondary btn--md" id="sit-all" aria-pressed="false">Maak alles beter</button>
   </div>
   <div class="sit__grid">
     {order.map((t) => (
@@ -19,7 +19,7 @@ const style = (blk: any[]) => blk.map((b, i) => `--x${i}:${b[0]}%;--y${i}:${b[1]
         <p class="mono">{t.num} · {t.label}</p>
         <h3>{t.heading}</h3>
         <p class="tile__copy">{t.copy}</p>
-        <button type="button" class="pill" data-toggle aria-pressed="false">Maak het beter</button>
+        <button type="button" class="btn btn--secondary btn--md" data-toggle aria-pressed="false">Maak het beter</button>
       </article>
     ))}
   </div>

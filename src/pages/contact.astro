@@ -1,20 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site } from '../data/site';
+import ContactForm from '../components/ContactForm.astro';
 ---
-<Base title="Contact" description="Bespreek je vraagstuk met Klundijk.">
+<Base title="Contact" description="Bespreek je vraagstuk met Klundijk." contactBand={false}>
+  <!-- Tijdelijke opzet: de Contact-pagina is nog niet ontworpen. Het formulier zelf volgt bord X · Componenten (sectie 04). -->
   <section class="section wrap">
     <h1>Heb je iets dat digitaal beter kan?</h1>
     <p>Vertel kort waar je iets aan wilt verbeteren. Je hoeft nog niet te weten welke oplossing nodig is.</p>
-    <!-- Formulierarchitectuur (externe formservice, serverless functie of Astro-adapter) is een open
-         besluit voor fase 1. Tot die tijd is het formulier uitgeschakeld en verzendt het niets. -->
-    <form aria-describedby="form-note" onsubmit="return false">
-      <label>Naam <input name="naam" autocomplete="name" required /></label>
-      <label>Bedrijf <input name="bedrijf" autocomplete="organization" /></label>
-      <label>E-mail <input type="email" name="email" autocomplete="email" required /></label>
-      <label>Waar wil je iets aan verbeteren? <textarea name="vraagstuk" required></textarea></label>
-      <button class="btn" type="submit" disabled>Versturen</button>
-      <p id="form-note" class="muted">Formulier nog niet gekoppeld. {site.contact.email ? <>Mail voorlopig naar {site.contact.email}.</> : <>E-mailadres volgt.</>}</p>
-    </form>
+    <ContactForm />
   </section>
 </Base>

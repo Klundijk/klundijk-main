@@ -26,12 +26,46 @@ h1, h2, h3, p { margin: 0; }
 .wide { font-weight: 800; font-stretch: 118%; letter-spacing: -0.04em; line-height: 0.98; }
 .section { padding: var(--pad-y) var(--pad-x); }
 
-/* Knoppen */
-.pill { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.5rem; border-radius: 999px;
-  background: var(--k-ink); color: var(--k-paper); border: 0; font-size: 1rem; font-weight: 600; text-decoration: none; cursor: pointer; }
-.pill--accent { background: var(--k-accent); color: var(--k-ink); font-weight: 700; }
-.pill--lg { min-height: 60px; padding: 0 2rem; font-size: 1.125rem; }
+/* ---- Knoppen (ontwerpbord X · Componenten, sectie 03) ----
+   Varianten: --primary (accent), --secondary (inkt, alleen op papier), --ghost (rand). Maten: standaard 56 px, --lg 60, --md 48.
+   Op een veldkleurig vlak (.on-field) wisselen de hoverkleuren. Hover/ingedrukt veranderen nooit de afmeting.
+   Uitgeschakeld = aria-disabled="true" (blijft focusseerbaar). Focus = de globale tweekleurige ring. */
+.btn { --b-bg: var(--k-accent); --b-fg: var(--k-ink); --b-border: var(--b-bg); --h-bg: var(--k-ink); --h-fg: var(--k-paper);
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; box-sizing: border-box; min-height: 56px; padding: 0 2rem;
+  border-radius: 999px; border: 2px solid var(--b-border); background: var(--b-bg); color: var(--b-fg);
+  font-family: var(--f-sans); font-size: 1.125rem; font-weight: 700; line-height: 1.2; text-decoration: none; text-align: center; cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
+.btn--lg { min-height: 60px; }
+.btn--md { min-height: 48px; padding: 0 1.5rem; font-size: 1rem; }
+.btn--primary { --b-border: var(--k-btn-outline, var(--k-accent)); }
+.btn--secondary { --b-bg: var(--k-ink); --b-fg: var(--k-paper); --h-bg: var(--k-accent); --h-fg: var(--k-ink); }
+.btn--ghost { --b-bg: transparent; --b-fg: currentColor; --b-border: currentColor; --h-bg: var(--k-ink); --h-fg: var(--k-paper); }
+.on-field .btn--primary { --h-bg: var(--k-paper); --h-fg: var(--k-ink); }
+.on-field .btn--ghost { --h-bg: var(--k-on-field); --h-fg: var(--k-field); }
+.btn:hover { background: var(--h-bg); color: var(--h-fg); border-color: var(--h-bg); }
+.btn:active { transform: translateY(1px); }
+/* Uitgeschakeld: zelfde kleuren bij hover, geen verplaatsing. */
+.btn[aria-disabled='true'] { --b-bg: var(--k-line); --b-fg: var(--k-muted); --b-border: var(--k-line); cursor: not-allowed; }
+.on-field .btn[aria-disabled='true'] { --b-bg: rgb(255 255 255 / 0.25); --b-fg: var(--k-on-field); --b-border: transparent; }
+.btn--ghost[aria-disabled='true'] { --b-bg: transparent; --b-border: var(--k-line); }
+.on-field .btn--ghost[aria-disabled='true'] { --b-fg: rgb(255 255 255 / 0.6); --b-border: rgb(255 255 255 / 0.4); }
+.btn[aria-disabled='true']:hover, .btn[aria-disabled='true']:active { background: var(--b-bg); color: var(--b-fg); border-color: var(--b-border); transform: none; }
+/* Bezig met verzenden: knop behoudt kleur en afmeting, geen hover-effect. */
+.btn[aria-busy='true'] { opacity: 0.85; cursor: progress; }
+.btn[aria-busy='true']:hover, .btn[aria-busy='true']:active { background: var(--b-bg); color: var(--b-fg); border-color: var(--b-border); transform: none; }
+
+/* Filter-chip (werkoverzicht): aria-pressed="true" = actief. */
+.chip { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: 48px; padding: 0 1.375rem; border-radius: 999px;
+  border: 2px solid var(--k-ink); background: transparent; color: var(--k-ink); font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase;
+  cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease; }
+.chip:hover { background: var(--k-line); }
+.chip[aria-pressed='true'], .chip:active { background: var(--k-ink); color: var(--k-paper); }
+.chip[aria-disabled='true'] { color: var(--k-muted); border-color: var(--k-line); cursor: not-allowed; }
+.chip[aria-disabled='true']:hover { background: transparent; }
+
+/* Tekstlink */
 .link-strong { font-size: 1.125rem; font-weight: 600; text-underline-offset: 6px; }
+.link-strong:hover { text-decoration-thickness: 3px; }
 .tag { display: inline-block; border: 1px solid currentColor; border-radius: 999px; padding: 0.5rem 1rem; }
 
 @media (prefers-reduced-motion: reduce) {
@@ -48,8 +82,6 @@ main h1 { font-weight: 800; font-stretch: 118%; letter-spacing: -0.04em; line-he
 main h2 { font-weight: 800; font-stretch: 112%; letter-spacing: -0.03em; line-height: 1.05; font-size: var(--t-lead); margin-bottom: 1rem; }
 main h3 { font-weight: 700; font-stretch: 110%; letter-spacing: -0.02em; font-size: var(--t-card); margin-bottom: 0.5rem; }
 main p { margin-bottom: 1rem; max-width: 62ch; }
-.btn { display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.5rem; border-radius: 999px; background: var(--k-ink); color: var(--k-paper); text-decoration: none; font-weight: 600; border: 0; }
-.btn--ghost { background: transparent; color: var(--k-ink); border: 2px solid var(--k-ink); }
 .actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 .grid { display: grid; gap: var(--gap); }
 .grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }

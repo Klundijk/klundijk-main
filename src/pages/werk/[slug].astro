@@ -43,7 +43,7 @@ const related = services.filter((s) => c.services.includes(s.id as (typeof c.ser
         <ul>{related.map((s) => <li><a href={`/wat-we-doen/${s.id}`}>{s.data.title}</a></li>)}</ul>
       </aside>
     )}
-    <p><a class="btn" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
+    <p><a class="btn btn--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
   </article>
 </Base>
 <style>

@@ -12,6 +12,8 @@
   --k-line: #d9d5ca;
   --k-muted: #57534b;
   --k-muted-dark: #b9b5aa;
+  --k-footer-line: #3a3a42;
+  --k-error: var(--k-accent-text); /* foutkleur op het veld: geel (4,69:1), altijd met icoon + tekst */
 
   --f-sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --f-serif: 'Instrument Serif', Georgia, serif;
