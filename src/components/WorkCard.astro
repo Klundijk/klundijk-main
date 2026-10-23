@@ -13,7 +13,7 @@ const Tag = linked ? 'a' : 'article';
 <Tag class:list={['wcard', { 'wcard--link': linked }]} href={linked ? `/werk/${entry.id}` : undefined} data-services={c.services.join(' ')} style={`--bg:${c.cardColor};--fg:${fg}`}>
   <div class="wcard__media">
     {c.cardImage
-      ? <img src={c.cardImage.src} alt={c.cardImage.alt} loading="lazy" />
+      ? <img src={c.cardImage.src} alt={c.cardImage.alt} loading="lazy" style={c.cardImage.position ? `object-position:${c.cardImage.position}` : undefined} />
       : showPlaceholders && <span class="wcard__ph">[Beeld volgt]</span>}
     <span class="wcard__num" aria-hidden="true">{num}</span>
   </div>
