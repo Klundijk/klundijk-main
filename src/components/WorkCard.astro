@@ -1,0 +1,55 @@
+---
+// Projectkaart (bord X · Werk): hele kaart is één link als er een casepagina is, anders een niet-klikbare kaart ("Case volgt").
+import { hasCasePage, textOn, type WorkEntry } from '../lib/content';
+import { showPlaceholders } from '../data/site';
+interface Props { entry: WorkEntry; index: number; }
+const { entry, index } = Astro.props;
+const c = entry.data;
+const linked = hasCasePage(entry);
+const num = String(index + 1).padStart(2, '0');
+const fg = textOn(c.cardColor);
+const Tag = linked ? 'a' : 'article';
+---
+<Tag class:list={['wcard', { 'wcard--link': linked }]} href={linked ? `/werk/${entry.id}` : undefined} data-services={c.services.join(' ')} style={`--bg:${c.cardColor};--fg:${fg}`}>
+  <div class="wcard__media">
+    {c.cardImage
+      ? <img src={c.cardImage.src} alt={c.cardImage.alt} loading="lazy" />
+      : showPlaceholders && <span class="wcard__ph">[Beeld volgt]</span>}
+    <span class="wcard__num" aria-hidden="true">{num}</span>
+  </div>
+  <div class="wcard__body">
+    <h3 class="wcard__title">{c.title}</h3>
+    {c.tags.length > 0 && <p class="wcard__tags">{c.tags.join(' · ')}</p>}
+    <div class="wcard__foot">
+      <span class="wcard__text">{c.excerpt ?? c.promise}</span>
+      {linked
+        ? <span class="wcard__go">Bekijk case <span aria-hidden="true" class="wcard__arrow">→</span></span>
+        : <span class="wcard__soon">Case volgt</span>}
+    </div>
+  </div>
+</Tag>
+<style>
+  .wcard { display: flex; flex-direction: column; gap: 1.25rem; color: inherit; text-decoration: none; min-width: 0; }
+  .wcard__media { position: relative; overflow: hidden; border-radius: 24px; background: var(--bg); color: var(--fg); height: 16.25rem; isolation: isolate; }
+  .wcard__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s var(--ease); }
+  .wcard__ph { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .wcard__num { position: absolute; left: 1.25rem; top: 1.25rem; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.08em; z-index: 1; }
+  .wcard__body { display: flex; flex-direction: column; gap: 0.625rem; }
+  .wcard__title { font-weight: 800; font-stretch: 112%; font-size: clamp(1.875rem, 2.9vw, 2.75rem); line-height: 1.02; letter-spacing: -0.03em; margin: 0; }
+  .wcard__tags { font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--k-muted); margin: 0; max-width: none; }
+  .wcard__foot { display: flex; flex-direction: column; align-items: flex-start; gap: 0.625rem; }
+  .wcard__text { font-size: 1.0625rem; line-height: 1.45; max-width: 30rem; }
+  .wcard__go { font-size: 1.0625rem; font-weight: 700; text-decoration: underline; text-underline-offset: 6px; }
+  .wcard__arrow { display: inline-block; transition: transform 0.4s var(--ease); }
+  .wcard__soon { font-size: 1.0625rem; font-weight: 600; color: var(--k-muted); }
+  @media (min-width: 768px) { .wcard__media { height: 26rem; } }
+  @media (min-width: 1100px) {
+    .wcard__media { height: 32.5rem; }
+    .wcard__foot { flex-direction: row; justify-content: space-between; align-items: baseline; gap: 1.25rem; }
+    .wcard__text { font-size: 1.1875rem; }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .wcard--link:hover .wcard__media img { transform: scale(1.03); }
+    .wcard--link:hover .wcard__arrow { transform: translateX(4px); }
+  }
+</style>
