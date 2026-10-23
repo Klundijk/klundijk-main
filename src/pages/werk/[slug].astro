@@ -1,52 +1,184 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { getPublishedCases, getServices } from '../../lib/content';
-import { site } from '../../data/site';
+import { getPublishedCases, textOn } from '../../lib/content';
+import { site, showPlaceholders } from '../../data/site';
 
 export async function getStaticPaths() {
   const cases = await getPublishedCases();
-  return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  return cases.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, next: cases.length > 1 ? cases[(i + 1) % cases.length] : null } }));
 }
-const { entry } = Astro.props;
+const { entry, next } = Astro.props;
 const c = entry.data;
 const { Content } = await render(entry);
-const services = await getServices();
-const related = services.filter((s) => c.services.includes(s.id as (typeof c.services)[number]));
+const meta = [
+  { k: 'Klant', v: c.client ?? c.title },
+  { k: 'Jaar', v: c.year ? String(c.year) : null },
+  { k: 'Sector', v: c.sector ?? null },
+  { k: 'Scope', v: c.scope.length ? c.scope.join(', ') : null },
+  { k: 'Diensten', v: c.services.length ? c.services.map((s) => site.serviceLabels[s]).join(', ') : null },
+].filter((m) => m.v);
+// Genummerde secties: alleen tonen wat inhoud heeft (geen lege placeholder-blokken in productie).
+const hasExecution = Boolean(entry.body?.trim());
+const sections = [
+  c.challenge && 'context',
+  (c.approach || c.choices.length) && 'approach',
+  hasExecution && 'execution',
+  (c.result || c.metrics?.length || c.quote) && 'result',
+].filter(Boolean) as string[];
+const n = (key: string) => String(sections.indexOf(key) + 1).padStart(2, '0');
+const heroFg = textOn(c.cardColor);
+const nextFg = next ? textOn(next.data.cardColor) : '';
 ---
-<Base title={c.seo?.title ?? c.title} description={c.seo?.description ?? c.excerpt} noindex={c.placeholder}>
-  <article class="section wrap">
-    <p class="eyebrow">{c.sector} · {c.year}</p>
-    <h1>{c.title}</h1>
-    <p>{c.promise}</p>
-    {c.placeholder && <p><span class="placeholder-flag">Placeholder, niet publiceren</span></p>}
-    <div class="media" role="img" aria-label={c.heroAlt || undefined}>{c.heroImage ? '' : 'Hero-beeld volgt'}</div>
+<Base title={c.seo?.title ?? c.title} description={c.seo?.description ?? c.excerpt ?? c.promise} noindex={c.placeholder}>
+  <article>
+    <header class="top wrap">
+      <a class="back" href="/werk"><span aria-hidden="true">←</span>Terug naar werk</a>
+      <div class="intro">
+        <p class="mono kicker">Case{c.sector ? ` · ${c.sector}` : ''}</p>
+        <h1 class="title">{c.title}</h1>
+        {c.promise && <p class="promise">{c.promise}</p>}
+        {c.placeholder && <p><span class="placeholder-flag">Nog niet compleet: geen casepagina in productie</span></p>}
+      </div>
+      <dl class="meta">
+        {meta.map((m) => <div><dt class="mono">{m.k}</dt><dd>{m.v}</dd></div>)}
+      </dl>
+      <div class="hero" style={`--bg:${c.cardColor};--fg:${heroFg}`}>
+        {c.heroImage
+          ? <img src={c.heroImage.src} alt={c.heroImage.alt} width="1312" height="738" fetchpriority="high" />
+          : showPlaceholders && <span class="mono ph">Hero-beeld · [schone mockup of schermafbeelding, 16:9, zonder tekstoverlay]</span>}
+      </div>
+    </header>
 
-    <dl class="facts">
-      <div><dt>Klant</dt><dd>{c.client}</dd></div>
-      <div><dt>Jaar</dt><dd>{c.year}</dd></div>
-      <div><dt>Sector</dt><dd>{c.sector}</dd></div>
-      <div><dt>Scope</dt><dd>{c.scope.join(', ')}</dd></div>
-      {c.technology && <div><dt>Techniek</dt><dd>{c.technology.join(', ')}</dd></div>}
-    </dl>
-
-    <h2>Vraagstuk</h2><p>{c.challenge}</p>
-    <h2>Aanpak en keuzes</h2><p>{c.approach}</p>
-    <h2>Uitvoering</h2><Content />
-    <h2>Resultaat</h2><p>{c.result}</p>
-    {c.metrics && (<ul>{c.metrics.map((m) => <li><strong>{m.value}</strong> {m.label}</li>)}</ul>)}
-    {c.quote && (<blockquote><p>{c.quote.text}</p><footer>{c.quote.author}, {c.quote.role}</footer></blockquote>)}
-
-    {related.length > 0 && (
-      <aside>
-        <h2>Gerelateerde diensten</h2>
-        <ul>{related.map((s) => <li><a href={`/wat-we-doen/${s.id}`}>{s.data.title}</a></li>)}</ul>
-      </aside>
+    {c.challenge && (
+      <section class="sec" aria-labelledby="s-context">
+        <div class="sec__head"><p class="mono kicker">{n('context')} · Context</p><h2 id="s-context">{c.challengeHeading ?? 'Context'}</h2></div>
+        <div class="sec__body"><p class="lead">{c.challenge}</p></div>
+      </section>
     )}
-    <p><a class="btn btn--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
+
+    {(c.approach || c.choices.length > 0) && (
+      <section class="sec" aria-labelledby="s-approach">
+        <div class="sec__head"><p class="mono kicker">{n('approach')} · Aanpak en keuzes</p><h2 id="s-approach">{c.approachHeading ?? 'Aanpak en keuzes'}</h2></div>
+        <div class="sec__body">
+          {c.approach && <p class="lead muted">{c.approach}</p>}
+          {c.choices.length > 0 && (
+            <ol class="choices">
+              {c.choices.map((ch, i) => (
+                <li><span class="mono choices__n">{String(i + 1).padStart(2, '0')}</span><span class="choices__t"><strong>{ch.title}</strong><span>{ch.reason}</span></span></li>
+              ))}
+            </ol>
+          )}
+          {c.detailImages.length > 0 && (
+            <div class="pair">{c.detailImages.map((im) => <img src={im.src} alt={im.alt} loading="lazy" width="640" height="480" />)}</div>
+          )}
+        </div>
+      </section>
+    )}
+
+    {hasExecution && (
+      <section class="sec" aria-labelledby="s-exec">
+        <div class="sec__head"><p class="mono kicker">{n('execution')} · Uitvoering</p><h2 id="s-exec">{c.executionHeading}</h2></div>
+        <div class="sec__body">
+          <div class="lead prose"><Content /></div>
+          {c.executionImage && <img class="wide" src={c.executionImage.src} alt={c.executionImage.alt} loading="lazy" width="1312" height="656" />}
+        </div>
+      </section>
+    )}
+
+    {(c.result || c.metrics?.length || c.quote) && (
+      <section class="sec" aria-labelledby="s-result">
+        <div class="sec__head"><p class="mono kicker">{n('result')} · Resultaat</p><h2 id="s-result">{c.resultHeading ?? 'Wat er veranderde.'}</h2></div>
+        <div class="sec__body">
+          {c.result && <p class="lead muted">{c.result}</p>}
+          {c.metrics && c.metrics.length > 0 && (
+            <ul class="metrics">{c.metrics.map((m) => <li><span class="metrics__v">{m.value}</span><span class="metrics__l">{m.label}</span></li>)}</ul>
+          )}
+          {c.quote && (
+            <figure class="quote"><blockquote>{c.quote.text}</blockquote><figcaption class="mono">{c.quote.author}, {c.quote.role}</figcaption></figure>
+          )}
+        </div>
+      </section>
+    )}
+
+    {c.services.length > 0 && (
+      <section class="used" aria-labelledby="s-used">
+        <h2 id="s-used" class="mono kicker">Gebruikte diensten</h2>
+        <ul>{c.services.map((s) => <li><a class="chip chip--link" href={`/wat-we-doen/${s}`}>{site.serviceLabels[s]} <span aria-hidden="true">→</span></a></li>)}</ul>
+      </section>
+    )}
   </article>
+
+  {next && (
+    <a class="next" href={`/werk/${next.id}`} style={`--bg:${next.data.cardColor};--fg:${nextFg}`}>
+      <span class="mono">Volgende case</span>
+      <span class="next__row"><span class="next__t">{next.data.title}</span><span aria-hidden="true" class="next__a">→</span></span>
+    </a>
+  )}
 </Base>
+
 <style>
-  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: var(--space-3); margin-block: var(--space-5); border-block: 1px solid var(--color-line); padding-block: var(--space-3); }
-  dt { font-size: 0.85rem; color: var(--color-muted); } dd { margin: 0; font-weight: 600; }
+  .top { padding-block: 0 3rem; display: flex; flex-direction: column; gap: 1.75rem; }
+  .back { align-self: flex-start; min-height: 44px; display: inline-flex; align-items: center; gap: 0.625rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none; }
+  .back:hover { text-decoration: underline; text-underline-offset: 6px; }
+  .intro { display: flex; flex-direction: column; gap: 1.125rem; }
+  .kicker { color: var(--k-muted); margin: 0; font-weight: 400; font-size: var(--t-mono); }
+  .title { font-weight: 800; font-stretch: 125%; font-size: clamp(2.75rem, 8vw + 12.8px, 8rem); line-height: 0.94; letter-spacing: -0.045em; margin: 0; overflow-wrap: anywhere; }
+  .promise { font-size: clamp(1.3125rem, 2.1vw + 0.8rem, 2rem); line-height: 1.5; max-width: 54rem; margin: 0; }
+  .meta { display: grid; gap: 1.125rem; margin: 0; }
+  .meta div { display: flex; flex-direction: column; gap: 0.375rem; border-top: 1px solid var(--k-ink); padding-top: 0.75rem; }
+  .meta dt { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--k-muted); }
+  .meta dd { margin: 0; font-size: 1.0625rem; line-height: 1.35; font-weight: 500; }
+  .hero { position: relative; overflow: hidden; border-radius: 24px; background: var(--bg); color: var(--fg); aspect-ratio: 16 / 9; min-height: 15rem; }
+  .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .ph { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 1rem; }
+
+  .sec { max-width: 100rem; margin-inline: auto; padding: 3rem var(--pad-x); border-top: 1px solid var(--k-ink); display: grid; gap: 1.5rem; }
+  .sec__head { display: flex; flex-direction: column; gap: 1rem; }
+  .sec h2 { font-weight: 800; font-stretch: 112%; font-size: clamp(2.125rem, 2.1vw + 25.8px, 3.5rem); line-height: 1; letter-spacing: -0.04em; margin: 0; }
+  .sec__body { display: flex; flex-direction: column; gap: 2rem; min-width: 0; }
+  .lead { font-size: clamp(1.125rem, 0.57vw + 15.8px, 1.5rem); line-height: 1.5; max-width: 47.5rem; margin: 0; }
+  .lead.muted { color: var(--k-muted); }
+  .prose :global(p) { font-size: inherit; margin: 0 0 1rem; max-width: none; }
+  .choices { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--k-line); }
+  .choices li { display: grid; grid-template-columns: 2.75rem 1fr; column-gap: 1rem; padding: 1.125rem 0; border-top: 1px solid var(--k-line); }
+  .choices__n { font-size: 0.875rem; letter-spacing: 0.06em; color: var(--k-muted); }
+  .choices__t { display: flex; flex-direction: column; gap: 0.375rem; }
+  .choices__t strong { font-size: 1.125rem; font-weight: 700; }
+  .choices__t span:last-child { font-size: 1rem; line-height: 1.5; color: var(--k-muted); }
+  .pair { display: grid; gap: 1rem; }
+  .pair img, .wide { width: 100%; height: auto; border-radius: 24px; object-fit: cover; }
+  .pair img { aspect-ratio: 4 / 3; } .wide { aspect-ratio: 2 / 1; }
+  .metrics { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+  .metrics li { border: 1px solid var(--k-ink); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .metrics__v { font-weight: 800; font-stretch: 118%; font-size: clamp(2.75rem, 0.75vw + 38px, 3.5rem); line-height: 1; letter-spacing: -0.04em; }
+  .metrics__l { font-size: 1rem; line-height: 1.45; color: var(--k-muted); }
+  .quote { margin: 0; display: flex; flex-direction: column; gap: 0.875rem; }
+  .quote blockquote { margin: 0; font-weight: 500; font-size: clamp(1.625rem, 1.33vw + 20.8px, 2.5rem); line-height: 1.15; letter-spacing: -0.02em; }
+  .quote figcaption { color: var(--k-muted); }
+  .used { max-width: 100rem; margin-inline: auto; padding: 2.5rem var(--pad-x); border-top: 1px solid var(--k-ink); display: flex; flex-direction: column; gap: 1.25rem; }
+  .used ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .chip--link { text-decoration: none; gap: 0.625rem; }
+  .next { display: flex; flex-direction: column; gap: 1.25rem; padding: 2.5rem var(--pad-x); background: var(--bg); color: var(--fg); text-decoration: none; }
+  .next__row { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; }
+  .next__t { font-weight: 800; font-stretch: 125%; font-size: clamp(3rem, 6.86vw + 21px, 7.5rem); line-height: 0.94; letter-spacing: -0.045em; overflow-wrap: anywhere; }
+  .next__a { font-size: clamp(2.25rem, 4vw, 5rem); transition: transform 0.4s var(--ease); }
+  .next:hover .next__a { transform: translateX(8px); }
+  @media (prefers-reduced-motion: reduce) { .next__a { transition: none; } .next:hover .next__a { transform: none; } }
+
+  @media (min-width: 768px) {
+    .meta { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+    .pair { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+  }
+  @media (min-width: 1100px) {
+    .top { padding-bottom: 4.5rem; gap: 2.5rem; }
+    .meta { grid-template-columns: 1fr 0.7fr 1fr 1.6fr 1.3fr; }
+    .hero { min-height: 0; }
+    .sec { padding-block: 6rem; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 1.5rem; }
+    .sec__head { grid-column: 1 / span 4; }
+    .sec__body { grid-column: 6 / span 7; }
+    .used { padding-block: 4rem; }
+    .next { padding-block: 4.5rem; }
+  }
 </style>

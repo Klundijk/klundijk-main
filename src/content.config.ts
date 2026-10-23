@@ -10,30 +10,55 @@ const seo = z.object({
   description: z.string().max(170).optional(),
 });
 
+const serviceId = z.enum(['merk-identiteit', 'websites-digitale-ervaringen', 'webshops-commerce', 'groei-slimme-processen']);
+const image = z.object({ src: z.string(), alt: z.string().default('') });
+
+// Eén collectie voor alle werk: `kind: project` is een teaser op het werkoverzicht zonder eigen pagina ("Case volgt"),
+// `kind: case` krijgt een casepagina. Casemodules die leeg zijn, worden niet getoond (geen placeholder-blokken in productie).
 const cases = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/cases' }),
-  schema: z.object({
-    title: z.string(),
-    promise: z.string().describe('Korte case-belofte: opgave of uitkomst in een regel'),
-    client: z.string(),
-    sector: z.string(),
-    year: z.number().int(),
-    excerpt: z.string(),
-    services: z.array(z.enum(['merk-identiteit', 'websites-digitale-ervaringen', 'webshops-commerce', 'groei-slimme-processen'])),
-    scope: z.array(z.string()).default([]),
-    technology: z.array(z.string()).optional(),
-    heroImage: z.string().optional(),
-    heroAlt: z.string().default(''),
-    challenge: z.string(),
-    approach: z.string(),
-    result: z.string(),
-    metrics: z.array(z.object({ label: z.string(), value: z.string() })).optional(),
-    quote: z.object({ text: z.string(), author: z.string(), role: z.string() }).optional(),
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(false),
-    placeholder: z.boolean().default(false).describe('True = voorbeeldinhoud, nooit publiceren'),
-    seo: seo.optional(),
-  }),
+  schema: z
+    .object({
+      title: z.string(),
+      kind: z.enum(['case', 'project']).default('project'),
+      order: z.number().int().default(99).describe('Volgorde op het werkoverzicht'),
+      tags: z.array(z.string()).default([]).describe('Labels op de kaart, bijv. "Merk & identiteit", "Website"'),
+      services: z.array(serviceId).default([]),
+      excerpt: z.string().optional().describe('Eén regel op de kaart'),
+      cardColor: z.string().regex(/^#[0-9a-fA-F]{6}$/).default('#DAD5CB').describe('Achtergrond van kaart en hero zolang er geen beeld is'),
+      cardImage: image.optional(),
+      // Casepagina
+      promise: z.string().optional().describe('Korte case-belofte: opgave of uitkomst in een regel'),
+      client: z.string().optional(),
+      sector: z.string().optional(),
+      year: z.number().int().optional(),
+      scope: z.array(z.string()).default([]),
+      technology: z.array(z.string()).optional(),
+      heroImage: image.optional(),
+      challengeHeading: z.string().optional(),
+      challenge: z.string().optional(),
+      approachHeading: z.string().optional(),
+      approach: z.string().optional(),
+      choices: z.array(z.object({ title: z.string(), reason: z.string() })).max(3).default([]),
+      detailImages: z.array(image).max(2).default([]),
+      executionHeading: z.string().default('Wat Klundijk deed.'),
+      executionImage: image.optional(),
+      resultHeading: z.string().optional(),
+      result: z.string().optional(),
+      metrics: z.array(z.object({ label: z.string(), value: z.string() })).max(3).optional(),
+      quote: z.object({ text: z.string(), author: z.string(), role: z.string() }).optional(),
+      featured: z.boolean().default(false),
+      draft: z.boolean().default(false),
+      placeholder: z.boolean().default(false).describe('True = niet publiceren als casepagina (nog niet compleet of voorbeeldinhoud)'),
+      seo: seo.optional(),
+    })
+    .superRefine((d, ctx) => {
+      if (d.kind === 'case' && !d.placeholder) {
+        for (const k of ['promise', 'excerpt', 'challenge', 'approach', 'result'] as const) {
+          if (!d[k]) ctx.addIssue({ code: 'custom', path: [k], message: `${k} is verplicht voor een gepubliceerde case` });
+        }
+      }
+    }),
 });
 
 const services = defineCollection({

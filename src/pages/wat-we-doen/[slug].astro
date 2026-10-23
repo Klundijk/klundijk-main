@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import { getServices, getPublishedCases } from '../../lib/content';
 import { site } from '../../data/site';
-import CaseCard from '../../components/CaseCard.astro';
+import WorkCard from '../../components/WorkCard.astro';
 
 export async function getStaticPaths() {
   const services = await getServices();
@@ -27,7 +27,7 @@ const cases = (await getPublishedCases()).filter((c) => c.data.services.includes
     <h2>Hoe we bepalen wat nodig is</h2>
     <ol>{s.approach.map((x) => <li>{x}</li>)}</ol>
 
-    {cases.length > 0 && (<><h2>Gerelateerd werk</h2><div class="grid grid--2">{cases.map((c) => <CaseCard entry={c} />)}</div></>)}
+    {cases.length > 0 && (<><h2>Gerelateerd werk</h2><div class="grid grid--2">{cases.map((c, i) => <WorkCard entry={c} index={i} />)}</div></>)}
     <p><a class="btn btn--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
   </section>
 </Base>

@@ -21,6 +21,13 @@ export const site = {
     { label: 'Groei & slimme processen', href: '/wat-we-doen/groei-slimme-processen' },
     { label: 'Merk & identiteit', href: '/wat-we-doen/merk-identiteit' },
   ],
+  // Labels van de vier capabilities en hun volgorde in de werkfilters (bord X · Werk).
+  serviceLabels: {
+    'merk-identiteit': 'Merk & identiteit',
+    'websites-digitale-ervaringen': 'Websites',
+    'webshops-commerce': 'Webshops & commerce',
+    'groei-slimme-processen': 'Groei & slimme processen',
+  } as Record<string, string>,
   footerLine: 'Digitale partner voor merk, websites, webshops en slimme processen.',
   // Nog aan te leveren door Levi (Aanleverlijst in Notion): telefoon, e-mail, KvK. Zolang een waarde null is,
   // wordt ze in productie niet getoond (alleen in dev als [placeholder]).

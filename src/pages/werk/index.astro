@@ -1,16 +1,94 @@
 ---
 import Base from '../../layouts/Base.astro';
-import CaseCard from '../../components/CaseCard.astro';
-import { getPublishedCases } from '../../lib/content';
-const cases = await getPublishedCases();
+import WorkCard from '../../components/WorkCard.astro';
+import { getWorkItems } from '../../lib/content';
+import { site, showPlaceholders } from '../../data/site';
+
+const items = await getWorkItems();
+const filters = ['merk-identiteit', 'websites-digitale-ervaringen', 'webshops-commerce', 'groei-slimme-processen'];
+const count = (id: string) => items.filter((i) => i.data.services.includes(id as never)).length;
+const hasCommerceCase = false; // slot voor een tweede commerce-case: pas tonen als het aantoonbaar is
 ---
-<Base title="Werk" description="Geselecteerd werk van Klundijk.">
-  <section class="section wrap">
-    <h1>Werk</h1>
-    {cases.length ? (
-      <div class="grid grid--2">{cases.map((c) => <CaseCard entry={c} />)}</div>
-    ) : (
-      <p class="muted">Cases volgen zodra ze toonbaar zijn.</p>
-    )}
+<Base title="Werk" description="Geselecteerd werk van Klundijk: projecten waarin merk, website en webshop samenkomen.">
+  <section class="head wrap">
+    <p class="mono kicker">Werk · selectie van projecten</p>
+    <h1 class="title">Werk<span class="dot">.</span></h1>
+    <p class="intro">Projecten waarin merk, website en webshop samenkomen. Alleen werk dat we echt hebben gemaakt, met de keuzes erbij.</p>
+
+    <!-- Filters werken met JavaScript; zonder JS staan alle projecten zichtbaar en blijft de groep verborgen. -->
+    <div class="filters" role="group" aria-label="Filter op dienst" data-filters hidden>
+      <button type="button" class="chip" aria-pressed="true" data-filter="all">Alles</button>
+      {filters.map((id) => (
+        <button type="button" class="chip" aria-pressed="false" data-filter={id} aria-disabled={count(id) === 0 ? 'true' : undefined}>{site.serviceLabels[id]}</button>
+      ))}
+    </div>
+    <p class="sr-only" role="status" aria-live="polite" data-status></p>
+  </section>
+
+  <section class="list wrap" aria-label="Projecten">
+    {items.length > 0 ? (
+      <ul class="grid" data-grid>
+        {items.map((e, i) => <li class="cell" data-item><WorkCard entry={e} index={i} /></li>)}
+      </ul>
+    ) : <p class="muted">Projecten volgen zodra ze toonbaar zijn.</p>}
+    <div class="empty" data-empty hidden>
+      <p>Geen projecten bij deze dienst.</p>
+      <button type="button" class="btn btn--secondary btn--md" data-reset>Toon alles</button>
+    </div>
+    {hasCommerceCase || !showPlaceholders ? null : <p class="slot mono">[Commerce-case volgt · alleen tonen als het aantoonbaar is]</p>}
   </section>
 </Base>
+
+<script>
+  const root = document.querySelector('[data-filters]') as HTMLElement | null;
+  const items = [...document.querySelectorAll<HTMLElement>('[data-item]')];
+  const status = document.querySelector<HTMLElement>('[data-status]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  if (root && items.length) {
+    root.hidden = false;
+    const chips = [...root.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const pattern = ['1 / span 7', '8 / span 5', '1 / span 5', '6 / span 7']; // asymmetrisch 7/5, 5/7 (desktop)
+    let first = true;
+    const apply = (id: string) => {
+      let n = 0;
+      items.forEach((li) => {
+        const svc = (li.querySelector('[data-services]') as HTMLElement).dataset.services!.split(' ');
+        const show = id === 'all' || svc.includes(id);
+        li.hidden = !show;
+        if (show) { li.style.setProperty('--c', pattern[n % 4]); n++; }
+      });
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === id)));
+      if (empty) empty.hidden = n > 0;
+      if (!first && status) status.textContent = n === 0 ? 'Geen projecten bij deze dienst.' : `${n} ${n === 1 ? 'project' : 'projecten'}`;
+      first = false;
+    };
+    chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter!)));
+    document.querySelector('[data-reset]')?.addEventListener('click', () => { apply('all'); chips[0].focus(); });
+    apply('all');
+  }
+</script>
+
+<style>
+  .head { padding-block: 3.5rem 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .kicker { color: var(--k-muted); }
+  .title { font-weight: 800; font-stretch: 125%; font-size: var(--t-hero); line-height: 0.92; letter-spacing: -0.045em; margin: 0; }
+  .dot { font-family: var(--f-serif); font-style: italic; font-weight: 400; font-size: 1.12em; }
+  .intro { font-size: clamp(1.25rem, 2.67vw, 1.75rem); line-height: 1.5; max-width: 51rem; margin: 0; }
+  .filters { display: flex; flex-wrap: wrap; gap: 0.75rem; padding-top: 0.75rem; }
+  .filters[hidden] { display: none; }
+  .list { padding-block: 1.5rem 5rem; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 2.75rem 1.5rem; grid-template-columns: 1fr; }
+  .cell[hidden] { display: none; }
+  .cell { min-width: 0; }
+  @media (min-width: 768px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 3.5rem; } }
+  @media (min-width: 1100px) { .grid { grid-template-columns: repeat(12, minmax(0, 1fr)); } .cell { grid-column: var(--c, auto); } }
+  /* Zonder JS (geen --c): vaste afwisseling 7/5 op desktop. */
+  @media (min-width: 1100px) {
+    .cell:nth-child(4n + 1) { --c: 1 / span 7; } .cell:nth-child(4n + 2) { --c: 8 / span 5; }
+    .cell:nth-child(4n + 3) { --c: 1 / span 5; } .cell:nth-child(4n + 4) { --c: 6 / span 7; }
+  }
+  .empty { display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; padding-block: 2rem; }
+  .empty[hidden] { display: none; }
+  .empty p { margin: 0; }
+  .slot { margin-top: 3.5rem; border: 1px dashed var(--k-ink); border-radius: 24px; min-height: 7.5rem; display: grid; place-items: center; text-align: center; padding: 1rem; }
+</style>
