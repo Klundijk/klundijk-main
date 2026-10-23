@@ -1,0 +1,88 @@
+---
+// HAALBAARHEIDSPROEF voor design X v5. Niet definitief, niet geïndexeerd.
+import { onField, accentText, palette, fieldOptions } from '../../lib/contrast';
+const field = fieldOptions[0];
+const accent = palette.accent;
+const vars = `--k-field:${field};--k-ink:${palette.ink};--k-paper:${palette.paper};--k-white:${palette.white};--k-accent:${accent};--k-on-field:${onField(field)};--k-accent-text:${accentText(field, accent)};`;
+---
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Spike X v5 hero</title>
+  <link rel="preload" href="/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <script is:inline>
+    (function () {
+      var d = document.documentElement, play = false;
+      try {
+        var rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!rm && !sessionStorage.getItem('kl-intro')) { play = true; sessionStorage.setItem('kl-intro', '1'); }
+      } catch (e) {}
+      d.setAttribute('data-intro', play ? 'rough' : 'refined');
+      d.className += ' js';
+    })();
+  </script>
+  <style is:global set:html={`
+@font-face{font-family:'Archivo';src:url('/fonts/archivo-latin-wdth-normal.woff2') format('woff2');font-weight:100 900;font-stretch:62% 125%;font-display:swap}
+@font-face{font-family:'Instrument Serif';src:url('/fonts/instrument-serif-latin-400-italic.woff2') format('woff2');font-style:italic;font-display:swap}
+@font-face{font-family:'DM Mono';src:url('/fonts/dm-mono-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+:root{${vars}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--k-field);color:var(--k-on-field);font-family:'Archivo',system-ui,sans-serif}
+:focus-visible{outline:3px solid var(--k-ink);box-shadow:0 0 0 6px var(--k-white);outline-offset:3px}
+.hero{min-height:clamp(420px,70vh,760px);padding:48px 24px;display:flex;flex-direction:column;justify-content:center;gap:24px;position:relative;overflow:hidden}
+.stack{position:relative}
+h1{margin:0;font-weight:800;font-stretch:125%;font-size:clamp(52px,10.28vw,148px);line-height:.95;letter-spacing:-.045em;transition:opacity 500ms,transform 700ms}
+h1 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--k-accent-text);letter-spacing:-.02em}
+.rough{position:absolute;inset:0;pointer-events:none;font-weight:300;font-stretch:62%;font-size:clamp(52px,10.28vw,148px);line-height:.95;opacity:0;transition:opacity 500ms;font-family:'DM Mono',monospace}
+.sub{font-size:clamp(18px,2vw,24px);max-width:36ch;margin:0;transition:opacity 900ms 300ms}
+[data-intro=rough] h1{opacity:0;transform:translateY(14px)}
+[data-intro=rough] .rough{opacity:1}
+[data-intro=rough] .sub{opacity:.25}
+html[data-intro=rough] body{background:var(--k-paper);color:var(--k-ink)}
+body{transition:background-color 900ms,color 900ms}
+.toggle{align-self:flex-start;font:500 14px 'DM Mono',monospace;padding:10px 16px;border:2px solid var(--k-on-field);background:transparent;color:inherit;cursor:pointer}
+.marquee{overflow:hidden;border-block:1px solid currentColor;padding:12px 0;display:flex;gap:16px;align-items:center}
+.track{display:flex;gap:48px;white-space:nowrap;animation:m 40s linear infinite;will-change:transform}
+.marquee:hover .track,.marquee:focus-within .track,.marquee[data-paused] .track{animation-play-state:paused}
+@keyframes m{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.track{animation:none}h1,.sub,body{transition:none}}
+`}></style>
+</head>
+<body>
+  <main class="hero">
+    <div class="stack">
+      <h1 id="h1">Digitaal kan <em>beter.</em></h1>
+      <div class="rough" aria-hidden="true">digitaal kan beter?</div>
+    </div>
+    <p class="sub">Dus maken we het beter.</p>
+    <button class="toggle" id="toggle" aria-pressed="false">Zie hoe het was</button>
+  </main>
+  <div class="marquee" id="marquee">
+    <button class="toggle" id="pause" aria-pressed="false" style="margin-left:24px">Pauzeer beweging</button>
+    <div class="track" aria-hidden="true">
+      {[0,1].map(() => <span style="display:flex;gap:48px">{['Websites','Webshops','Maatwerk','Onderhoud','Strategie'].map(t => <span>{t} ·</span>)}</span>)}
+    </div>
+  </div>
+  <script is:inline>
+    var d = document.documentElement;
+    if (d.getAttribute('data-intro') === 'rough') setTimeout(function(){ d.setAttribute('data-intro','refined'); }, 900);
+    var t = document.getElementById('toggle');
+    t.addEventListener('click', function(){
+      var on = t.getAttribute('aria-pressed') === 'true';
+      t.setAttribute('aria-pressed', String(!on));
+      t.textContent = on ? 'Zie hoe het was' : 'Maak het beter';
+      d.setAttribute('data-intro', on ? 'refined' : 'rough');
+    });
+    var p = document.getElementById('pause'), m = document.getElementById('marquee');
+    p.addEventListener('click', function(){
+      var on = p.getAttribute('aria-pressed') === 'true';
+      p.setAttribute('aria-pressed', String(!on));
+      p.textContent = on ? 'Pauzeer beweging' : 'Hervat beweging';
+      if (on) m.removeAttribute('data-paused'); else m.setAttribute('data-paused','');
+    });
+  </script>
+</body>
+</html>
