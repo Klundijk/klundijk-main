@@ -19,6 +19,16 @@ approach:
   - Kiezen welke richting past.
   - Maken en uitwerken in een bruikbaar systeem.
   - Verbeteren op basis van gebruik.
+momentsHeading: Wat we voor je doen.
+moments:
+  - title: Positionering en merkstrategie
+    text: Helder maken waar je voor staat, voor wie, en waarin je verschilt.
+  - title: Logo en visuele identiteit
+    text: Een herkenbaar gezicht dat past bij het bedrijf dat je nu bent.
+  - title: Huisstijlsysteem en richtlijnen
+    text: Afspraken en bouwstenen waarmee iedereen consistent kan werken.
+  - title: Vertaling naar middelen
+    text: Je merk doorgezet in website, webshop en alle andere middelen.
 faq: []
 ---
 Conceptcopy op basis van de content blueprint. De Schrijver-rol herziet deze tekst.

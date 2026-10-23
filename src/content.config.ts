@@ -73,6 +73,14 @@ const services = defineCollection({
     deliverables: z.array(z.string()),
     approach: z.array(z.string()),
     faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
+    // Dienstpagina (patroon bord X · Commerce). Alles optioneel: ontbreekt een blok, dan wordt het niet getoond.
+    heroText: z.string().optional().describe('Intro in de hero; standaard shortIntro'),
+    momentsHeading: z.string().optional(),
+    moments: z.array(z.object({ title: z.string(), text: z.string() })).max(4).default([]),
+    projectsHeading: z.string().default('Ons werk.'),
+    contactHeading: z.string().optional(),
+    contactText: z.string().optional(),
+    concept: z.boolean().default(true).describe('Tekst is concept en nog niet beoordeeld door SEO & content (badge alleen in dev)'),
     seo: seo.optional(),
   }),
 });

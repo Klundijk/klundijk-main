@@ -1,15 +1,21 @@
 ---
 // Contactband: op alle pagina's onder de inhoud, boven de footer (ontwerpbord X · Componenten, sectie 05).
 import { site, showPlaceholders } from '../data/site';
+interface Props { heading?: string; text?: string; cta?: { label: string; href: string }; }
+const {
+  heading = 'Heb je iets dat digitaal beter kan?',
+  text = 'Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.',
+  cta = site.primaryCta,
+} = Astro.props;
 const { phone, email } = site.contact;
 const showContactLine = Boolean(phone || email || showPlaceholders);
 ---
 <section class="band on-field" aria-labelledby="band-h">
   <p class="mono band__kicker">Contact</p>
-  <h2 id="band-h" class="band__title">Heb je iets dat digitaal beter kan?</h2>
-  <p class="band__text">Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.</p>
+  <h2 id="band-h" class="band__title">{heading}</h2>
+  <p class="band__text">{text}</p>
   <div class="band__actions">
-    <a class="btn btn--primary btn--lg" href={site.primaryCta.href}>{site.primaryCta.label}</a>
+    <a class="btn btn--primary btn--lg" href={cta.href}>{cta.label}</a>
     {showContactLine && (
       <p class="band__line">
         {phone ? <a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}

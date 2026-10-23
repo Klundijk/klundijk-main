@@ -4,16 +4,39 @@ import { getServices } from '../../lib/content';
 const services = await getServices();
 ---
 <Base title="Wat we doen" description="Merk, websites, webshops en slimme digitale processen: waarvoor je Klundijk inschakelt.">
-  <section class="section wrap">
-    <h1>Wat we doen</h1>
-    <p>Technologie volgt het vraagstuk, niet andersom. Vier gebieden waarin we je helpen.</p>
-    <div class="grid grid--2">
-      {services.map((s) => (
-        <a class="card" href={`/wat-we-doen/${s.id}`}>
-          <h2>{s.data.title}</h2>
-          <p>{s.data.shortIntro}</p>
-        </a>
+  <!-- Tijdelijke opzet: de overzichtspagina "Wat we doen" is nog niet ontworpen. Rijen volgen het patroon van de homepage. -->
+  <section class="head wrap">
+    <p class="eyebrow">Wat we doen</p>
+    <h1 class="title">Technologie volgt het vraagstuk.</h1>
+    <p class="intro">Vier gebieden waarin we je helpen. We beginnen bij wat jij wilt bereiken, niet bij een platform.</p>
+  </section>
+  <section class="list wrap" aria-label="Diensten">
+    <ol class="rows">
+      {services.map((s, i) => (
+        <li>
+          <a class="row" href={`/wat-we-doen/${s.id}`}>
+            <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+            <span class="row__t">{s.data.title}</span>
+            <span class="row__d">{s.data.shortIntro}</span>
+            <span class="row__a" aria-hidden="true">→</span>
+          </a>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
 </Base>
+<style>
+  .head { padding-block: 3.5rem 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .title { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 0.98; letter-spacing: -0.04em; max-width: 18ch; }
+  .intro { margin: 0; font-size: clamp(1.125rem, 2vw, 1.5rem); line-height: 1.5; max-width: 40rem; }
+  .list { padding-block: 1rem 5rem; }
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--k-ink); }
+  .rows li { border-bottom: 1px solid var(--k-ink); }
+  .mono { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; color: var(--k-muted); }
+  .row { display: grid; gap: 0.5rem 1.5rem; grid-template-columns: auto 1fr auto; align-items: baseline; padding-block: 1.5rem; text-decoration: none; }
+  .row__t { font-weight: 800; font-stretch: 115%; font-size: var(--t-row); letter-spacing: -0.03em; line-height: 1.05; }
+  .row__d { grid-column: 2 / 3; color: var(--k-muted); max-width: 40rem; }
+  .row__a { grid-row: 1; grid-column: 3; font-size: 1.5rem; transition: transform 0.2s var(--ease); }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) { .row:hover .row__a { transform: translateX(4px); } }
+  @media (min-width: 1100px) { .row { grid-template-columns: 4rem 1.1fr 1fr auto; } .row__d { grid-column: 3; grid-row: 1; } .row__a { grid-column: 4; } }
+</style>

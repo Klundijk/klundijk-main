@@ -1,8 +1,11 @@
 ---
+// Dienstpagina (bord X · Commerce + X · Commerce Mobiel is het patroon voor alle vier).
+// Blokken zonder inhoud worden niet getoond; conceptteksten krijgen alleen in dev een badge.
 import Base from '../../layouts/Base.astro';
-import { getServices, getPublishedCases } from '../../lib/content';
-import { site } from '../../data/site';
 import WorkCard from '../../components/WorkCard.astro';
+import { getServices, getWorkItems } from '../../lib/content';
+import { site, showPlaceholders } from '../../data/site';
+import { principles, principlesHeading, steps, werkwijzeHref } from '../../data/werkwijze';
 
 export async function getStaticPaths() {
   const services = await getServices();
@@ -10,24 +13,145 @@ export async function getStaticPaths() {
 }
 const { entry } = Astro.props;
 const s = entry.data;
-const cases = (await getPublishedCases()).filter((c) => c.data.services.includes(entry.id as never));
+const all = await getWorkItems();
+// Uitgelichte items (featured) staan voorop en vormen de hero-kaart; de kaartnummers blijven die van het overzicht.
+const work = all
+  .map((e, i) => ({ e, i }))
+  .filter(({ e }) => e.data.services.includes(entry.id as never))
+  .sort((a, b) => Number(b.e.data.featured) - Number(a.e.data.featured));
+const featured = work[0]?.e;
+const label = site.serviceLabels[entry.id] ?? s.title;
+const cta = site.commerceCta;
+const band = { heading: s.contactHeading, text: s.contactText, cta };
+const num = (n: number) => String(n + 1).padStart(2, '0');
 ---
-<Base title={s.seo?.title ?? s.title} description={s.seo?.description ?? s.shortIntro}>
-  <section class="section wrap">
-    <p class="eyebrow"><a href="/wat-we-doen">Wat we doen</a></p>
-    <h1>{s.title}</h1>
-    <p>{s.heroStatement}</p>
-
-    <h2>Wanneer dit relevant is</h2>
-    <ul>{s.situations.map((x) => <li>{x}</li>)}</ul>
-    <h2>Wat het oplevert</h2>
-    <ul>{s.outcomes.map((x) => <li>{x}</li>)}</ul>
-    <h2>Wat we kunnen leveren</h2>
-    <ul>{s.deliverables.map((x) => <li>{x}</li>)}</ul>
-    <h2>Hoe we bepalen wat nodig is</h2>
-    <ol>{s.approach.map((x) => <li>{x}</li>)}</ol>
-
-    {cases.length > 0 && (<><h2>Gerelateerd werk</h2><div class="grid grid--2">{cases.map((c, i) => <WorkCard entry={c} index={i} />)}</div></>)}
-    <p><a class="btn btn--primary" href={site.primaryCta.href}>{site.primaryCta.label}</a></p>
+<Base title={s.seo?.title ?? s.title} description={s.seo?.description ?? s.shortIntro} heroHeader band={band}>
+  <section class="hero on-field" aria-labelledby="svc-title">
+    <div class="hero__text">
+      <p class="mono kicker">Wat we doen · {s.title}</p>
+      <h1 id="svc-title" class="hero__title">{s.title}</h1>
+      <p class="hero__lead">{s.heroText ?? s.shortIntro}</p>
+      <p class="hero__actions">
+        <a class="btn btn--primary btn--lg" href={cta.href}>{cta.label}</a>
+        <a class="link-strong" href={`/werk?dienst=${entry.id}`}>Bekijk ons werk</a>
+      </p>
+    </div>
+    {featured && (
+      <div class="hero__card" style={`--bg:${featured.data.cardColor}`}>
+        {featured.data.cardImage && <img src={featured.data.cardImage.src} alt={featured.data.cardImage.alt} />}
+        <span class="hero__pill mono">{featured.data.title} · {featured.data.tags.join(', ').toLowerCase()}</span>
+      </div>
+    )}
   </section>
+
+  {s.moments.length > 0 && (
+    <section class="block wrap-full" aria-labelledby="moments-h">
+      <p class="mono kicker kicker--dark">Waarvoor je ons inschakelt</p>
+      <h2 id="moments-h" class="h2">{s.momentsHeading ?? 'Wat we voor je doen.'}</h2>
+      <ol class="moments">
+        {s.moments.map((m, i) => (
+          <li class="moment">
+            <span class="mono kicker--dark">{num(i)}</span>
+            <h3 class="moment__t">{m.title}</h3>
+            <p>{m.text}</p>
+          </li>
+        ))}
+      </ol>
+      {showPlaceholders && s.concept && <p class="flag mono">Concepttekst · SEO &amp; content beoordeelt</p>}
+    </section>
+  )}
+
+  <section class="block block--rule wrap-full" aria-labelledby="how-h">
+    <p class="mono kicker--dark">Hoe we werken</p>
+    <h2 id="how-h" class="h2">{principlesHeading}</h2>
+    <div class="principles">
+      {principles.map((p) => (
+        <div class="principle"><h3 class="principle__t">{p.title}</h3><p>{p.text}</p></div>
+      ))}
+    </div>
+  </section>
+
+  <section class="steps-block wrap-full" aria-labelledby="steps-h">
+    <p class="mono kicker--dark" id="steps-h">Werkwijze in zes stappen</p>
+    <ol class="steps">
+      {steps.map((t, i) => <li><span class="mono kicker--dark">{num(i)}</span><span class="step__t">{t}</span></li>)}
+    </ol>
+    <a class="link-strong" href={werkwijzeHref}>Meer over onze werkwijze</a>
+  </section>
+
+  {(work.length > 0 || showPlaceholders) && (
+    <section class="block block--rule wrap-full" aria-labelledby="proj-h">
+      <div class="proj-head">
+        <h2 id="proj-h" class="h2">{s.projectsHeading}</h2>
+        <a class="link-strong" href={`/werk?dienst=${entry.id}`}>Alle projecten</a>
+      </div>
+      <ul class="proj">
+        {work.map(({ e, i }) => <li class="proj__cell"><WorkCard entry={e} index={i} /></li>)}
+        {showPlaceholders && work.length < 2 && <li class="proj__cell proj__slot"><p class="slot mono">[Tweede {label.toLowerCase()}-case · alleen tonen als het aantoonbaar is]</p></li>}
+      </ul>
+    </section>
+  )}
 </Base>
+
+<style>
+  .wrap-full { padding-inline: var(--pad-x); }
+  .mono { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+  .kicker { color: color-mix(in srgb, var(--k-on-field) 78%, transparent); margin: 0; }
+  .kicker--dark { color: var(--k-muted); }
+
+  /* Hero op veldkleur; de header erboven is dezelfde kleur (on-hero). */
+  .hero { background: var(--k-field); color: var(--k-on-field); padding: 1.5rem var(--pad-x) var(--pad-y); display: grid; gap: 2rem; align-items: center; }
+  .hero__text { display: flex; flex-direction: column; gap: 1.375rem; min-width: 0; }
+  .hero__title { margin: 0; font-weight: 800; font-stretch: 125%; font-size: clamp(2.75rem, 6.39vw, 5.75rem); line-height: 0.94; letter-spacing: -0.045em; text-wrap: balance; }
+  .hero__lead { margin: 0; max-width: 40rem; font-size: clamp(1.125rem, 1.67vw, 1.5rem); line-height: 1.5; }
+  .hero__actions { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; }
+  .hero__card { position: relative; overflow: hidden; height: 16.25rem; border-radius: 24px; background: var(--bg, #dad5cb); }
+  .hero__card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero__pill { position: absolute; left: 1rem; bottom: 1rem; max-width: calc(100% - 2rem); background: var(--k-ink); color: var(--k-paper); border-radius: 999px; padding: 0.5rem 1rem; font-size: 0.75rem; letter-spacing: 0.06em; }
+  @media (min-width: 768px) { .hero__card { height: 22rem; } }
+  @media (min-width: 1100px) {
+    .hero { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); padding-top: 2rem; }
+    .hero__text { grid-column: 1 / span 7; }
+    .hero__card { grid-column: 8 / span 5; height: 35rem; }
+    .hero__text:only-child { grid-column: 1 / span 9; }
+  }
+
+  .block { padding-block: var(--pad-y); display: flex; flex-direction: column; gap: 2.5rem; }
+  .block--rule { border-top: 1px solid var(--k-ink); }
+  .kicker--dark, .block .mono { margin: 0; }
+  .h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 0.98; letter-spacing: -0.04em; max-width: 20ch; text-wrap: balance; }
+
+  .moments { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  .moment { border: 1px solid var(--k-ink); border-radius: 24px; padding: 1.375rem; background: var(--k-white); display: flex; flex-direction: column; gap: 1rem; min-width: 0; }
+  .moment p { margin: 0; color: var(--k-muted); font-size: 1rem; line-height: 1.5; }
+  .moment__t { margin: 0; font-weight: 800; font-stretch: 112%; font-size: 1.625rem; line-height: 1.02; letter-spacing: -0.03em; overflow-wrap: anywhere; hyphens: auto; }
+  @media (min-width: 768px) { .moments { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); } .moment { padding: 1.75rem; min-height: 17rem; } .moment p { font-size: 1.125rem; } }
+  @media (min-width: 1100px) { .moments { grid-template-columns: repeat(4, minmax(0, 1fr)); } .moment__t { font-size: clamp(1.625rem, 2.36vw, 2.125rem); font-stretch: 118%; } }
+  .flag { align-self: flex-start; border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: 0.75rem; letter-spacing: 0.04em; }
+
+  .principles { display: grid; gap: 1.75rem; grid-template-columns: 1fr; }
+  .principle { border-top: 2px solid var(--k-ink); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .principle p { margin: 0; color: var(--k-muted); font-size: 1rem; line-height: 1.5; }
+  .principle__t { margin: 0; font-weight: 800; font-stretch: 112%; font-size: 1.625rem; line-height: 1.02; letter-spacing: -0.03em; overflow-wrap: anywhere; }
+  @media (min-width: 768px) { .principle p { font-size: 1.125rem; } .principle__t { font-size: 1.875rem; } }
+  @media (min-width: 1100px) { .principles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; } .principle__t { font-size: clamp(1.625rem, 2.2vw, 2rem); } }
+
+  .steps-block { padding-bottom: var(--pad-y); display: flex; flex-direction: column; gap: 2rem; align-items: flex-start; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; align-self: stretch; }
+  .steps li { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--k-ink); padding-top: 0.75rem; min-width: 0; }
+  .step__t { font-weight: 800; font-stretch: 112%; font-size: 1.375rem; letter-spacing: -0.02em; line-height: 1.1; }
+  @media (min-width: 768px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; } .step__t { font-size: 1.625rem; } }
+  @media (min-width: 1100px) { .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+
+  .proj-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; }
+  .proj { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  .proj__cell { min-width: 0; }
+  .slot { margin: 0; min-height: 10rem; height: 100%; border: 1px dashed var(--k-ink); border-radius: 24px; display: grid; place-items: center; text-align: center; padding: 1rem; }
+  @media (min-width: 768px) { .proj { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) {
+    .proj { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .proj__cell:nth-child(odd) { grid-column: 1 / span 7; }
+    .proj__cell:nth-child(even) { grid-column: 8 / span 5; }
+    .slot { min-height: 32.5rem; }
+  }
+</style>

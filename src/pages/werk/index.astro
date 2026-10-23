@@ -64,7 +64,9 @@ const hasCommerceCase = false; // slot voor een tweede commerce-case: pas tonen 
     };
     chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter!)));
     document.querySelector('[data-reset]')?.addEventListener('click', () => { apply('all'); chips[0].focus(); });
-    apply('all');
+    // ?dienst=<id> (link vanaf een dienstpagina) opent het overzicht vooraf gefilterd.
+    const wanted = new URLSearchParams(location.search).get('dienst');
+    apply(wanted && chips.some((c) => c.dataset.filter === wanted && c.getAttribute('aria-disabled') !== 'true') ? wanted : 'all');
   }
 </script>
 
