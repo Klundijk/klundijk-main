@@ -11,7 +11,7 @@ import { SERVICES as S } from '../../data/home';
         <ul class="hub__tags">{S.hub.tags.map((t) => <li class="tag">{t}</li>)}</ul>
         <p class="acts"><a class="btn btn--primary btn--lg" href={S.hub.cta.href}>{S.hub.cta.label}</a> <a class="link-strong" href={S.hub.more.href}>{S.hub.more.label}</a></p>
       </div>
-      <figure class="hub__img" role="img" aria-label={S.hub.image}><figcaption class="mono">{S.hub.image}</figcaption></figure>
+      <figure class="hub__img"><figcaption class="mono">{S.hub.image}</figcaption></figure>
     </div>
     <ul class="srows">
       {S.rows.map((r) => <li><span class="mono">{r.num}</span> <span class="srows__t">{r.title}</span></li>)}

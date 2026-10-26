@@ -38,7 +38,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     </div>
     {featured && (
       <div class="hero__card" style={`--bg:${featured.data.cardColor}`}>
-        {featured.data.cardImage && <img src={featured.data.cardImage.src} alt={featured.data.cardImage.alt} />}
+        {featured.data.cardImage && <img src={featured.data.cardImage.src} alt={featured.data.cardImage.alt} fetchpriority="high" decoding="async" style={featured.data.cardImage.position ? `object-position:${featured.data.cardImage.position}` : undefined} />}
         <span class="hero__pill mono">{featured.data.title} · {featured.data.tags.join(', ').toLowerCase()}</span>
       </div>
     )}
@@ -86,7 +86,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
         <a class="link-strong" href={`/werk?dienst=${entry.id}`}>Alle projecten</a>
       </div>
       <ul class="proj">
-        {work.map(({ e, i }) => <li class="proj__cell"><WorkCard entry={e} index={i} /></li>)}
+        {work.map(({ e, i }) => <li class="proj__cell"><WorkCard entry={e} index={i} headingLevel="h3" /></li>)}
         {showPlaceholders && work.length < 2 && <li class="proj__cell proj__slot"><p class="slot mono">[Tweede {label.toLowerCase()}-case · alleen tonen als het aantoonbaar is]</p></li>}
       </ul>
     </section>

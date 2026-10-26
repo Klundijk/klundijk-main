@@ -29,11 +29,14 @@ export const site = {
     'groei-slimme-processen': 'Groei & slimme processen',
   } as Record<string, string>,
   footerLine: 'Digitale partner voor merk, websites, webshops en slimme processen.',
-  // Nog aan te leveren door Levi (Aanleverlijst in Notion): telefoon, e-mail, KvK. Zolang een waarde null is,
+  // Telefoon en e-mail aangeleverd door Levi (23 okt). Nog aan te leveren: KvK. Zolang een waarde null is,
   // wordt ze in productie niet getoond (alleen in dev als [placeholder]).
-  contact: { email: null as string | null, phone: null as string | null, location: 'Veendam' },
+  contact: { email: 'info@klundijk.com' as string | null, phone: '06 83 79 30 22' as string | null, location: 'Veendam' },
   legal: { kvk: null as string | null, privacyHref: null as string | null, termsHref: null as string | null },
 } as const;
 
 /** Placeholder-inhoud (nog te leveren) alleen tonen in dev of met PUBLIC_SHOW_PLACEHOLDERS=1. */
 export const showPlaceholders = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_PLACEHOLDERS === '1';
+
+/** Alleen met PUBLIC_INDEXABLE=1 (bij livegang) mogen zoekmachines de site indexeren. Preview- en stagingomgevingen blijven noindex. */
+export const indexable = import.meta.env.PUBLIC_INDEXABLE === '1';

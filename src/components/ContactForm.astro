@@ -4,11 +4,13 @@
 // Validatie bij verzenden, niet bij elke toetsaanslag. Teksten en endpoint staan in src/data/form.ts.
 import { form as cfg } from '../data/form';
 import { site } from '../data/site';
+interface Props { bare?: boolean; submitLabel?: string; }
+const { bare = false, submitLabel = cfg.copy.submit } = Astro.props;
 const f = cfg.fields;
 const privacyHref = site.legal.privacyHref;
 // Alleen platte strings naar het clientscript (functies overleven define:vars niet).
 const clientCopy = {
-  submit: cfg.copy.submit,
+  submit: submitLabel,
   busy: cfg.copy.busy,
   title: cfg.copy.successTitle,
   titleNamed: cfg.copy.successTitleNamed,
@@ -17,7 +19,7 @@ const clientCopy = {
   errorNotConnected: cfg.copy.errorNotConnected,
 };
 ---
-<div class="cform on-field" data-cform data-endpoint={cfg.endpoint ?? ''}>
+<div class:list={['cform', 'on-field', { 'cform--bare': bare }]} data-cform data-endpoint={cfg.endpoint ?? ''}>
   <form method="post" action={cfg.endpoint ?? undefined} onsubmit={cfg.endpoint ? undefined : 'return false'} aria-labelledby="cform-title" novalidate={false} data-form>
     <h2 id="cform-title" class="sr-only">Contactformulier</h2>
 
@@ -32,14 +34,14 @@ const clientCopy = {
         <input id="f-naam" name="naam" type="text" autocomplete="name" required data-empty={f.naam.empty} data-summary-text={f.naam.summary} />
         <p class="err" id="f-naam-err" data-err hidden><span class="icon" aria-hidden="true">!</span><span data-err-text></span></p>
       </div>
-      <div class="field" data-field="email">
-        <label for="f-email">{f.email.label}</label>
-        <input id="f-email" name="email" type="email" autocomplete="email" required data-empty={f.email.empty} data-invalid={f.email.invalid} data-summary-text={f.email.summary} />
-        <p class="err" id="f-email-err" data-err hidden><span class="icon" aria-hidden="true">!</span><span data-err-text></span></p>
-      </div>
       <div class="field" data-field="bedrijf">
         <label for="f-bedrijf">{f.bedrijf.label} <span class="opt">{f.bedrijf.optional}</span></label>
         <input id="f-bedrijf" name="bedrijf" type="text" autocomplete="organization" />
+      </div>
+      <div class="field field--wide" data-field="email">
+        <label for="f-email">{f.email.label}</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" required data-empty={f.email.empty} data-invalid={f.email.invalid} data-summary-text={f.email.summary} />
+        <p class="err" id="f-email-err" data-err hidden><span class="icon" aria-hidden="true">!</span><span data-err-text></span></p>
       </div>
       <div class="field field--wide" data-field="vraagstuk">
         <label for="f-vraag">{f.vraagstuk.label}</label>
@@ -58,7 +60,7 @@ const clientCopy = {
     </div>
 
     <div class="submit">
-      <button type="submit" class="btn btn--primary btn--lg" data-submit><span data-dots aria-hidden="true" hidden>···</span><span data-submit-label>{cfg.copy.submit}</span></button>
+      <button type="submit" class="btn btn--primary btn--lg" data-submit><span data-dots aria-hidden="true" hidden>···</span><span data-submit-label>{submitLabel}</span></button>
     </div>
 
     <p class="privacy">
@@ -188,6 +190,8 @@ const clientCopy = {
 <style>
   .cform { background: var(--k-field); color: var(--k-on-field); border-radius: 20px; padding: clamp(1.25rem, 3vw, 2.25rem); }
   form { display: grid; gap: 2rem; max-width: none; }
+  .cform--bare { background: transparent; border-radius: 0; padding: 0; }
+  .cform--bare .grid2 { grid-template-columns: 1fr !important; }
   .grid2 { display: grid; gap: 2rem 2.5rem; }
   @media (min-width: 768px) { .grid2 { grid-template-columns: 1fr 1fr; } .field--wide { grid-column: 1 / -1; } }
   .field { display: flex; flex-direction: column; gap: 0.375rem; }
