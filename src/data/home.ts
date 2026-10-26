@@ -25,16 +25,16 @@ export const TILES: Tile[] = [
     copy: 'Dan kijken we naar boodschap, structuur, gebruikerservaring en wat bezoekers nodig hebben om verder te gaan.',
     b: [[10,10,60,20,-4,'INK',2],[30,36,50,16,3,'PAPER',2],[12,60,36,24,-2,'ACCENT',2]],
     a: [[10,10,80,24,0,'FIELD',12],[10,40,50,12,0,'INK',6],[10,60,36,22,0,'ACCENT',12]] },
-  { id: 'merk', num: '03', label: 'Merk & identiteit',
-    heading: 'Je merk past niet meer bij het bedrijf dat je bent geworden.',
-    copy: 'Dan helpen we om positie, uitstraling en middelen opnieuw op één lijn te brengen.',
-    b: [[8,14,30,30,-10,'ACCENT',2],[44,22,28,28,12,'INK',2],[22,56,34,26,-5,'PAPER',2]],
-    a: [[10,14,34,34,0,'FIELD',50],[50,14,34,34,0,'ACCENT',50],[10,56,74,24,0,'INK',14]] },
-  { id: 'processen', num: '04', label: 'Groei & slimme processen',
+  { id: 'processen', num: '03', label: 'Groei & slimme processen',
     heading: 'Je weet dat processen slimmer kunnen, maar nog niet welke technologie daarbij past.',
     copy: 'Dan beginnen we bij het proces en kiezen we pas daarna de techniek, automatisering of AI die werkelijk helpt.',
     b: [[8,20,22,22,-8,'INK',2],[50,44,22,22,10,'ACCENT',2],[20,62,22,18,-4,'PAPER',2]],
     a: [[8,40,20,22,0,'FIELD',50],[40,40,20,22,0,'ACCENT',50],[72,40,20,22,0,'INK',50]] },
+  { id: 'merk', num: '04', label: 'Merk & identiteit',
+    heading: 'Je merk past niet meer bij het bedrijf dat je bent geworden.',
+    copy: 'Dan helpen we om positie, uitstraling en middelen opnieuw op één lijn te brengen.',
+    b: [[8,14,30,30,-10,'ACCENT',2],[44,22,28,28,12,'INK',2],[22,56,34,26,-5,'PAPER',2]],
+    a: [[10,14,34,34,0,'FIELD',50],[50,14,34,34,0,'ACCENT',50],[10,56,74,24,0,'INK',14]] },
 ];
 
 export const SERVICES = {

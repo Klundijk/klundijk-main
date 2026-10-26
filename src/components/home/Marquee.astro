@@ -6,7 +6,7 @@ const text = 'Digitaal kan beter. — Dus maken we het beter. — ';
     <span>{text.repeat(6)}</span><span>{text.repeat(6)}</span>
   </div>
   <p class="sr-only">Digitaal kan beter. Dus maken we het beter.</p>
-  <button type="button" class="marquee__btn mono" id="marquee-btn" aria-pressed="false">Pauzeer beweging</button>
+  <button type="button" class="marquee__btn mono" id="marquee-btn" aria-pressed="false">Pauze tekstband</button>
 </section>
 <script>
   const track = document.getElementById('marquee-track');
@@ -14,14 +14,14 @@ const text = 'Digitaal kan beter. — Dus maken we het beter. — ';
   b?.addEventListener('click', () => {
     const paused = track?.classList.toggle('is-paused');
     b.setAttribute('aria-pressed', String(!!paused));
-    b.textContent = paused ? 'Hervat beweging' : 'Pauzeer beweging';
+    b.textContent = paused ? 'Hervat tekstband' : 'Pauze tekstband';
   });
 </script>
 <style>
-  .marquee { background: var(--k-ink); color: var(--k-paper); overflow: hidden; position: relative; padding: 1.25rem 0; }
+  .marquee { background: var(--k-ink); color: var(--k-paper); overflow: hidden; position: relative; padding: 3.5rem 0 1.25rem; }
   .marquee__track { display: flex; width: max-content; animation: mq 40s linear infinite; font-family: var(--f-sans); font-weight: 800; font-stretch: 125%; font-size: var(--t-row); text-transform: uppercase; white-space: nowrap; }
   .marquee:hover .marquee__track, .marquee:focus-within .marquee__track, .marquee__track.is-paused { animation-play-state: paused; }
-  .marquee__btn { position: absolute; right: var(--pad-x); bottom: .25rem; background: var(--k-paper); color: var(--k-ink); border: 0; border-radius: 999px; padding: .25rem .75rem; font-size: .7rem; cursor: pointer; }
+  .marquee__btn { position: absolute; right: var(--pad-x); top: 12px; z-index: 1; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; background: var(--k-paper); color: var(--k-ink); border: 0; border-radius: 999px; padding: 0 1.125rem; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
   @keyframes mq { to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } .marquee__btn { display: none; } }
 </style>

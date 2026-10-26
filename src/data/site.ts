@@ -1,4 +1,6 @@
 // Globale instellingen. Naam en contactgegevens staan op één plek.
+import { DIENSTEN, dienstHref, dienstLabels } from './diensten';
+
 export const site = {
   name: 'Klundijk',
   tagline: 'Digitaal kan beter. Dus maken we het beter.',
@@ -13,21 +15,9 @@ export const site = {
     { label: 'Over', href: '/over' },
     { label: 'Contact', href: '/contact' },
   ],
-  // Dienstenpagina's onder "Wat we doen" (subnavigatie mobiel menu). Volgorde is een voorstel van de Designer
-  // (v5.2) en nog niet bevestigd door Levi en SEO & content.
-  services: [
-    { label: 'Webshops & commerce', href: '/wat-we-doen/webshops-commerce' },
-    { label: 'Websites', href: '/wat-we-doen/websites-digitale-ervaringen' },
-    { label: 'Groei & slimme processen', href: '/wat-we-doen/groei-slimme-processen' },
-    { label: 'Merk & identiteit', href: '/wat-we-doen/merk-identiteit' },
-  ],
-  // Labels van de vier capabilities en hun volgorde in de werkfilters (bord X · Werk).
-  serviceLabels: {
-    'merk-identiteit': 'Merk & identiteit',
-    'websites-digitale-ervaringen': 'Websites',
-    'webshops-commerce': 'Webshops & commerce',
-    'groei-slimme-processen': 'Groei & slimme processen',
-  } as Record<string, string>,
+  // Dienstenpagina's onder "Wat we doen" (subnavigatie mobiel menu); volgorde en labels komen uit data/diensten.ts.
+  services: DIENSTEN.map((d) => ({ label: d.label, href: dienstHref(d.id) })),
+  serviceLabels: dienstLabels as Record<string, string>,
   footerLine: 'Digitale partner voor merk, websites, webshops en slimme processen.',
   // Telefoon en e-mail aangeleverd door Levi (23 okt). Nog aan te leveren: KvK. Zolang een waarde null is,
   // wordt ze in productie niet getoond (alleen in dev als [placeholder]).

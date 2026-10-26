@@ -1,6 +1,6 @@
 ---
 title: Groei & slimme processen
-order: 4
+order: 3
 shortIntro: Optimalisatie, analytics, CRO, SEO, koppelingen, automatisering en passende AI-toepassingen.
 heroStatement: Digitaal dat blijft verbeteren.
 situations:

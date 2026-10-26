@@ -19,7 +19,9 @@
   --f-serif: 'Instrument Serif', Georgia, serif;
   --f-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* Fluïde typografie: desktopontwerp 1440 px, mobiel 390 px. */
+  /* Fluïde typografie: desktopontwerp 1440 px, mobiel 390 px. Gebouwde curve = de spec (handoff X v5.5):
+     kop (--t-hero)  52 / 79 / 113 / 148 px op 390 / 768 / 1100 / 1440
+     tussenkop (--t-display) 36 px op 390 · subkop (--t-lead) 24 px op 390 · hubtitel (--t-hub) 44 px mobiel, 92 px desktop. */
   --t-hero: clamp(3.25rem, 10.28vw, 9.25rem);     /* 52 -> 148 px */
   --t-hero-serif: 1.12em;
   --t-display: clamp(2.25rem, 5vw, 4.5rem);        /* 36 -> 72 px */
