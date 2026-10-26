@@ -3,9 +3,10 @@ import Base from '../../layouts/Base.astro';
 import WorkCard from '../../components/WorkCard.astro';
 import { getWorkItems } from '../../lib/content';
 import { site, showPlaceholders } from '../../data/site';
+import { DIENSTEN } from '../../data/diensten';
 
 const items = await getWorkItems();
-const filters = ['merk-identiteit', 'websites-digitale-ervaringen', 'webshops-commerce', 'groei-slimme-processen'];
+const filters = DIENSTEN.map((d) => d.id);
 const count = (id: string) => items.filter((i) => i.data.services.includes(id as never)).length;
 const hasCommerceCase = false; // slot voor een tweede commerce-case: pas tonen als het aantoonbaar is
 ---

@@ -10,6 +10,7 @@ interface Props { title?: string; description?: string; ogImage?: string; noinde
 const { title, description = site.description, ogImage, noindex = false, heroHeader = false, contactBand = true, band } = Astro.props;
 const fullTitle = title ? `${title} | ${site.name}` : `${site.name}: ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogUrl = new URL(ogImage ?? '/og-image.png', Astro.site).href;
 const ld = {
   '@context': 'https://schema.org', '@type': 'Organization', name: site.name,
   url: new URL('/', Astro.site).toString(), description: site.description,
@@ -37,8 +38,15 @@ const ld = {
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Klundijk: Digitaal kan beter." />
+    <meta property="og:locale" content="nl_NL" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
     <link rel="preload" href="/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin />
     <style set:html={themeCss}></style>
     <slot name="head" />

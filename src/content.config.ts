@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { DIENST_IDS } from './data/diensten';
 
 // Contentmodel uit de "Website research & content blueprint".
 // Bron-onafhankelijk: dezelfde velden kunnen later uit een headless CMS komen.
@@ -10,7 +11,7 @@ const seo = z.object({
   description: z.string().max(170).optional(),
 });
 
-const serviceId = z.enum(['merk-identiteit', 'websites-digitale-ervaringen', 'webshops-commerce', 'groei-slimme-processen']);
+const serviceId = z.enum(DIENST_IDS);
 const image = z.object({ src: z.string(), alt: z.string().default(''), position: z.string().optional().describe('CSS object-position voor de uitsnede, bijv. "left top"') });
 
 // Eén collectie voor alle werk: `kind: project` is een teaser op het werkoverzicht zonder eigen pagina ("Case volgt"),

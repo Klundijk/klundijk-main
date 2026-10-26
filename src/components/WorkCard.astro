@@ -15,7 +15,7 @@ const Tag = linked ? 'a' : 'article';
     {c.cardImage
       ? <img src={c.cardImage.src} alt={c.cardImage.alt} loading="lazy" style={c.cardImage.position ? `object-position:${c.cardImage.position}` : undefined} />
       : showPlaceholders && <span class="wcard__ph">[Beeld volgt]</span>}
-    <span class="wcard__num" aria-hidden="true">{num}</span>
+    <span class:list={['wcard__num', { 'wcard__num--chip': !!c.cardImage }]} aria-hidden="true">{num}</span>
   </div>
   <div class="wcard__body">
     <Heading class="wcard__title">{c.title}</Heading>
@@ -34,6 +34,8 @@ const Tag = linked ? 'a' : 'article';
   .wcard__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s var(--ease); }
   .wcard__ph { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; }
   .wcard__num { position: absolute; left: 1.25rem; top: 1.25rem; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.08em; z-index: 1; }
+  /* Kaartnummer op een leesbaar vlak als er een beeld achter zit. */
+  .wcard__num--chip { background: var(--bg); color: var(--fg); padding: 0.25rem 0.625rem; border-radius: 999px; left: 1rem; top: 1rem; }
   .wcard__body { display: flex; flex-direction: column; gap: 0.625rem; }
   .wcard__title { font-weight: 800; font-stretch: 112%; font-size: clamp(1.875rem, 2.9vw, 2.75rem); line-height: 1.02; letter-spacing: -0.03em; margin: 0; }
   .wcard__tags { font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--k-muted); margin: 0; max-width: none; }

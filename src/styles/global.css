@@ -66,6 +66,8 @@ h1, h2, h3, p { margin: 0; }
 /* Tekstlink */
 .link-strong { font-size: 1.125rem; font-weight: 600; text-underline-offset: 6px; }
 .link-strong:hover { text-decoration-thickness: 3px; }
+/* Tikdoel: losse links en knoppen minimaal 44 px hoog (handoff v5.5, punt 4). */
+.link-strong { display: inline-flex; align-items: center; min-height: 44px; }
 .tag { display: inline-block; border: 1px solid currentColor; border-radius: 999px; padding: 0.5rem 1rem; }
 
 @media (prefers-reduced-motion: reduce) {

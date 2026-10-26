@@ -1,6 +1,6 @@
 ---
 title: Webshops & commerce
-order: 3
+order: 1
 shortIntro: Nieuwe shops, redesign, migratie, productstructuur, UX, SEO-behoud en technische inrichting.
 heroStatement: Een webshop die niet in de weg zit.
 situations:

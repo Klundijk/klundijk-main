@@ -1,6 +1,6 @@
 ---
 title: Merk & identiteit
-order: 1
+order: 4
 shortIntro: Positionering, visuele identiteit, logo, systemen en middelen.
 heroStatement: Een merk dat past bij het bedrijf dat je nu bent.
 situations:
