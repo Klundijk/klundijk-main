@@ -37,3 +37,6 @@ export const site = {
 
 /** Placeholder-inhoud (nog te leveren) alleen tonen in dev of met PUBLIC_SHOW_PLACEHOLDERS=1. */
 export const showPlaceholders = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_PLACEHOLDERS === '1';
+
+/** Alleen met PUBLIC_INDEXABLE=1 (bij livegang) mogen zoekmachines de site indexeren. Preview- en stagingomgevingen blijven noindex. */
+export const indexable = import.meta.env.PUBLIC_INDEXABLE === '1';

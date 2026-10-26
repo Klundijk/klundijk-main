@@ -1,9 +1,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Domein is nog niet vastgesteld (open punt in Notion). Pas `site` aan zodra het domein bekend is.
+// Domein is nog niet vastgesteld (open punt in Notion). Zet bij livegang SITE_URL (bijv. https://klundijk.com)
+// en PUBLIC_INDEXABLE=1 als omgevingsvariabelen; tot die tijd is de site noindex en blokkeert robots.txt alles.
 export default defineConfig({
-  site: 'https://example.invalid',
+  site: process.env.SITE_URL ?? 'https://example.invalid',
   output: 'static',
   trailingSlash: 'never',
   build: { format: 'directory' },

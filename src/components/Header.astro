@@ -1,5 +1,6 @@
 ---
 import { site, showPlaceholders } from '../data/site';
+import Wordmark from './Wordmark.astro';
 interface Props { onHero?: boolean; }
 const { onHero = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
@@ -10,7 +11,7 @@ const hasServices = (href: string) => href === '/wat-we-doen';
 const { phone, email } = site.contact;
 ---
 <header class:list={['site-header', { 'on-hero': onHero }]}>
-  <a class="brand" href="/" aria-label={`${site.name}, naar de homepage`}>{site.name}</a>
+  <a class="brand" href="/" aria-label={`${site.name}, naar de homepage`}><Wordmark class="brand__mark" /></a>
 
   <!-- Desktop (vanaf 1100 px) -->
   <nav class="nav-desktop" aria-label="Hoofdnavigatie">
@@ -28,7 +29,7 @@ const { phone, email } = site.contact;
 
   <dialog id="menu" class="menu" aria-label="Menu" aria-modal="true">
     <div class="menu__bar">
-      <span class="menu__brand">{site.name}</span>
+      <span class="menu__brand"><span class="sr-only">{site.name}</span><Wordmark class="brand__mark" /></span>
       <button type="button" class="menu-btn" id="menu-close"><span class="menu-btn__x" aria-hidden="true">×</span>Sluit</button>
     </div>
     <nav class="menu__nav" aria-label="Hoofdnavigatie">
@@ -86,7 +87,8 @@ const { phone, email } = site.contact;
   .site-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 1.25rem var(--pad-x); position: relative; z-index: 5;
     background: var(--k-paper); color: var(--k-ink); }
   .site-header.on-hero { background: var(--hero-bg, var(--k-field)); color: var(--hero-fg, var(--k-on-field)); transition: background 0.9s ease, color 0.9s ease; }
-  .brand { font-weight: 800; font-stretch: 125%; font-size: 1.375rem; letter-spacing: -0.03em; text-decoration: none; }
+  .brand { display: inline-flex; align-items: center; text-decoration: none; min-height: 44px; }
+  .brand, .menu__brand { --mark-h: 1.3rem; }
 
   /* Zonder JS (en tot 'has-menu' gezet is): links als rij onder de kop. */
   .nav-fallback { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0 1.5rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
@@ -110,7 +112,7 @@ const { phone, email } = site.contact;
   .menu[open] { display: flex; flex-direction: column; }
   .menu::backdrop { background: var(--k-field); }
   .menu__bar { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem var(--pad-x) 0.75rem; }
-  .menu__brand { font-weight: 800; font-stretch: 125%; font-size: 1.375rem; letter-spacing: -0.03em; }
+  .menu__brand { display: inline-flex; align-items: center; }
   .menu__nav { padding: 0.5rem var(--pad-x) 0; }
   .menu__nav ul { list-style: none; margin: 0; padding: 0; }
   .menu__nav > ul { border-bottom: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); }
@@ -134,7 +136,7 @@ const { phone, email } = site.contact;
 
   @media (min-width: 1100px) {
     .site-header { padding-block: 1.75rem; flex-wrap: nowrap; }
-    .brand { font-size: 1.625rem; }
+    .brand { --mark-h: 1.6rem; }
     .menu-btn, .nav-fallback, .menu { display: none !important; }
     .nav-desktop { display: flex; align-items: center; gap: 2.25rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
     .nav-desktop a { text-decoration: none; display: inline-block; padding: 6px 0; border-bottom: 2px solid transparent; }
