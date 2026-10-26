@@ -11,7 +11,7 @@ const seo = z.object({
 });
 
 const serviceId = z.enum(['merk-identiteit', 'websites-digitale-ervaringen', 'webshops-commerce', 'groei-slimme-processen']);
-const image = z.object({ src: z.string(), alt: z.string().default('') });
+const image = z.object({ src: z.string(), alt: z.string().default(''), position: z.string().optional().describe('CSS object-position voor de uitsnede, bijv. "left top"') });
 
 // Eén collectie voor alle werk: `kind: project` is een teaser op het werkoverzicht zonder eigen pagina ("Case volgt"),
 // `kind: case` krijgt een casepagina. Casemodules die leeg zijn, worden niet getoond (geen placeholder-blokken in productie).

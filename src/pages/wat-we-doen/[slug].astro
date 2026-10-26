@@ -38,7 +38,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     </div>
     {featured && (
       <div class="hero__card" style={`--bg:${featured.data.cardColor}`}>
-        {featured.data.cardImage && <img src={featured.data.cardImage.src} alt={featured.data.cardImage.alt} />}
+        {featured.data.cardImage && <img src={featured.data.cardImage.src} alt={featured.data.cardImage.alt} style={featured.data.cardImage.position ? `object-position:${featured.data.cardImage.position}` : undefined} />}
         <span class="hero__pill mono">{featured.data.title} · {featured.data.tags.join(', ').toLowerCase()}</span>
       </div>
     )}
