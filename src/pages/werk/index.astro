@@ -29,7 +29,7 @@ const hasCommerceCase = false; // slot voor een tweede commerce-case: pas tonen 
   <section class="list wrap" aria-label="Projecten">
     {items.length > 0 ? (
       <ul class="grid" data-grid>
-        {items.map((e, i) => <li class="cell" data-item><WorkCard entry={e} index={i} /></li>)}
+        {items.map((e, i) => <li class="cell" data-item><WorkCard entry={e} index={i} priority={i === 0} /></li>)}
       </ul>
     ) : <p class="muted">Projecten volgen zodra ze toonbaar zijn.</p>}
     <div class="empty" data-empty hidden>
