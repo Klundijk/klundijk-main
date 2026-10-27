@@ -1,4 +1,15 @@
+# afhankelijkheden en build
 node_modules
 dist
 .astro
+
+# omgeving en geheimen (nooit committen)
 .env
+.env.*
+!.env.example
+
+# hosting en tooling
+.vercel
+.DS_Store
+Thumbs.db
+*.log

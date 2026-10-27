@@ -1,8 +1,9 @@
 ---
+import { dims } from '../../lib/images';
 // Overzicht "Wat we doen" (bord X · Wat we doen, 1440 en 390). Commerce uitgelicht, drie rijen, vraagstukken, werkwijze.
 import Base from '../../layouts/Base.astro';
 import { getWorkItems } from '../../lib/content';
-import { site, showPlaceholders } from '../../data/site';
+import { showPlaceholders } from '../../data/site';
 import { DIENSTEN, dienstHref, dienstLabels } from '../../data/diensten';
 import { overzicht as o } from '../../data/overzicht';
 import { principlesHeading, steps, werkwijzeHref } from '../../data/werkwijze';
@@ -26,7 +27,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
 
   <section class="commerce on-field" aria-labelledby="commerce-h">
     <div class="commerce__img" style={`--bg:${work.find((w) => w.id === 'rootboxes')?.data.cardColor ?? '#DAD5CB'}`}>
-      {commerceImg && <img src={commerceImg.src} alt={commerceImg.alt} loading="lazy" decoding="async" style={commerceImg.position ? `object-position:${commerceImg.position}` : undefined} />}
+      {commerceImg && <img src={commerceImg.src} width={dims(commerceImg.src).width} height={dims(commerceImg.src).height} alt={commerceImg.alt} loading="lazy" decoding="async" style={commerceImg.position ? `object-position:${commerceImg.position}` : undefined} />}
     </div>
     <div class="commerce__text">
       <p class="commerce__meta"><span class="mono kicker">01</span><span class="pill pill--light mono">{o.commerce.badge}</span></p>

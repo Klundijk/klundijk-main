@@ -1,5 +1,6 @@
 ---
 // Projectkaart (bord X · Werk): hele kaart is één link als er een casepagina is, anders een niet-klikbare kaart ("Case volgt").
+import { dims, srcsetFor } from '../lib/images';
 import { hasCasePage, textOn, type WorkEntry } from '../lib/content';
 import { showPlaceholders } from '../data/site';
 interface Props { entry: WorkEntry; index: number; headingLevel?: 'h2' | 'h3'; priority?: boolean; }
@@ -9,13 +10,13 @@ const linked = hasCasePage(entry);
 const num = String(index + 1).padStart(2, '0');
 const fg = textOn(c.cardColor);
 // Webp-beelden hebben een -800-variant voor kleine schermen.
-const srcset = c.cardImage?.src.endsWith('.webp') ? `${c.cardImage.src.replace('.webp', '-800.webp')} 800w, ${c.cardImage.src} 1400w` : undefined;
+const srcset = c.cardImage ? srcsetFor(c.cardImage.src) : undefined;
 const Tag = linked ? 'a' : 'article';
 ---
 <Tag class:list={['wcard', { 'wcard--link': linked }]} href={linked ? `/werk/${entry.id}` : undefined} data-services={c.services.join(' ')} style={`--bg:${c.cardColor};--fg:${fg}`}>
   <div class="wcard__media">
     {c.cardImage
-      ? <img src={c.cardImage.src} srcset={srcset} sizes="(min-width: 1100px) 58vw, 100vw" alt={c.cardImage.alt} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : undefined} decoding="async" style={c.cardImage.position ? `object-position:${c.cardImage.position}` : undefined} />
+      ? <img src={c.cardImage.src} srcset={srcset} width={c.cardImage ? dims(c.cardImage.src).width : undefined} height={c.cardImage ? dims(c.cardImage.src).height : undefined} sizes="(min-width: 1100px) 58vw, 100vw" alt={c.cardImage.alt} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : undefined} decoding="async" style={c.cardImage.position ? `object-position:${c.cardImage.position}` : undefined} />
       : showPlaceholders && <span class="wcard__ph">[Beeld volgt]</span>}
     <span class:list={['wcard__num', { 'wcard__num--chip': !!c.cardImage }]} aria-hidden="true">{num}</span>
   </div>

@@ -11,4 +11,3 @@ export type DienstId = (typeof DIENSTEN)[number]['id'];
 export const DIENST_IDS = DIENSTEN.map((d) => d.id) as [DienstId, ...DienstId[]];
 export const dienstHref = (id: DienstId) => `/wat-we-doen/${id}`;
 export const dienstLabels = Object.fromEntries(DIENSTEN.map((d) => [d.id, d.label])) as Record<DienstId, string>;
-export const dienstOrder = (id: DienstId) => DIENSTEN.findIndex((d) => d.id === id) + 1;

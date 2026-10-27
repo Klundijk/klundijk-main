@@ -8,5 +8,5 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'never',
   build: { format: 'directory' },
-  integrations: [sitemap({ filter: (p) => !p.includes('/spike') })],
+  integrations: [sitemap()],
 });

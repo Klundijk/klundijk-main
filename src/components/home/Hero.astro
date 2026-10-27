@@ -1,4 +1,5 @@
 ---
+import { dims, srcsetFor } from '../../lib/images';
 // Hero (bord X · Home / X · Mobiel). Twee lagen: de "ruwe" staat (hoe het was) en de verfijnde staat. De intro speelt alleen
 // bij het eerste bezoek per sessie en nooit bij verminderde beweging; de knop wisselt altijd. Alleen opacity, transform
 // en kleur worden geanimeerd, dus geen layoutverschuiving.
@@ -6,7 +7,7 @@ import { getWorkItems, hasCasePage } from '../../lib/content';
 const entry = (await getWorkItems()).find((e) => e.id === 'auto-restyle-noord');
 const c = entry?.data;
 const img = c?.cardImage;
-const srcset = img?.src.endsWith('.webp') ? `${img.src.replace('.webp', '-800.webp')} 800w, ${img.src} 1400w` : undefined;
+const srcset = img ? srcsetFor(img.src) : undefined;
 const cardHref = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
 ---
 <section class="hero" aria-labelledby="hero-title">
@@ -42,7 +43,7 @@ const cardHref = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
   {c && (
     <a class="hero__card" href={cardHref}>
       {img
-        ? <img class="hero__img" src={img.src} srcset={srcset} sizes="(min-width: 1500px) 1312px, calc(100vw - 2.5rem)" width="1400" height="875" alt={img.alt} fetchpriority="high" decoding="async" style={img.position ? `object-position:${img.position}` : undefined} />
+        ? <img class="hero__img" src={img.src} srcset={srcset} sizes="(min-width: 1500px) 1312px, calc(100vw - 2.5rem)" width={dims(img.src).width} height={dims(img.src).height} alt={img.alt} fetchpriority="high" decoding="async" style={img.position ? `object-position:${img.position}` : undefined} />
         : <span class="hero__img hero__img--ph" aria-hidden="true"></span>}
       <span class="hero__cardtxt">
         <span class="mono">Uitgelicht werk</span>

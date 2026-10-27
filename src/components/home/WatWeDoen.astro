@@ -1,11 +1,12 @@
 ---
+import { dims, srcsetFor } from '../../lib/images';
 // Wat we doen (bord X · Home): Webshops & commerce als zwaartepunt met beeld, daaronder de drie andere diensten.
 import { SERVICES as S } from '../../data/home';
 import { getWorkItems, hasCasePage } from '../../lib/content';
 const img = (await getWorkItems()).find((e) => e.id === S.hub.imageCase);
 const ci = img?.data.cardImage;
 const imgHref = img && hasCasePage(img) ? `/werk/${img.id}` : '#werk';
-const srcset = ci?.src.endsWith('.webp') ? `${ci.src.replace('.webp', '-800.webp')} 800w, ${ci.src} 1400w` : undefined;
+const srcset = ci ? srcsetFor(ci.src) : undefined;
 ---
 <section class="wwd on-field" id="wat-we-doen" aria-labelledby="wwd-h">
   <div class="wwd__in">
@@ -23,7 +24,7 @@ const srcset = ci?.src.endsWith('.webp') ? `${ci.src.replace('.webp', '-800.webp
       </div>
       {ci && (
         <a class="hub__img" href={imgHref}>
-          <img src={ci.src} srcset={srcset} sizes="(min-width: 1100px) 40vw, calc(100vw - 2.5rem)" width="1400" height="875" alt={ci.alt} loading="lazy" decoding="async" style={ci.position ? `object-position:${ci.position}` : undefined} />
+          <img src={ci.src} srcset={srcset} sizes="(min-width: 1100px) 40vw, calc(100vw - 2.5rem)" width={dims(ci.src).width} height={dims(ci.src).height} alt={ci.alt} loading="lazy" decoding="async" style={ci.position ? `object-position:${ci.position}` : undefined} />
           <span class="hub__cap mono">{S.hub.imageCaption}</span>
         </a>
       )}

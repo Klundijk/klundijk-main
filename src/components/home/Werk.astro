@@ -1,11 +1,12 @@
 ---
 // Werk (bord X · Home): accordeon met alle projecten, het eerste staat open. Zonder JavaScript staan alle panelen open.
+import { dims, srcsetFor } from '../../lib/images';
 import { getWorkItems, hasCasePage, textOn } from '../../lib/content';
 import { showPlaceholders } from '../../data/site';
 const items = await getWorkItems();
 const rows = items.map((e, i) => ({
   id: e.id, n: String(i + 1).padStart(2, '0'), c: e.data, linked: hasCasePage(e), fg: textOn(e.data.cardColor),
-  srcset: e.data.cardImage?.src.endsWith('.webp') ? `${e.data.cardImage.src.replace('.webp', '-800.webp')} 800w, ${e.data.cardImage.src} 1400w` : undefined,
+  srcset: e.data.cardImage ? srcsetFor(e.data.cardImage.src) : undefined,
   thumb: e.data.cardImage?.src.endsWith('.webp') ? e.data.cardImage.src.replace('.webp', '-800.webp') : e.data.cardImage?.src,
   accent: e.data.tags.includes('Webshop'),
 }));
@@ -35,7 +36,7 @@ const rows = items.map((e, i) => ({
           <div class="wcard" style={`--bg:${r.c.cardColor};--fg:${r.fg}`}>
             <div class="wcard__media">
               {r.c.cardImage
-                ? <img src={r.c.cardImage.src} srcset={r.srcset} sizes="(min-width: 1100px) 66vw, 100vw" alt={r.c.cardImage.alt} width="1400" height="875" loading="lazy" decoding="async" style={r.c.cardImage.position ? `object-position:${r.c.cardImage.position}` : undefined} />
+                ? <img src={r.c.cardImage.src} srcset={r.srcset} sizes="(min-width: 1100px) 66vw, 100vw" alt={r.c.cardImage.alt} width={dims(r.c.cardImage.src).width} height={dims(r.c.cardImage.src).height} loading="lazy" decoding="async" style={r.c.cardImage.position ? `object-position:${r.c.cardImage.position}` : undefined} />
                 : showPlaceholders && <span class="wcard__ph mono">Beeld — [nog te leveren]</span>}
             </div>
             <div class="wcard__body">
@@ -104,10 +105,9 @@ const rows = items.map((e, i) => ({
   @media (min-width: 768px) {
     .wrow__btn { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; padding: 1.625rem 0; }
     .wrow__n { display: block; grid-column: span 1; font-size: 0.875rem; letter-spacing: 0.08em; color: var(--k-muted); }
-    .wrow__name { grid-column: span 5; font-stretch: 118%; line-height: 1; }
-    .wrow__tags { grid-column: span 3; }
+    .wrow__name { grid-column: span 6; font-stretch: 118%; line-height: 1; }
+    .wrow__tags { grid-column: span 4; }
     .wpill { padding: 0.5rem 1rem; font-size: 0.8125rem; }
-    .wrow__thumbs { display: flex; grid-column: span 2; gap: 0.5rem; justify-content: flex-end; }
     .wrow__thumbs img, .wrow__thumbph { width: 64px; height: 48px; object-fit: cover; }
     .wrow__thumbph { border: 1px dashed var(--k-ink); background: #dad5cb; display: block; }
     .wrow__ico { grid-row: auto; grid-column: span 1; text-align: right; font-size: 2rem; }
@@ -118,6 +118,11 @@ const rows = items.map((e, i) => ({
     .wcard__tags { display: block; font-size: 0.8125rem; }
     .wcard__line { font-size: 1.5rem; line-height: 1.35; }
     .wcard__cta { font-size: 1.0625rem; padding: 0 1.5rem; }
+  }
+  @media (min-width: 1100px) {
+    .wrow__name { grid-column: span 5; }
+    .wrow__tags { grid-column: span 3; }
+    .wrow__thumbs { display: flex; grid-column: span 2; gap: 0.5rem; justify-content: flex-end; }
   }
   @media (max-width: 1099px) and (min-width: 768px) { .wcard { height: 28rem; grid-template-columns: 1fr 1.6fr; } .wcard__line { font-size: 1.25rem; } }
   @media (prefers-reduced-motion: reduce) { .wrow__btn * { transition: none; } }

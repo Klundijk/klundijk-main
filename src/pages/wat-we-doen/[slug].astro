@@ -1,4 +1,5 @@
 ---
+import { dims } from '../../lib/images';
 // Dienstpagina (bord X · Commerce + X · Commerce Mobiel is het patroon voor alle vier).
 // Blokken zonder inhoud worden niet getoond; conceptteksten krijgen alleen in dev een badge.
 import Base from '../../layouts/Base.astro';
@@ -26,7 +27,7 @@ const cta = site.commerceCta;
 const band = { heading: s.contactHeading, text: s.contactText, cta };
 const num = (n: number) => String(n + 1).padStart(2, '0');
 ---
-<Base title={s.seo?.title ?? s.title} description={s.seo?.description ?? s.shortIntro} heroHeader band={band}>
+<Base title={s.seo?.title ?? s.title} description={s.seo?.description ?? s.shortIntro} heroHeader band={band} breadcrumb={[{ name: 'Wat we doen', href: '/wat-we-doen' }, { name: s.title, href: `/wat-we-doen/${entry.id}` }]}>
   <section class="hero on-field" aria-labelledby="svc-title">
     <div class="hero__text">
       <p class="mono kicker">Wat we doen · {label}</p>
@@ -39,7 +40,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     </div>
     {featured && (
       <div class="hero__card" style={`--bg:${featured.data.cardColor}`}>
-        {featured.data.cardImage && <img src={featured.data.cardImage.src} alt={featured.data.cardImage.alt} fetchpriority="high" decoding="async" style={featured.data.cardImage.position ? `object-position:${featured.data.cardImage.position}` : undefined} />}
+        {featured.data.cardImage && <img src={featured.data.cardImage.src} width={dims(featured.data.cardImage.src).width} height={dims(featured.data.cardImage.src).height} alt={featured.data.cardImage.alt} fetchpriority="high" decoding="async" style={featured.data.cardImage.position ? `object-position:${featured.data.cardImage.position}` : undefined} />}
         <span class="hero__pill mono">{featured.data.title} · {featured.data.tags.join(', ').toLowerCase()}</span>
       </div>
     )}

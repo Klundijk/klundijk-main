@@ -75,24 +75,8 @@ h1, h2, h3, p { margin: 0; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
-/* ---- Tijdelijke basisstijl voor de nog niet ontworpen pagina's (werk, wat-we-doen, over, contact, 404).
-   Wordt vervangen zodra de Designer deze pagina's heeft opgeleverd. ---- */
+/* ---- Gedeelde hulpklassen ---- */
 .wrap { max-width: 78rem; margin-inline: auto; padding-inline: var(--pad-x); }
-.eyebrow { font-family: var(--f-mono); font-size: var(--t-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--k-muted); margin-bottom: 1rem; }
 .muted { color: var(--k-muted); }
-main h1 { font-weight: 800; font-stretch: 118%; letter-spacing: -0.04em; line-height: 1; font-size: var(--t-display); margin-bottom: 1rem; }
-main h2 { font-weight: 800; font-stretch: 112%; letter-spacing: -0.03em; line-height: 1.05; font-size: var(--t-lead); margin-bottom: 1rem; }
-main h3 { font-weight: 700; font-stretch: 110%; letter-spacing: -0.02em; font-size: var(--t-card); margin-bottom: 0.5rem; }
-main p { margin-bottom: 1rem; max-width: 62ch; }
-.actions { display: flex; flex-wrap: wrap; gap: 1rem; }
-.grid { display: grid; gap: var(--gap); }
-.grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); }
-.grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
-.card { display: block; text-decoration: none; border-top: 2px solid var(--k-ink); padding-top: 1rem; }
-.card:hover h3 { text-decoration: underline; }
-.media { background: #dad5cb; aspect-ratio: 16 / 10; margin-bottom: 1rem; display: grid; place-items: center; color: var(--k-muted); font-size: 0.9rem; border-radius: 12px; }
+/* Alleen zichtbaar in dev of met PUBLIC_SHOW_PLACEHOLDERS=1: markeert inhoud die nog geleverd moet worden. */
 .placeholder-flag { display: inline-block; background: #fff3c4; color: #5a4500; padding: 0.1em 0.5em; font-size: 0.8rem; border-radius: 4px; }
-form { display: grid; gap: 1rem; max-width: 36rem; }
-label { display: grid; gap: 0.25rem; font-weight: 600; }
-input, textarea { font: inherit; padding: 0.75em; border: 2px solid var(--k-ink); border-radius: 8px; background: var(--k-white); color: inherit; }
-textarea { min-height: 9rem; }

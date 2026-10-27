@@ -1,4 +1,5 @@
 ---
+import { dims, srcsetFor } from '../../lib/images';
 // Uitgelichte case (bord X · Home). Alleen echte tekst: keuze en resultaat staan als [placeholder] in dev en verdwijnen in productie.
 import { HOME_CASE as H } from '../../data/home';
 import { getWorkItems, hasCasePage } from '../../lib/content';
@@ -6,7 +7,7 @@ import { showPlaceholders } from '../../data/site';
 const entry = (await getWorkItems()).find((e) => e.id === H.slug);
 const im = entry?.data.heroImage ?? entry?.data.cardImage;
 const href = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
-const srcset = im?.src.endsWith('.webp') ? `${im.src.replace('.webp', '-800.webp')} 800w, ${im.src} 1400w` : undefined;
+const srcset = im ? srcsetFor(im.src) : undefined;
 const cols = H.cols.filter((c) => c.v || showPlaceholders);
 ---
 <section class="case" aria-labelledby="case-h">
@@ -17,7 +18,7 @@ const cols = H.cols.filter((c) => c.v || showPlaceholders);
     </div>
     <a class="link-strong case__more" href={href}>{H.more}</a>
   </div>
-  {im && <img class="case__img" src={im.src} srcset={srcset} sizes="(min-width: 1500px) 1312px, calc(100vw - 2.5rem)" width="1400" height="875" alt={im.alt} loading="lazy" decoding="async" style={im.position ? `object-position:${im.position}` : undefined} />}
+  {im && <img class="case__img" src={im.src} srcset={srcset} sizes="(min-width: 1500px) 1312px, calc(100vw - 2.5rem)" width={dims(im.src).width} height={dims(im.src).height} alt={im.alt} loading="lazy" decoding="async" style={im.position ? `object-position:${im.position}` : undefined} />}
   <dl class="cols">
     {cols.map((c) => (
       <div class="col">

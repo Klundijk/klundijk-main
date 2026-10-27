@@ -1,4 +1,5 @@
 ---
+import { dims } from '../../lib/images';
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import { getPublishedCases, textOn } from '../../lib/content';
@@ -30,7 +31,7 @@ const n = (key: string) => String(sections.indexOf(key) + 1).padStart(2, '0');
 const heroFg = textOn(c.cardColor);
 const nextFg = next ? textOn(next.data.cardColor) : '';
 ---
-<Base title={c.seo?.title ?? c.title} description={c.seo?.description ?? c.excerpt ?? c.promise} noindex={c.placeholder}>
+<Base title={c.seo?.title ?? c.title} description={c.seo?.description ?? c.excerpt ?? c.promise} noindex={c.placeholder} breadcrumb={[{ name: 'Werk', href: '/werk' }, { name: c.title, href: `/werk/${entry.id}` }]}>
   <article>
     <header class="top wrap">
       <a class="back" href="/werk"><span aria-hidden="true">←</span>Terug naar werk</a>
@@ -45,7 +46,7 @@ const nextFg = next ? textOn(next.data.cardColor) : '';
       </dl>
       <div class="hero" style={`--bg:${c.cardColor};--fg:${heroFg}`}>
         {c.heroImage
-          ? <img src={c.heroImage.src} alt={c.heroImage.alt} width="1312" height="738" fetchpriority="high" />
+          ? <img src={c.heroImage.src} alt={c.heroImage.alt} width={dims(c.heroImage.src).width} height={dims(c.heroImage.src).height} fetchpriority="high" />
           : showPlaceholders && <span class="mono ph">Hero-beeld · [schone mockup of schermafbeelding, 16:9, zonder tekstoverlay]</span>}
       </div>
     </header>
@@ -70,7 +71,7 @@ const nextFg = next ? textOn(next.data.cardColor) : '';
             </ol>
           )}
           {c.detailImages.length > 0 && (
-            <div class="pair">{c.detailImages.map((im) => <img src={im.src} alt={im.alt} loading="lazy" width="640" height="480" />)}</div>
+            <div class="pair">{c.detailImages.map((im) => <img src={im.src} alt={im.alt} loading="lazy" width={dims(im.src).width} height={dims(im.src).height} />)}</div>
           )}
         </div>
       </section>
@@ -81,7 +82,7 @@ const nextFg = next ? textOn(next.data.cardColor) : '';
         <div class="sec__head"><p class="mono kicker">{n('execution')} · Uitvoering</p><h2 id="s-exec">{c.executionHeading}</h2></div>
         <div class="sec__body">
           <div class="lead prose"><Content /></div>
-          {c.executionImage && <img class="wide" src={c.executionImage.src} alt={c.executionImage.alt} loading="lazy" width="1312" height="656" />}
+          {c.executionImage && <img class="wide" src={c.executionImage.src} alt={c.executionImage.alt} loading="lazy" width={dims(c.executionImage.src).width} height={dims(c.executionImage.src).height} />}
         </div>
       </section>
     )}

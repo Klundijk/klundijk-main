@@ -12,7 +12,7 @@ import Klanten from '../components/home/Klanten.astro';
 import Contact from '../components/home/Contact.astro';
 import { site } from '../data/site';
 ---
-<Base title="Klundijk — Digitaal kan beter" description={site.description} heroHeader contactBand={false}>
+<Base description={site.description} heroHeader contactBand={false}>
   <script is:inline slot="head">
     (function(){try{
       var r=document.documentElement, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, seen=sessionStorage.getItem('kl-intro');
