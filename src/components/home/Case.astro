@@ -1,26 +1,64 @@
 ---
+import { dims, srcsetFor } from '../../lib/images';
+// Uitgelichte case (bord X · Home). Alleen echte tekst: keuze en resultaat staan als [placeholder] in dev en verdwijnen in productie.
+import { HOME_CASE as H } from '../../data/home';
+import { getWorkItems, hasCasePage } from '../../lib/content';
 import { showPlaceholders } from '../../data/site';
-const cols = [
-  ['Vraagstuk', 'Een nieuwe naam en nieuwe locatie vroegen om een online uitstraling die weer klopt.'],
-  ['Belangrijkste keuze', null],
-  ['Uitvoering', 'Merk, website en content opnieuw op één lijn gebracht.'],
-  ['Resultaat', null],
-] as const;
+const entry = (await getWorkItems()).find((e) => e.id === H.slug);
+const im = entry?.data.heroImage ?? entry?.data.cardImage;
+const href = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
+const srcset = im ? srcsetFor(im.src) : undefined;
+const cols = H.cols.filter((c) => c.v || showPlaceholders);
 ---
 <section class="case" aria-labelledby="case-h">
-  <p class="mono">Uitgelichte case</p>
-  <h2 id="case-h" class="h2">Niet alleen wat we maakten, maar waarom.</h2>
-  <div class="cols">
-    {cols.map(([k, v]) => (v || showPlaceholders) && (
-      <div><h3 class="mono">{k}</h3><p>{v ?? '[Nog aan te leveren door Levi en SEO & content.]'}</p></div>
-    ))}
+  <div class="case__head">
+    <div class="case__titles">
+      <p class="mono case__kicker">{H.kicker}</p>
+      <h2 id="case-h" class="case__h">{H.title}</h2>
+    </div>
+    <a class="link-strong case__more" href={href}>{H.more}</a>
   </div>
+  {im && <img class="case__img" src={im.src} srcset={srcset} sizes="(min-width: 1500px) 1312px, calc(100vw - 2.5rem)" width={dims(im.src).width} height={dims(im.src).height} alt={im.alt} loading="lazy" decoding="async" style={im.position ? `object-position:${im.position}` : undefined} />}
+  <dl class="cols">
+    {cols.map((c) => (
+      <div class="col">
+        <dt class="mono">{c.k}</dt>
+        <dd class:list={[{ 'is-ph': !c.v }]}>{c.v ?? c.ph}</dd>
+      </div>
+    ))}
+  </dl>
+  {showPlaceholders && (
+    <div class="slot">
+      <p class="mono slot__k">{H.slot.kicker}</p>
+      <p class="slot__t">{H.slot.title}</p>
+      <p class="slot__n">{H.slot.note}</p>
+    </div>
+  )}
 </section>
 <style>
-  .case { background: var(--k-ink); color: var(--k-paper); padding: var(--pad-y) var(--pad-x); }
-  .h2 { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: .5rem 0 2rem; max-width: 18ch; }
-  .cols { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
-  @media (min-width: 768px) { .cols { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1100px) { .cols { grid-template-columns: repeat(4, 1fr); } }
-  .cols h3 { text-transform: uppercase; font-size: .8rem; margin: 0 0 .5rem; color: var(--k-muted-dark); }
+  .case { background: var(--k-ink); color: var(--k-paper); padding: 3.5rem var(--pad-x); display: flex; flex-direction: column; gap: clamp(1.75rem, 3.9vw, 3.5rem); }
+  @media (min-width: 768px) { .case { padding-block: var(--pad-y); } }
+  .case__head { display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; }
+  @media (min-width: 768px) { .case__head { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 2rem; } }
+  .case__titles { display: flex; flex-direction: column; gap: 1.25rem; }
+  .case__kicker { margin: 0; color: var(--k-muted-dark); letter-spacing: 0.08em; }
+  .case__h { margin: 0; max-width: 56rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1; letter-spacing: -0.04em; }
+  @media (min-width: 768px) { .case__h { font-stretch: 118%; line-height: 0.98; } }
+  .case__more { order: 3; flex: none; }
+  @media (max-width: 767px) { .case__head { display: contents; } .case__titles { order: 0; } .case__more { order: 5; } }
+  .case__img { width: 100%; height: clamp(18.75rem, 36.1vw, 32.5rem); object-fit: cover; border-radius: 24px; }
+  .cols { display: grid; gap: 1.25rem 1.5rem; grid-template-columns: minmax(0, 1fr); margin: 0; }
+  @media (min-width: 768px) { .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1100px) { .cols { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); } }
+  .col { display: flex; flex-direction: column; gap: 0.75rem; }
+  @media (min-width: 768px) { .col { border-top: 1px solid var(--k-paper); padding-top: 1.25rem; } }
+  .col dt { color: var(--k-muted-dark); letter-spacing: 0.1em; }
+  .col dd { margin: 0; font-size: clamp(1.0625rem, 1.25vw, 1.125rem); line-height: 1.5; }
+  .col dd.is-ph { color: var(--k-muted-dark); }
+  .slot { border: 1px dashed var(--k-paper); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.625rem; }
+  @media (min-width: 1100px) { .slot { flex-direction: row; justify-content: space-between; align-items: center; gap: 2rem; padding: 1.75rem 2rem; } .slot__k, .slot__n { max-width: 16.25rem; } .slot__t { flex: 1; } }
+  .slot p { margin: 0; }
+  .slot__k { color: var(--k-muted-dark); }
+  .slot__t { font-weight: 800; font-stretch: 118%; font-size: clamp(1.5rem, 2.22vw, 2rem); line-height: 1.1; letter-spacing: -0.03em; }
+  .slot__n { color: var(--k-muted-dark); font-size: 0.9375rem; line-height: 1.4; }
 </style>

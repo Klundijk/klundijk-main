@@ -1,29 +1,129 @@
 ---
-import { WORK } from '../../data/home';
+// Werk (bord X · Home): accordeon met alle projecten, het eerste staat open. Zonder JavaScript staan alle panelen open.
+import { dims, srcsetFor } from '../../lib/images';
+import { getWorkItems, hasCasePage, textOn } from '../../lib/content';
+import { showPlaceholders } from '../../data/site';
+const items = await getWorkItems();
+const rows = items.map((e, i) => ({
+  id: e.id, n: String(i + 1).padStart(2, '0'), c: e.data, linked: hasCasePage(e), fg: textOn(e.data.cardColor),
+  srcset: e.data.cardImage ? srcsetFor(e.data.cardImage.src) : undefined,
+  thumb: e.data.cardImage?.src.endsWith('.webp') ? e.data.cardImage.src.replace('.webp', '-800.webp') : e.data.cardImage?.src,
+  accent: e.data.tags.includes('Webshop'),
+}));
 ---
-<section class="section" aria-labelledby="werk-h">
-  <h2 id="werk-h" class="h2">Werk dat iets in beweging zet.</h2>
-  <ul class="rows">
-    {WORK.map((w) => (
-      <li>
-        <a href={w.href} class="row">
-          <span class="row__t">{w.title}</span>
-          <span class="row__tags">{w.tags.map((t) => <span class:list={['tag', { 'tag--accent': t === 'Webshop' }]}>{t}</span>)}</span>
-          <span class="row__go" aria-hidden="true">→</span>
-        </a>
+<section class="werk" id="werk" aria-labelledby="werk-h">
+  <div class="werk__head">
+    <h2 id="werk-h" class="werk__h">Werk dat iets in beweging zet.</h2>
+    <p class="mono werk__hint">Klik een project open</p>
+  </div>
+  <ul class="wlist" data-wlist>
+    {rows.map((r, i) => (
+      <li class="wrow" data-wrow>
+        <h3 class="wrow__h">
+          <button type="button" class="wrow__btn" aria-expanded={i === 0 ? 'true' : 'false'} aria-controls={`wp-${r.id}`} data-wtoggle>
+            <span class="wrow__n mono" aria-hidden="true">{r.n}</span>
+            <span class="wrow__name">{r.c.title}</span>
+            <span class="wrow__tags"><span class:list={['wpill mono', { 'wpill--accent': r.accent }]}>{r.c.tags.join(' · ')}</span></span>
+            <span class="wrow__thumbs" aria-hidden="true">
+              {r.thumb
+                ? <><img src={r.thumb} alt="" width="64" height="48" loading="lazy" decoding="async" style="object-position:30% 50%" /><img src={r.thumb} alt="" width="64" height="48" loading="lazy" decoding="async" style="object-position:75% 50%" /></>
+                : <><span class="wrow__thumbph"></span><span class="wrow__thumbph"></span></>}
+            </span>
+            <span class="wrow__ico" aria-hidden="true" data-wico>{i === 0 ? '−' : '+'}</span>
+          </button>
+        </h3>
+        <div class="wpanel" id={`wp-${r.id}`} hidden={i !== 0} data-wpanel>
+          <div class="wcard" style={`--bg:${r.c.cardColor};--fg:${r.fg}`}>
+            <div class="wcard__media">
+              {r.c.cardImage
+                ? <img src={r.c.cardImage.src} srcset={r.srcset} sizes="(min-width: 1100px) 66vw, 100vw" alt={r.c.cardImage.alt} width={dims(r.c.cardImage.src).width} height={dims(r.c.cardImage.src).height} loading="lazy" decoding="async" style={r.c.cardImage.position ? `object-position:${r.c.cardImage.position}` : undefined} />
+                : showPlaceholders && <span class="wcard__ph mono">Beeld — [nog te leveren]</span>}
+            </div>
+            <div class="wcard__body">
+              <p class="mono wcard__tags">{r.c.tags.join(' · ')}</p>
+              <p class="wcard__line">{r.c.excerpt ?? r.c.promise}</p>
+              {r.linked
+                ? <a class="wcard__cta" href={`/werk/${r.id}`}>Bekijk case<span class="sr-only"> {r.c.title}</span></a>
+                : <span class="wcard__cta wcard__cta--soon">Case volgt</span>}
+            </div>
+          </div>
+        </div>
       </li>
     ))}
   </ul>
 </section>
+<script>
+  const rows = [...document.querySelectorAll<HTMLElement>('[data-wrow]')];
+  const set = (row: HTMLElement, open: boolean) => {
+    row.querySelector('[data-wtoggle]')?.setAttribute('aria-expanded', String(open));
+    row.querySelector<HTMLElement>('[data-wpanel]')!.hidden = !open;
+    const ico = row.querySelector('[data-wico]');
+    if (ico) ico.textContent = open ? '−' : '+';
+  };
+  rows.forEach((row) => {
+    row.querySelector('[data-wtoggle]')?.addEventListener('click', () => {
+      const open = row.querySelector('[data-wtoggle]')?.getAttribute('aria-expanded') === 'true';
+      rows.forEach((r) => set(r, r === row ? !open : false));
+    });
+  });
+</script>
 <style>
-  .h2 { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: 0 0 2rem; }
-  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--k-line); }
-  .row { display: grid; grid-template-columns: 1fr auto; gap: .5rem 1rem; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--k-line); color: inherit; text-decoration: none; transition: padding .3s var(--ease); }
-  .row:hover, .row:focus-visible { padding-left: 1rem; }
-  .row__t { font-size: var(--t-row); font-weight: 800; font-stretch: 115%; letter-spacing: -.02em; }
-  .row__tags { grid-column: 1; display: flex; flex-wrap: wrap; gap: .5rem; }
-  .row__go { grid-row: 1; grid-column: 2; font-size: 1.5rem; }
-  @media (min-width: 768px) { .row { grid-template-columns: 1.4fr 1.6fr auto; } .row__tags { grid-column: auto; } .row__go { grid-row: auto; grid-column: auto; } }
-  .tag--accent { background: var(--k-accent); color: var(--k-ink); border-color: var(--k-accent); }
-  @media (prefers-reduced-motion: reduce) { .row { transition: none; } }
+  .werk { padding: 3.5rem var(--pad-x) 2.5rem; display: flex; flex-direction: column; gap: clamp(1.5rem, 2.8vw, 2.5rem); }
+  @media (min-width: 768px) { .werk { padding-top: var(--pad-y); padding-bottom: 4.5rem; } }
+  .werk__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; }
+  .werk__h { max-width: 56rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1; letter-spacing: -0.04em; margin: 0; }
+  @media (min-width: 768px) { .werk__h { font-stretch: 118%; line-height: 0.98; } }
+  .werk__hint { display: none; color: var(--k-muted); margin: 0; }
+  @media (min-width: 768px) { .werk__hint { display: block; } }
+
+  .wlist { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--k-ink); }
+  .wrow { border-top: 1px solid var(--k-ink); }
+  .wrow__h { margin: 0; font: inherit; }
+  .wrow__btn { width: 100%; text-align: left; background: none; border: 0; cursor: pointer; color: var(--k-ink); padding: 1.25rem 0;
+    display: grid; grid-template-columns: 1fr auto; gap: 0.625rem 0.75rem; align-items: baseline; }
+  .wrow__n, .wrow__thumbs { display: none; }
+  .wrow__name { font-weight: 800; font-stretch: 112%; font-size: clamp(1.875rem, 3.34vw, 3rem); letter-spacing: -0.03em; line-height: 1.05; }
+  .wrow__ico { grid-row: 1; grid-column: 2; font-size: 1.75rem; font-weight: 500; line-height: 1; }
+  .wrow__tags { grid-column: 1 / -1; display: flex; }
+  .wpill { border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.75rem; font-size: 0.75rem; letter-spacing: 0.04em; background: transparent; }
+  .wpill--accent { background: var(--k-accent); }
+  .wrow__btn:hover .wrow__name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+
+  .wpanel { padding: 0 0 1.5rem; }
+  .wpanel[hidden] { display: none; }
+  .wcard { border-radius: 24px; overflow: hidden; background: var(--bg); color: var(--fg); display: flex; flex-direction: column; }
+  .wcard__media { position: relative; height: 14.375rem; overflow: hidden; order: -1; }
+  .wcard__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .wcard__ph { position: absolute; inset: 0; padding: 0.75rem; display: flex; align-items: flex-end; border: 1px dashed currentColor; margin: 1rem; }
+  .wcard__body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .wcard__tags { display: none; margin: 0; letter-spacing: 0.08em; }
+  .wcard__line { margin: 0; font-size: 1.0625rem; line-height: 1.4; }
+  .wcard__cta { display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.375rem; border: 2px solid var(--fg); border-radius: 999px; color: var(--fg); font-size: 1rem; font-weight: 600; text-decoration: none; }
+  a.wcard__cta:hover { background: var(--fg); color: var(--bg); }
+  .wcard__cta--soon { opacity: 0.85; }
+
+  @media (min-width: 768px) {
+    .wrow__btn { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; padding: 1.625rem 0; }
+    .wrow__n { display: block; grid-column: span 1; font-size: 0.875rem; letter-spacing: 0.08em; color: var(--k-muted); }
+    .wrow__name { grid-column: span 6; font-stretch: 118%; line-height: 1; }
+    .wrow__tags { grid-column: span 4; }
+    .wpill { padding: 0.5rem 1rem; font-size: 0.8125rem; }
+    .wrow__thumbs img, .wrow__thumbph { width: 64px; height: 48px; object-fit: cover; }
+    .wrow__thumbph { border: 1px dashed var(--k-ink); background: #dad5cb; display: block; }
+    .wrow__ico { grid-row: auto; grid-column: span 1; text-align: right; font-size: 2rem; }
+    .wpanel { padding-bottom: 2rem; }
+    .wcard { display: grid; grid-template-columns: 4fr 8fr; height: 33.75rem; border-radius: 28px; }
+    .wcard__media { order: 0; height: auto; grid-column: 2; grid-row: 1; }
+    .wcard__body { grid-column: 1; grid-row: 1; padding: 2rem; justify-content: space-between; gap: 1.5rem; }
+    .wcard__tags { display: block; font-size: 0.8125rem; }
+    .wcard__line { font-size: 1.5rem; line-height: 1.35; }
+    .wcard__cta { font-size: 1.0625rem; padding: 0 1.5rem; }
+  }
+  @media (min-width: 1100px) {
+    .wrow__name { grid-column: span 5; }
+    .wrow__tags { grid-column: span 3; }
+    .wrow__thumbs { display: flex; grid-column: span 2; gap: 0.5rem; justify-content: flex-end; }
+  }
+  @media (max-width: 1099px) and (min-width: 768px) { .wcard { height: 28rem; grid-template-columns: 1fr 1.6fr; } .wcard__line { font-size: 1.25rem; } }
+  @media (prefers-reduced-motion: reduce) { .wrow__btn * { transition: none; } }
 </style>

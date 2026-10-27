@@ -1,12 +1,14 @@
 ---
-const text = 'Digitaal kan beter. — Dus maken we het beter. — ';
+// Tekstband (bord X · Home). Decoratief: de tekst staat voor schermlezers één keer in een verborgen regel.
+// Pauzeerknop (WCAG 2.2.2); stopt ook bij hover/focus en bij verminderde beweging.
+const pair = 'Digitaal kan beter. — Dus maken we het beter. — ';
 ---
 <section class="marquee" aria-label="Motto">
   <div class="marquee__track" id="marquee-track" aria-hidden="true">
-    <span>{text.repeat(6)}</span><span>{text.repeat(6)}</span>
+    <span>{pair.repeat(2)}</span><span>{pair.repeat(2)}</span>
   </div>
   <p class="sr-only">Digitaal kan beter. Dus maken we het beter.</p>
-  <button type="button" class="marquee__btn mono" id="marquee-btn" aria-pressed="false">Pauze tekstband</button>
+  <button type="button" class="marquee__btn mono" id="marquee-btn" aria-pressed="false"><span aria-hidden="true" id="marquee-ico">❚❚</span><span id="marquee-lbl">Pauze tekstband</span></button>
 </section>
 <script>
   const track = document.getElementById('marquee-track');
@@ -14,14 +16,22 @@ const text = 'Digitaal kan beter. — Dus maken we het beter. — ';
   b?.addEventListener('click', () => {
     const paused = track?.classList.toggle('is-paused');
     b.setAttribute('aria-pressed', String(!!paused));
-    b.textContent = paused ? 'Hervat tekstband' : 'Pauze tekstband';
+    const ico = document.getElementById('marquee-ico');
+    const lbl = document.getElementById('marquee-lbl');
+    if (ico) ico.textContent = paused ? '▶' : '❚❚';
+    if (lbl) lbl.textContent = paused ? 'Hervat tekstband' : 'Pauze tekstband';
   });
 </script>
 <style>
-  .marquee { background: var(--k-ink); color: var(--k-paper); overflow: hidden; position: relative; padding: 3.5rem 0 1.25rem; }
-  .marquee__track { display: flex; width: max-content; animation: mq 40s linear infinite; font-family: var(--f-sans); font-weight: 800; font-stretch: 125%; font-size: var(--t-row); text-transform: uppercase; white-space: nowrap; }
+  .marquee { background: var(--k-ink); color: var(--k-paper); overflow: hidden; position: relative; padding: 4.25rem 0 1.5rem; }
+  /* Snelheid gelijk aan het ontwerp: één "paar" zinnen per 40 s (twee paren per helft, dus 80 s). */
+  .marquee__track { display: flex; width: max-content; animation: mq 80s linear infinite; font-family: var(--f-sans); font-weight: 800; font-stretch: 125%;
+    font-size: clamp(3.5rem, 8.33vw, 7.5rem); letter-spacing: -0.04em; line-height: 1; text-transform: uppercase; white-space: nowrap; }
   .marquee:hover .marquee__track, .marquee:focus-within .marquee__track, .marquee__track.is-paused { animation-play-state: paused; }
-  .marquee__btn { position: absolute; right: var(--pad-x); top: 12px; z-index: 1; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; background: var(--k-paper); color: var(--k-ink); border: 0; border-radius: 999px; padding: 0 1.125rem; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
+  .marquee__btn { position: absolute; right: var(--pad-x); top: 8px; z-index: 1; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; gap: 10px;
+    background: var(--k-ink); color: var(--k-paper); border: 1.5px solid var(--k-paper); border-radius: 999px; padding: 0 1.125rem; font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; }
+  .marquee__btn:hover { background: var(--k-paper); color: var(--k-ink); }
   @keyframes mq { to { transform: translateX(-50%); } }
+  @media (min-width: 768px) { .marquee { padding: 4rem 0 2.25rem; } .marquee__btn { top: 12px; } }
   @media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } .marquee__btn { display: none; } }
 </style>

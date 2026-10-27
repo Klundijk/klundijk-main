@@ -1,59 +1,127 @@
 ---
+// Situaties (bord X · Home): vier tegels met een illustratie die van "nu" naar "beter" gaat. De eerste tegel (webshops) is groot.
+// Zonder JavaScript staat elke tegel op "Nu" en verdwijnen de knoppen (ze zijn een verbetering, geen vereiste).
 import { TILES } from '../../data/home';
-const order = [TILES[0], TILES[1], TILES[2], TILES[3]];
-const col = (c: string) => ({ FIELD: 'var(--k-field)', ACCENT: 'var(--k-accent)', INK: 'var(--k-ink)', PAPER: 'var(--k-paper)' } as Record<string,string>)[c];
-const style = (blk: any[]) => blk.map((b, i) => `--x${i}:${b[0]}%;--y${i}:${b[1]}%;--w${i}:${b[2]}%;--h${i}:${b[3]}%;--r${i}:${b[4]}deg;--c${i}:${col(b[5])};--b${i}:${b[6]}px`).join(';');
+import { blockStyles, lineStyles } from '../../lib/stage';
 ---
-<section class="section sit" aria-labelledby="sit-h">
+<section class="sit" aria-labelledby="sit-h">
   <div class="sit__head">
-    <h2 id="sit-h" class="sit__h">Waar kunnen we iets beter maken?</h2>
-    <p class="muted">Kies een situatie en zie wat ‘beter’ betekent.</p>
-    <button type="button" class="btn btn--secondary btn--md" id="sit-all" aria-pressed="false">Maak alles beter</button>
+    <div class="sit__titles">
+      <h2 id="sit-h" class="sit__h">Waar kunnen we iets beter maken?</h2>
+      <p class="mono sit__sub">Kies een situatie en zie wat ‘beter’ betekent</p>
+    </div>
+    <button type="button" class="sit__all" id="sit-all" aria-pressed="false" hidden>Maak alles beter</button>
   </div>
   <div class="sit__grid">
-    {order.map((t) => (
-      <article class:list={['tile', { 'tile--lg': t.large }]} data-tile data-better="false">
-        <div class="tile__art" aria-hidden="true">
-          {t.b.map((_, i) => <i class="blk" style={`${style(t.b)}`} data-i={i} data-before={style(t.b)} data-after={style(t.a)}></i>)}
-        </div>
-        <p class="mono">{t.num} · {t.label}</p>
-        <h3>{t.heading}</h3>
-        <p class="tile__copy">{t.copy}</p>
-        <button type="button" class="btn btn--secondary btn--md" data-toggle aria-pressed="false">Maak het beter</button>
-      </article>
-    ))}
+    {TILES.map((t, i) => {
+      const before = blockStyles(t.art, 0);
+      const after = blockStyles(t.art, 1);
+      const lb = lineStyles(t.art, 0);
+      const la = lineStyles(t.art, 1);
+      return (
+        <article class:list={['tile', { 'tile--lg': i === 0 }]} data-tile aria-labelledby={`sit-${t.id}`}>
+          <div class="tile__art" aria-hidden="true">
+            <div class="stage">
+              {lb.map((s, k) => <i class="ln" style={s} data-before={s} data-after={la[k]}></i>)}
+              {before.map((s, k) => <i class="blk" style={s} data-before={s} data-after={after[k]}></i>)}
+            </div>
+          </div>
+          <div class="tile__body">
+            <p class="mono tile__meta"><span>{t.num}{i === 0 ? ` · ${t.label}` : ''}{i !== 0 && <span class="sr-only"> · {t.label}</span>}</span><span class="tile__state" data-state>Nu</span></p>
+            <h3 id={`sit-${t.id}`} class="tile__h">{t.heading}</h3>
+            <p class="tile__copy">{t.copy}</p>
+            <p class="tile__acts">
+              <button type="button" class="tbtn" data-toggle aria-pressed="false" hidden>Maak het beter</button>
+              {i === 0 && <a class="tbtn tbtn--accent" href="#contact">Plan een kennismaking</a>}
+            </p>
+          </div>
+        </article>
+      );
+    })}
   </div>
 </section>
 <script>
   const tiles = [...document.querySelectorAll<HTMLElement>('[data-tile]')];
-  const all = document.getElementById('sit-all');
+  const all = document.getElementById('sit-all') as HTMLButtonElement | null;
   const apply = (t: HTMLElement, better: boolean) => {
     t.dataset.better = String(better);
-    t.querySelectorAll<HTMLElement>('.blk').forEach((b) => b.setAttribute('style', (better ? b.dataset.after : b.dataset.before) || ''));
-    const btn = t.querySelector('[data-toggle]');
+    t.querySelectorAll<HTMLElement>('.blk, .ln').forEach((b) => b.setAttribute('style', (better ? b.dataset.after : b.dataset.before) || ''));
+    const btn = t.querySelector<HTMLButtonElement>('[data-toggle]');
     btn?.setAttribute('aria-pressed', String(better));
     if (btn) btn.textContent = better ? 'Zie hoe het was' : 'Maak het beter';
+    const st = t.querySelector('[data-state]');
+    if (st) st.textContent = better ? 'Beter' : 'Nu';
   };
-  tiles.forEach((t) => t.querySelector('[data-toggle]')?.addEventListener('click', () => apply(t, t.dataset.better !== 'true')));
-  all?.addEventListener('click', () => {
-    const go = all.getAttribute('aria-pressed') !== 'true';
-    tiles.forEach((t) => apply(t, go));
-    all.setAttribute('aria-pressed', String(go));
-    all.textContent = go ? 'Alles terug naar hoe het was' : 'Maak alles beter';
+  const sync = () => {
+    if (!all) return;
+    const every = tiles.every((t) => t.dataset.better === 'true');
+    all.setAttribute('aria-pressed', String(every));
+    all.textContent = every ? 'Alles terug naar hoe het was' : 'Maak alles beter';
+  };
+  tiles.forEach((t) => {
+    t.dataset.better = 'false';
+    const btn = t.querySelector<HTMLButtonElement>('[data-toggle]');
+    if (btn) { btn.hidden = false; btn.addEventListener('click', () => { apply(t, t.dataset.better !== 'true'); sync(); }); }
   });
+  if (all) {
+    all.hidden = false;
+    all.addEventListener('click', () => {
+      const go = !tiles.every((t) => t.dataset.better === 'true');
+      tiles.forEach((t) => apply(t, go));
+      sync();
+    });
+  }
 </script>
 <style>
-  .sit__h { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: 0 0 .5rem; }
-  .sit__head { display: grid; gap: .75rem; justify-items: start; margin-bottom: 2rem; }
-  .sit__grid { display: grid; gap: var(--gap); grid-template-columns: 1fr; }
-  @media (min-width: 768px) { .sit__grid { grid-template-columns: repeat(2, 1fr); } .tile--lg { grid-column: span 2; } }
-  .tile { background: #fff; border-radius: 24px; padding: 1.5rem; display: grid; gap: .75rem; align-content: start; }
-  .tile h3 { font-size: var(--t-card); font-weight: 700; font-stretch: 110%; margin: 0; }
-  .tile__copy { margin: 0; color: var(--k-muted); }
-  .tile__art { position: relative; height: 12rem; background: var(--k-paper); border-radius: 16px; overflow: hidden; }
-  .blk { position: absolute; left: var(--x0); top: var(--y0); width: var(--w0); height: var(--h0); background: var(--c0); border-radius: var(--b0); transform: rotate(var(--r0)); transition: all .8s var(--ease); }
-  .blk[data-i="1"] { left: var(--x1); top: var(--y1); width: var(--w1); height: var(--h1); background: var(--c1); border-radius: var(--b1); transform: rotate(var(--r1)); }
-  .blk[data-i="2"] { left: var(--x2); top: var(--y2); width: var(--w2); height: var(--h2); background: var(--c2); border-radius: var(--b2); transform: rotate(var(--r2)); }
-  .blk[data-i="3"] { left: var(--x3); top: var(--y3); width: var(--w3); height: var(--h3); background: var(--c3); border-radius: var(--b3); transform: rotate(var(--r3)); }
-  @media (prefers-reduced-motion: reduce) { .blk { transition: none; } }
+  .sit { padding: 2.5rem var(--pad-x) 3.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+  @media (min-width: 768px) { .sit { padding-top: 4.5rem; padding-bottom: var(--pad-y); gap: 2.5rem; } }
+  .sit__head { display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  @media (min-width: 768px) { .sit__head { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 2rem; } }
+  .sit__titles { display: flex; flex-direction: column; gap: 1rem; }
+  .sit__h { max-width: 56rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1; letter-spacing: -0.04em; margin: 0; }
+  @media (min-width: 768px) { .sit__h { font-stretch: 118%; line-height: 0.98; } }
+  .sit__sub { color: var(--k-muted); margin: 0; font-size: 0.75rem; }
+  @media (min-width: 768px) { .sit__sub { font-size: 0.8125rem; } }
+  .sit__all { min-height: 56px; background: var(--k-ink); color: var(--k-paper); border: 0; border-radius: 999px; padding: 0 1.5rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; flex: none; }
+  .sit__all[hidden] { display: none; }
+  @media (min-width: 768px) { .sit__all { padding: 0 1.75rem; } }
+  .sit__all:hover, .tbtn:hover { background: var(--k-accent); color: var(--k-ink); }
+
+  .sit__grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 768px) { .sit__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); } .tile--lg { grid-column: 1 / -1; } }
+  @media (min-width: 1100px) { .sit__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  /* Tablet: vier tegels in twee kolommen; de laatste (derde kleine) loopt over de volle breedte met beeld naast tekst. */
+  @media (min-width: 768px) and (max-width: 1099px) {
+    .tile:last-child { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; align-items: center; }
+  }
+
+  .tile { background: var(--k-white); border: 1px solid var(--k-line); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .tile__body { display: flex; flex-direction: column; gap: 1.125rem; align-items: flex-start; flex: 1; }
+  .tile__meta { align-self: stretch; max-width: none; display: flex; justify-content: space-between; align-items: center; color: var(--k-muted); margin: 0; }
+  .tile__h { font-weight: 700; font-stretch: 110%; font-size: clamp(1.625rem, 1.74vw, 1.5625rem); line-height: 1.1; letter-spacing: -0.02em; margin: 0; }
+  .tile__copy { margin: 0; font-size: 1.0625rem; line-height: 1.5; color: var(--k-muted); transition: color 0.6s; }
+  .tile[data-better='true'] .tile__copy { color: var(--k-ink); }
+  .tile__acts { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin: auto 0 0; }
+  .tbtn { min-height: 48px; display: inline-flex; align-items: center; background: var(--k-ink); color: var(--k-paper); border: 0; border-radius: 999px; padding: 0 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; }
+  .tbtn[hidden] { display: none; }
+  .tbtn--accent { background: var(--k-accent); color: var(--k-ink); font-weight: 700; }
+  .tbtn--accent:hover { background: var(--k-ink); color: var(--k-paper); }
+
+  .tile__art { height: 17.5rem; background: var(--k-paper); border-radius: 12px; overflow: hidden; container-type: size; display: grid; place-items: center; }
+  .stage { position: relative; container-type: inline-size; width: min(94cqw, calc(88cqh * 1.4167)); aspect-ratio: 340 / 240; }
+  .blk, .ln { position: absolute; display: block; transition: left 0.9s var(--ease), top 0.9s var(--ease), width 0.9s var(--ease), height 0.9s var(--ease), background-color 0.9s var(--ease), border-radius 0.9s var(--ease), transform 0.9s var(--ease), opacity 0.9s var(--ease); }
+  .ln { height: 0.88cqw; margin-top: -0.44cqw; transform-origin: 0 50%; }
+
+  @media (min-width: 768px) {
+    .tile { padding: 1.5rem; gap: 1.125rem; }
+    .tile__art { height: 16.25rem; }
+    .tile__h { font-size: 1.5625rem; }
+    .tile__copy { font-size: 1.0625rem; }
+    .tile--lg { border: 2px solid var(--k-ink); padding: clamp(1.5rem, 2.5vw, 2.25rem); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(1.5rem, 3.34vw, 3rem); align-items: center; }
+    .tile--lg .tile__art { height: clamp(17.5rem, 26.4vw, 23.75rem); }
+    .tile--lg .tile__body { gap: 1.375rem; }
+    .tile--lg .tile__h { font-weight: 800; font-stretch: 112%; font-size: clamp(1.875rem, 3.05vw, 2.75rem); line-height: 1.04; letter-spacing: -0.03em; }
+    .tile--lg .tile__copy { font-size: clamp(1.0625rem, 1.4vw, 1.25rem); }
+  }
+  @media (prefers-reduced-motion: reduce) { .blk, .ln, .tile__copy { transition: none; } }
 </style>

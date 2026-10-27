@@ -1,16 +1,100 @@
 ---
-import { STEPS } from '../../data/home';
+// Proces (bord X · Home): zes stappen. Kies een stap en de illustratie wordt per fase "beter".
+// Zonder JavaScript zijn alle zes stappen een gewone lijst met uitleg.
+import { STEPS, PROCES_ART } from '../../data/home';
+import { blockStyles } from '../../lib/stage';
+const stages = STEPS.map((s) => blockStyles(PROCES_ART, s.t));
 ---
-<section class="section" aria-labelledby="pr-h">
-  <p class="mono">Van advies tot regie</p>
-  <h2 id="pr-h" class="h2">Eerst begrijpen. Dan pas maken of regisseren.</h2>
-  <ol class="steps">
-    {STEPS.map((s, i) => <li><span class="mono">{String(i + 1).padStart(2, '0')}</span><strong>{s}</strong></li>)}
-  </ol>
+<section class="proc" aria-labelledby="pr-h">
+  <div class="proc__head">
+    <p class="mono proc__kicker">Van advies tot regie</p>
+    <h2 id="pr-h" class="proc__h">Eerst begrijpen. Dan pas maken of regisseren.</h2>
+  </div>
+  <div class="proc__grid">
+    <div class="proc__list" data-proc>
+      <ol class="steps">
+        {STEPS.map((s, i) => (
+          <li class="step" data-step data-text={s.text} data-role={s.role}>
+            <button type="button" class="step__btn" aria-pressed={i === 0 ? 'true' : 'false'} aria-describedby="proc-text" hidden>
+              <span class="mono step__n">{String(i + 1).padStart(2, '0')}</span><span class="step__t">{s.title}</span>
+            </button>
+            <p class="step__static"><span class="mono step__n">{String(i + 1).padStart(2, '0')}</span> <strong>{s.title}</strong><br />{s.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="proc__text" id="proc-text" aria-live="polite" hidden>{STEPS[0].text}</p>
+    </div>
+    <div class="proc__view" data-view hidden>
+      <div class="proc__art" aria-hidden="true">
+        <div class="stage">
+          {stages[0].map((s, k) => <i class="blk" style={s} data-s={JSON.stringify(stages.map((st) => st[k]))}></i>)}
+        </div>
+      </div>
+      <div class="proc__meta mono"><span data-no>Fase 1 van 6</span><span data-role>{STEPS[0].role}</span></div>
+      <div class="proc__bar" aria-hidden="true">{STEPS.map((_, i) => <i data-bar style={`opacity:${i === 0 ? 1 : 0.3}`}></i>)}</div>
+    </div>
+  </div>
 </section>
+<script>
+  const root = document.querySelector<HTMLElement>('[data-proc]');
+  const view = document.querySelector<HTMLElement>('[data-view]');
+  if (root && view) {
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const text = document.getElementById('proc-text')!;
+    const blocks = [...view.querySelectorAll<HTMLElement>('.blk')];
+    const bars = [...view.querySelectorAll<HTMLElement>('[data-bar]')];
+    root.classList.add('is-js');
+    view.hidden = false;
+    text.hidden = false;
+    steps.forEach((s) => (s.querySelector('button')!.hidden = false));
+    const pick = (i: number) => {
+      steps.forEach((s, k) => s.querySelector('button')!.setAttribute('aria-pressed', String(k === i)));
+      text.textContent = steps[i].dataset.text || '';
+      view.querySelector('[data-no]')!.textContent = `Fase ${i + 1} van ${steps.length}`;
+      view.querySelector('[data-role]')!.textContent = steps[i].dataset.role || '';
+      blocks.forEach((b) => b.setAttribute('style', (JSON.parse(b.dataset.s || '[]') as string[])[i] || ''));
+      bars.forEach((b, k) => (b.style.opacity = k <= i ? '1' : '0.3'));
+    };
+    steps.forEach((s, i) => s.querySelector('button')!.addEventListener('click', () => pick(i)));
+  }
+</script>
 <style>
-  .h2 { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: .5rem 0 2rem; max-width: 20ch; }
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); counter-reset: s; }
-  .steps li { border-top: 2px solid var(--k-ink); padding-top: .75rem; display: grid; gap: .25rem; }
-  .steps strong { font-size: var(--t-card); font-stretch: 110%; }
+  .proc { padding: 3.5rem var(--pad-x); display: flex; flex-direction: column; gap: 1.5rem; }
+  @media (min-width: 768px) { .proc { padding-block: var(--pad-y); gap: 3rem; } }
+  .proc__head { display: flex; flex-direction: column; gap: 1.25rem; }
+  .proc__kicker { margin: 0; color: var(--k-muted); letter-spacing: 0.08em; }
+  .proc__h { margin: 0; max-width: 62rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1; letter-spacing: -0.04em; }
+  @media (min-width: 768px) { .proc__h { font-stretch: 118%; line-height: 0.98; } }
+  .proc__grid { display: grid; gap: 1.5rem; }
+  .proc__list { display: contents; }
+  .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.625rem; }
+  .step__btn { width: 100%; text-align: left; cursor: pointer; display: flex; align-items: baseline; gap: 1rem; min-height: 60px; padding: 0.75rem 1.125rem; border-radius: 16px;
+    border: 1px solid var(--k-ink); background: transparent; color: var(--k-ink); transition: background-color 0.4s, color 0.4s; }
+  .step__btn[hidden] { display: none; }
+  .step__btn[aria-pressed='true'] { background: var(--k-ink); color: var(--k-paper); }
+  .step__btn[aria-pressed='true'] .step__n { color: var(--k-accent); }
+  .step__n { font-size: 0.875rem; color: var(--k-muted); }
+  .step__t { font-weight: 800; font-stretch: 112%; font-size: clamp(1.625rem, 2.08vw, 1.875rem); letter-spacing: -0.03em; line-height: 1; }
+  .step__static { margin: 0; padding: 1rem 0; border-top: 2px solid var(--k-ink); font-size: 1.0625rem; line-height: 1.5; }
+  .step__static strong { font-weight: 800; font-stretch: 112%; font-size: 1.375rem; letter-spacing: -0.02em; }
+  .proc__list.is-js .step__static { display: none; }
+  .proc__text { margin: 0.75rem 0 0; font-size: clamp(1.25rem, 1.67vw, 1.5rem); line-height: 1.4; letter-spacing: -0.01em; }
+  .proc__text[hidden], .proc__view[hidden] { display: none; }
+  .proc__view { display: flex; flex-direction: column; gap: 1rem; }
+  .proc__art { height: 18.75rem; background: var(--k-white); border: 1px solid var(--k-line); border-radius: 20px; overflow: hidden; container-type: size; display: grid; place-items: center; }
+  .stage { position: relative; container-type: inline-size; width: min(94cqw, calc(88cqh * 1.4167)); aspect-ratio: 340 / 240; }
+  .blk { position: absolute; display: block; transition: left 0.9s var(--ease), top 0.9s var(--ease), width 0.9s var(--ease), height 0.9s var(--ease), background-color 0.9s var(--ease), border-radius 0.9s var(--ease), transform 0.9s var(--ease); }
+  .proc__meta { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; color: var(--k-muted); font-size: 0.75rem; }
+  .proc__bar { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.5rem; }
+  .proc__bar i { display: block; height: 6px; background: var(--k-ink); transition: opacity 0.4s; }
+  /* Mobiel: eerst de illustratie, dan voortgang, dan de stappen en de uitleg (volgorde zoals in het ontwerp). */
+  .proc__view { order: -1; }
+  @media (min-width: 1100px) {
+    .proc__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: start; }
+    .proc__list { display: block; grid-column: span 5; }
+    .proc__view { order: 0; grid-column: 7 / span 6; }
+    .proc__art { height: 26.25rem; }
+  }
+  @media (max-width: 1099px) { .proc__list.is-js { display: contents; } .proc__list.is-js .steps { order: 1; } .proc__list.is-js .proc__text { order: 2; margin: 0; } }
+  @media (prefers-reduced-motion: reduce) { .blk, .proc__bar i, .step__btn { transition: none; } }
 </style>
