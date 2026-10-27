@@ -6,6 +6,7 @@ export const WORK = [
   { id: 'drenthe', title: 'Drenthe Caravans', tags: ['Merk', 'Website'], href: '/werk' },
   { id: 'rudi', title: 'Rudi Schipper', tags: ['Webshop', 'Automatisering'], href: '/werk' },
   { id: 'root', title: 'RootBoxes', tags: ['Logo', 'Huisstijl', 'Webshop'], href: '/werk' },
+  { id: 'oakbase', title: 'OakBase', tags: ['Logo', 'Huisstijl', 'Website'], href: '/werk' },
 ] as const;
 
 type Block = [x: number, y: number, w: number, h: number, rot: number, color: 'FIELD' | 'ACCENT' | 'INK' | 'PAPER', radius: number];
