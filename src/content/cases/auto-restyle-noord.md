@@ -6,6 +6,12 @@ tags: [Merk & identiteit, Website]
 services: [merk-identiteit, websites-digitale-ervaringen]
 excerpt: 'Nieuwe naam, nieuwe locatie: de online uitstraling opnieuw op orde.'
 cardColor: '#0F1A2E'
+cardImage:
+  src: /work/auto-restyle-noord.webp
+  alt: Website van Auto Restyle Noord op een laptop
+heroImage:
+  src: /work/auto-restyle-noord.webp
+  alt: Website van Auto Restyle Noord op een laptop
 promise: 'Nieuwe naam, nieuwe locatie: de online uitstraling opnieuw op orde.'
 client: Auto Restyle Noord
 sector: Auto restyling
