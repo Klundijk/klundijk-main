@@ -19,16 +19,21 @@ approach:
   - Kiezen welke richting past.
   - Maken en uitwerken in een bruikbaar systeem.
   - Verbeteren op basis van gebruik.
-momentsHeading: Wat we voor je doen.
+heroText: 'Van positionering en visuele identiteit tot logo, huisstijl en middelen die in de praktijk werken. Zodat je merk past bij het bedrijf dat je bent geworden.'
+heroCase: kraaij-av
+momentsHeading: 'Vier momenten waarop je merk beter kan.'
 moments:
-  - title: Positionering en merkstrategie
-    text: Helder maken waar je voor staat, voor wie, en waarin je verschilt.
-  - title: Logo en visuele identiteit
-    text: Een herkenbaar gezicht dat past bij het bedrijf dat je nu bent.
-  - title: Huisstijlsysteem en richtlijnen
-    text: Afspraken en bouwstenen waarmee iedereen consistent kan werken.
-  - title: Vertaling naar middelen
-    text: Je merk doorgezet in website, webshop en alle andere middelen.
+  - title: 'Positionering'
+    text: 'Helder maken waar je voor staat en voor wie, zodat keuzes in beeld en tekst makkelijker worden.'
+  - title: 'Logo & huisstijl'
+    text: 'Een identiteit die herkenbaar is, werkt op elk formaat en door meer mensen dan jij kan worden gebruikt.'
+  - title: 'Middelen'
+    text: 'Drukwerk, digitale middelen en sjablonen die in de praktijk werken, met duidelijke regels.'
+  - title: 'Merk online'
+    text: 'Je identiteit doortrekken naar website en webshop, zodat alles één verhaal vertelt.'
+projectsHeading: 'Merken die we maakten.'
+contactHeading: 'Praten over je merk?'
+contactText: 'Vertel kort wat je merk nu is en waar het niet meer past. We denken mee, ook als een kleine aanpassing genoeg is.'
 faq: []
 ---
 Conceptcopy op basis van de content blueprint. De Schrijver-rol herziet deze tekst.

@@ -1,10 +1,125 @@
 ---
+// Over (bord X · Over, 1440 en 390): hero, aanspreekpunt, uitgangspunten, werkwijze, klanten. Contactband onderaan zoals overal.
 import Base from '../layouts/Base.astro';
+import { site, showPlaceholders } from '../data/site';
+import { over as o } from '../data/over';
+import { principlesAbout, principlesHeading, steps } from '../data/werkwijze';
+
+const num = (n: number) => String(n + 1).padStart(2, '0');
+const chips = [site.contact.location, o.person.region, site.legal.kvk ? `KvK ${site.legal.kvk}` : showPlaceholders ? 'KvK [nummer]' : null].filter(Boolean) as string[];
+const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
 ---
-<Base title="Over Klundijk" description="Een kleine, moderne digitale studio die meedenkt en maakt.">
-  <section class="section wrap">
-    <h1>Over Klundijk</h1>
-    <p>Klundijk is een kleine, moderne digitale studio die meedenkt én maakt. Technologie volgt het vraagstuk, niet andersom.</p>
-    <p class="muted">Conceptpagina. Inhoud volgt van de Schrijver-rol; zichtbaarheid van Levi is nog een open besluit.</p>
+<Base title="Over Klundijk" description="Klundijk helpt ondernemers met merk, websites, webshops en slimme processen. Je praat met één persoon die meedenkt." heroHeader>
+  <section class="hero on-field" aria-labelledby="over-title">
+    <p class="mono kicker">{o.eyebrow}</p>
+    <h1 id="over-title" class="hero__title">{o.title}</h1>
+    <p class="hero__lead">{o.lead}</p>
+  </section>
+
+  <section class:list={['person', { 'person--solo': !showPlaceholders }]} aria-labelledby="person-h">
+    {showPlaceholders && (
+      <div class="portrait">
+        <div class="portrait__img" role="img" aria-label="Portret van Levi (placeholder)">[Portret Levi · foto of beeld, gezicht niet verplicht]</div>
+        <span class="sticker mono" aria-hidden="true">{o.person.sticker}</span>
+      </div>
+    )}
+    <div class="person__text">
+      <p class="mono muted">{o.person.kicker}</p>
+      <h2 id="person-h" class="h2">{o.person.title}</h2>
+      {bio && <p class="person__bio">{bio}</p>}
+      <p class="person__p">{o.person.text}</p>
+      <ul class="chips">{chips.map((c) => <li class="pill mono">{c}</li>)}</ul>
+      <p class="person__cta"><a class="btn btn--primary btn--lg" href={site.primaryCta.href}>{o.person.cta}</a></p>
+      {showPlaceholders && <p class="flag mono">Concepttekst · Levi en SEO &amp; content bevestigen</p>}
+    </div>
+  </section>
+
+  <section class="beliefs" aria-labelledby="beliefs-h">
+    <p class="mono muted">{o.beliefs.kicker}</p>
+    <h2 id="beliefs-h" class="h2">{principlesHeading}</h2>
+    <ul class="principles">
+      {principlesAbout.map((p) => <li class="principle"><h3 class="principle__t">{p.title}</h3><p>{p.text}</p></li>)}
+    </ul>
+    {showPlaceholders && <p class="flag mono">Concepttekst · SEO &amp; content beoordeelt</p>}
+  </section>
+
+  <section class="how" aria-labelledby="how-h">
+    <p id="how-h" class="mono">{o.steps.kicker}</p>
+    <ol class="steps">
+      {steps.map((t, i) => <li><span class="mono">{num(i)}</span><span class="step__t">{t}</span></li>)}
+    </ol>
+  </section>
+
+  <section class="clients" aria-labelledby="clients-h">
+    <div>
+      <p id="clients-h" class="mono muted">{o.clients.kicker}</p>
+      <ul class="names">{o.clients.names.map((n, i) => <li>{n}{i < o.clients.names.length - 1 ? ',' : '.'}</li>)}</ul>
+    </div>
+    <p><a class="link-strong" href="/werk">{o.clients.cta}</a></p>
   </section>
 </Base>
+
+<style>
+  .mono { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; margin: 0; }
+  .muted { color: var(--k-muted); }
+  .kicker { color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
+  .h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance; overflow-wrap: anywhere; }
+  .pill { display: inline-block; border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: 0.75rem; letter-spacing: 0.04em; color: var(--k-ink); }
+  .flag { align-self: flex-start; border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: 0.75rem; letter-spacing: 0.04em; }
+
+  .hero { background: var(--k-field); color: var(--k-on-field); padding: 1.5rem var(--pad-x) var(--pad-y); display: flex; flex-direction: column; gap: 1.375rem; }
+  .hero__title { margin: 0; font-weight: 800; font-stretch: 118%; font-size: clamp(1.875rem, 10.2vw, 2.5rem); line-height: 0.94; letter-spacing: -0.045em; max-width: 20ch; text-wrap: balance; overflow-wrap: anywhere; }
+  .hero__lead { margin: 0; max-width: 40rem; font-size: clamp(1.125rem, 1.67vw, 1.5rem); line-height: 1.5; }
+
+  .person { background: var(--k-paper); padding: var(--pad-y) var(--pad-x); display: grid; gap: 2.5rem; align-items: center; }
+  .portrait { position: relative; padding: 1rem 1.5rem 2rem; }
+  .portrait__img { transform: rotate(-3deg); height: 22rem; border-radius: 28px; background: #dad5cb; border: 1px dashed var(--k-ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+  .sticker { position: absolute; right: 0; bottom: 0; background: var(--k-accent); color: var(--k-ink); border-radius: 999px; padding: 0.625rem 1.125rem; transform: rotate(3deg); }
+  .person__text { display: flex; flex-direction: column; gap: 1.25rem; min-width: 0; }
+  .person__bio { margin: 0; max-width: 35rem; font-size: clamp(1.125rem, 1.53vw, 1.375rem); line-height: 1.5; }
+  .person__p { margin: 0; max-width: 35rem; color: var(--k-muted); font-size: clamp(1.0625rem, 1.32vw, 1.1875rem); line-height: 1.5; }
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .person__cta { margin: 0.25rem 0 0; }
+  .person--solo .person__text { max-width: 44rem; }
+
+  .beliefs { background: var(--k-paper); border-top: 1px solid var(--k-ink); padding: var(--pad-y) var(--pad-x); display: flex; flex-direction: column; gap: 2.5rem; }
+  .beliefs .h2 { max-width: 20ch; }
+  .principles { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.75rem; grid-template-columns: 1fr; }
+  .principle { border-top: 2px solid var(--k-ink); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; min-width: 0; }
+  .principle p { margin: 0; color: var(--k-muted); font-size: 1rem; line-height: 1.5; }
+  .principle__t { margin: 0; font-weight: 800; font-stretch: 112%; font-size: 1.5rem; line-height: 1.02; letter-spacing: -0.03em; overflow-wrap: anywhere; }
+
+  .how { background: var(--k-ink); color: var(--k-paper); padding: var(--pad-y) var(--pad-x); display: flex; flex-direction: column; gap: 2rem; }
+  .how > .mono { color: var(--k-muted-dark); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  .steps li { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid #fff; padding-top: 0.75rem; min-width: 0; }
+  .steps .mono { color: rgb(255 255 255 / 0.78); letter-spacing: 0.08em; }
+  .step__t { font-weight: 800; font-stretch: 112%; font-size: 1.375rem; letter-spacing: -0.02em; line-height: 1.1; }
+
+  .clients { background: var(--k-paper); padding: var(--pad-y) var(--pad-x); display: flex; flex-direction: column; gap: 2.5rem; align-items: flex-start; }
+  .clients > div { display: flex; flex-direction: column; gap: 1rem; }
+  .clients p { margin: 0; }
+  .names { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.75rem; }
+  .names li { font-weight: 800; font-stretch: 112%; font-size: 1.75rem; letter-spacing: -0.03em; line-height: 1.1; }
+
+  @media (min-width: 768px) {
+    .principles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+    .principle p { font-size: 1.125rem; }
+    .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+    .step__t { font-size: 1.625rem; }
+    .portrait__img { height: 30rem; }
+    .names li { font-size: 2.5rem; font-stretch: 118%; }
+  }
+  @media (min-width: 1100px) {
+    .hero__title { font-size: clamp(2.5rem, 6.4vw, 5.75rem); }
+    .person { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); }
+    .portrait { grid-column: 1 / span 5; }
+    .portrait__img { height: 23.75rem; }
+    .person__text { grid-column: 7 / span 6; }
+    .person--solo .person__text { grid-column: 1 / span 8; }
+    .principles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem; }
+    .principle__t { font-stretch: 118%; font-size: clamp(1.5rem, 2.2vw, 2rem); }
+    .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .names li { font-size: 3.5rem; }
+  }
+</style>

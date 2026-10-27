@@ -19,16 +19,21 @@ approach:
   - Kiezen wat de moeite waard is.
   - Maken en inregelen.
   - Meten en bijsturen.
-momentsHeading: Wat we voor je doen.
+heroText: 'Optimalisatie, analytics, SEO, conversie, koppelingen, automatisering en passende AI-toepassingen, na een goede diagnose. Eerst begrijpen waar het knelt, dan pas kiezen.'
+heroCase: rudi-schipper
+momentsHeading: 'Vier momenten waarop het slimmer kan.'
 moments:
-  - title: Analytics en meetplan
-    text: Weten wat er gebeurt op je site en welke cijfers ertoe doen.
-  - title: SEO en conversie
-    text: Beter gevonden worden en meer van je bezoekers laten doen wat je wilt.
-  - title: Koppelingen en automatisering
-    text: Systemen die met elkaar praten, zodat handwerk verdwijnt.
-  - title: Passende AI-toepassingen
-    text: Alleen waar het aantoonbaar tijd of kwaliteit oplevert.
+  - title: 'Analytics & SEO'
+    text: 'Weten wat bezoekers doen en gevonden worden door de mensen die je zoekt, zonder trucjes.'
+  - title: 'Conversie'
+    text: 'Van bezoeker naar aanvraag of bestelling: de stappen onderweg helderder en korter maken.'
+  - title: 'Koppelingen & automatisering'
+    text: 'Systemen die met elkaar praten, zodat jij minder handwerk hebt en minder fouten maakt.'
+  - title: 'Passende AI-toepassingen'
+    text: 'Alleen waar het echt helpt, na een diagnose. Niet ieder probleem vraagt om AI.'
+projectsHeading: 'Slimmer werken in de praktijk.'
+contactHeading: 'Praten over slimmer werken?'
+contactText: 'Vertel kort waar de tijd nu in gaat en wat je zou willen loslaten. We kijken eerst wat er speelt.'
 faq: []
 ---
 Conceptcopy op basis van de content blueprint. De Schrijver-rol herziet deze tekst.

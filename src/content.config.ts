@@ -76,6 +76,7 @@ const services = defineCollection({
     faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     // Dienstpagina (patroon bord X · Commerce). Alles optioneel: ontbreekt een blok, dan wordt het niet getoond.
     heroText: z.string().optional().describe('Intro in de hero; standaard shortIntro'),
+    heroCase: z.string().optional().describe('Slug van het werk-item dat als beeld in de hero staat; standaard het uitgelichte of eerste item'),
     momentsHeading: z.string().optional(),
     moments: z.array(z.object({ title: z.string(), text: z.string() })).max(4).default([]),
     projectsHeading: z.string().default('Ons werk.'),

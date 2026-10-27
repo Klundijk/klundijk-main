@@ -15,10 +15,11 @@ const { entry } = Astro.props;
 const s = entry.data;
 const all = await getWorkItems();
 // Uitgelichte items (featured) staan voorop en vormen de hero-kaart; de kaartnummers blijven die van het overzicht.
+const rank = (e: (typeof all)[number]) => (e.id === s.heroCase ? 2 : e.data.featured ? 1 : 0);
 const work = all
   .map((e, i) => ({ e, i }))
   .filter(({ e }) => e.data.services.includes(entry.id as never))
-  .sort((a, b) => Number(b.e.data.featured) - Number(a.e.data.featured));
+  .sort((a, b) => rank(b.e) - rank(a.e));
 const featured = work[0]?.e;
 const label = site.serviceLabels[entry.id] ?? s.title;
 const cta = site.commerceCta;
@@ -28,8 +29,8 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
 <Base title={s.seo?.title ?? s.title} description={s.seo?.description ?? s.shortIntro} heroHeader band={band}>
   <section class="hero on-field" aria-labelledby="svc-title">
     <div class="hero__text">
-      <p class="mono kicker">Wat we doen · {s.title}</p>
-      <h1 id="svc-title" class="hero__title">{s.title}</h1>
+      <p class="mono kicker">Wat we doen · {label}</p>
+      <h1 id="svc-title" class="hero__title">{label}</h1>
       <p class="hero__lead">{s.heroText ?? s.shortIntro}</p>
       <p class="hero__actions">
         <a class="btn btn--primary btn--lg" href={cta.href}>{cta.label}</a>
