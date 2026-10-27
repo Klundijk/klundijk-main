@@ -1,35 +1,94 @@
 ---
+// Wat we doen (bord X · Home): Webshops & commerce als zwaartepunt met beeld, daaronder de drie andere diensten.
 import { SERVICES as S } from '../../data/home';
+import { getWorkItems, hasCasePage } from '../../lib/content';
+const img = (await getWorkItems()).find((e) => e.id === S.hub.imageCase);
+const ci = img?.data.cardImage;
+const imgHref = img && hasCasePage(img) ? `/werk/${img.id}` : '#werk';
+const srcset = ci?.src.endsWith('.webp') ? `${ci.src.replace('.webp', '-800.webp')} 800w, ${ci.src} 1400w` : undefined;
 ---
-<section class="wwd" aria-labelledby="wwd-h">
+<section class="wwd on-field" id="wat-we-doen" aria-labelledby="wwd-h">
   <div class="wwd__in">
-    <h2 id="wwd-h" class="h2">Wat we doen</h2>
+    <div class="wwd__bar">
+      <h2 id="wwd-h" class="mono wwd__kicker">Wat we doen</h2>
+      <a class="link-strong" href="/wat-we-doen">Bekijk wat we doen</a>
+    </div>
     <div class="hub">
-      <div>
-        <p class="mono">{S.hub.num}</p>
+      <div class="hub__txt">
+        <p class="mono hub__num">{S.hub.num}</p>
         <h3 class="hub__t">{S.hub.title}</h3>
-        <ul class="hub__tags">{S.hub.tags.map((t) => <li class="tag">{t}</li>)}</ul>
-        <p class="acts"><a class="btn btn--primary btn--lg" href={S.hub.cta.href}>{S.hub.cta.label}</a> <a class="link-strong" href={S.hub.more.href}>{S.hub.more.label}</a></p>
+        <p class="hub__p">{S.hub.text}</p>
+        <ul class="hub__tags">{S.hub.tags.map((t) => <li class="mono pill">{t}</li>)}</ul>
+        <p class="hub__acts"><a class="btn btn--primary btn--lg" href={S.hub.cta.href}>{S.hub.cta.label}</a><a class="link-strong" href={S.hub.more.href}>{S.hub.more.label}</a></p>
       </div>
-      <figure class="hub__img"><figcaption class="mono">{S.hub.image}</figcaption></figure>
+      {ci && (
+        <a class="hub__img" href={imgHref}>
+          <img src={ci.src} srcset={srcset} sizes="(min-width: 1100px) 40vw, calc(100vw - 2.5rem)" width="1400" height="875" alt={ci.alt} loading="lazy" decoding="async" style={ci.position ? `object-position:${ci.position}` : undefined} />
+          <span class="hub__cap mono">{S.hub.imageCaption}</span>
+        </a>
+      )}
     </div>
     <ul class="srows">
-      {S.rows.map((r) => <li><span class="mono">{r.num}</span> <span class="srows__t">{r.title}</span></li>)}
+      {S.rows.map((r) => (
+        <li>
+          <a class="srow" href={r.href}>
+            <span class="srow__n mono">{r.num}</span>
+            <span class="srow__t">{r.title}</span>
+            <span class="srow__d">{r.text}</span>
+            <span class="srow__go" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
     </ul>
   </div>
 </section>
 <style>
-  .wwd { background: var(--k-field); color: var(--k-on-field); padding: var(--pad-y) var(--pad-x); }
+  .wwd { background: var(--k-field); color: var(--k-on-field); padding: 3.5rem var(--pad-x); }
+  @media (min-width: 768px) { .wwd { padding-block: var(--pad-y); } }
   .wwd__in { max-width: var(--page-max); margin: 0 auto; }
-  .h2 { font-size: var(--t-display); font-weight: 800; font-stretch: 115%; line-height: 1; letter-spacing: -.03em; margin: 0 0 2rem; }
-  .hub { display: grid; gap: 2rem; }
-  @media (min-width: 1100px) { .hub { grid-template-columns: 1.3fr 1fr; align-items: center; } }
-  .hub__t { font-size: var(--t-hub); font-weight: 800; font-stretch: 120%; line-height: .95; letter-spacing: -.04em; margin: .5rem 0 1rem; }
-  .hub__tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.5rem; }
-  .acts { display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; }
-  .hub__img { margin: 0; min-height: 18rem; border-radius: 24px; background: repeating-linear-gradient(135deg, #ffffff22 0 12px, #ffffff0a 12px 24px); position: relative; }
-  .hub__img figcaption { position: absolute; left: 1rem; bottom: 1rem; font-size: .75rem; }
-  .srows { list-style: none; padding: 0; margin: 3rem 0 0; border-top: 1px solid currentColor; }
-  .srows li { padding: 1.25rem 0; border-bottom: 1px solid currentColor; display: flex; gap: 1.5rem; align-items: baseline; }
-  .srows__t { font-size: var(--t-row); font-weight: 800; font-stretch: 115%; }
+  .wwd__bar { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: 1.75rem; }
+  .wwd__kicker { margin: 0; font-weight: 400; font-size: 0.8125rem; letter-spacing: 0.08em; }
+  @media (min-width: 768px) { .wwd__kicker { font-size: 0.875rem; } }
+  .hub { border-top: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); padding: 1.75rem 0 2.25rem; display: grid; gap: 1.25rem; }
+  .hub__txt { display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; }
+  .hub__num { margin: 0; font-size: 0.8125rem; }
+  .hub__t { font-weight: 800; font-stretch: 118%; font-size: var(--t-hub); letter-spacing: -0.045em; line-height: 0.95; margin: 0; overflow-wrap: anywhere; }
+  .hub__p { margin: 0; max-width: 40rem; font-size: clamp(1.125rem, 1.53vw, 1.375rem); line-height: 1.5; }
+  .hub__tags { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 0.625rem; }
+  .pill { border: 1.5px solid var(--k-on-field); border-radius: 999px; padding: 0.5rem 0.875rem; font-size: 0.75rem; letter-spacing: 0.04em; }
+  .hub__acts { display: flex; flex-direction: column; align-items: stretch; gap: 0.5rem; margin: 0.25rem 0 0; align-self: stretch; }
+  .hub__acts .btn { min-height: 56px; }
+  .hub__acts .link-strong { justify-content: center; }
+  .hub__img { order: -1; position: relative; display: block; height: 15rem; border-radius: 20px; overflow: hidden; background: color-mix(in srgb, var(--k-ink) 80%, var(--k-field)); }
+  .hub__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s var(--ease); }
+  .hub__cap { position: absolute; left: 1rem; bottom: 1rem; background: var(--k-ink); color: var(--k-paper); border-radius: 999px; padding: 0.5rem 0.875rem; font-size: 0.6875rem; letter-spacing: 0.06em; max-width: calc(100% - 2rem); }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) { .hub__img:hover img { transform: scale(1.03); } }
+  .srows { list-style: none; padding: 0; margin: 0; border-bottom: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); }
+  .srow { display: grid; gap: 0.5rem; padding: 1.5rem 0; border-top: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); color: inherit; text-decoration: none; }
+  .srow__n { font-size: 0.8125rem; }
+  .srow__t { font-weight: 800; font-stretch: 112%; font-size: clamp(1.875rem, 2.78vw, 2.5rem); letter-spacing: -0.03em; line-height: 1.02; }
+  .srow__d { font-size: 1.0625rem; line-height: 1.5; }
+  .srow__go { display: none; font-size: 1.5rem; font-weight: 600; text-align: right; transition: transform 0.3s var(--ease); }
+  .srow:hover .srow__t { text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 2px; }
+  .srow:hover .srow__go { transform: translateX(4px); }
+  @media (min-width: 768px) {
+    .hub__acts { flex-direction: row; align-items: center; gap: 1.75rem; align-self: flex-start; }
+    .hub__acts .link-strong { justify-content: flex-start; }
+    .hub__acts .btn { padding: 0 2rem; }
+    .pill { font-size: 0.8125rem; padding: 0.625rem 1.125rem; }
+    .hub__img { height: 20rem; }
+    .srow { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: baseline; padding: 2.125rem 0; }
+    .srow__n { grid-column: span 1; font-size: 0.875rem; }
+    .srow__t { grid-column: span 5; font-stretch: 118%; }
+    .srow__d { grid-column: span 5; font-size: 1.125rem; }
+    .srow__go { display: block; grid-column: span 1; }
+  }
+  @media (min-width: 1100px) {
+    .hub { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); padding: 3rem 0 4rem; align-items: start; }
+    .hub__txt { grid-column: span 7; gap: 1.75rem; }
+    .hub__num { font-size: 0.875rem; }
+    .hub__img { order: 0; grid-column: 8 / span 5; height: 27.5rem; border-radius: 24px; }
+    .hub__cap { font-size: 0.75rem; padding: 0.625rem 1.125rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hub__img img, .srow__go { transition: none; } }
 </style>

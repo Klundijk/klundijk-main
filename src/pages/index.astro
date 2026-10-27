@@ -7,10 +7,12 @@ import Werk from '../components/home/Werk.astro';
 import WatWeDoen from '../components/home/WatWeDoen.astro';
 import Case from '../components/home/Case.astro';
 import Proces from '../components/home/Proces.astro';
-import OverContact from '../components/home/OverContact.astro';
+import Over from '../components/home/Over.astro';
+import Klanten from '../components/home/Klanten.astro';
+import Contact from '../components/home/Contact.astro';
 import { site } from '../data/site';
 ---
-<Base title="Klundijk — Digitaal kan beter" description={site.description} heroHeader>
+<Base title="Klundijk — Digitaal kan beter" description={site.description} heroHeader contactBand={false}>
   <script is:inline slot="head">
     (function(){try{
       var r=document.documentElement, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, seen=sessionStorage.getItem('kl-intro');
@@ -18,12 +20,15 @@ import { site } from '../data/site';
       else r.dataset.intro='refined';
     }catch(e){document.documentElement.dataset.intro='refined';}})();
   </script>
+  <noscript slot="head"><style>.wpanel[hidden] { display: block !important; }</style></noscript>
   <Hero />
+  <Werk />
   <Marquee />
   <Situations />
-  <Werk />
   <WatWeDoen />
   <Case />
   <Proces />
-  <OverContact />
+  <Over />
+  <Klanten />
+  <Contact />
 </Base>

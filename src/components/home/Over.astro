@@ -1,0 +1,46 @@
+---
+// Over (bord X · Home): portret, sticker en onderschrift zijn nog te leveren en verschijnen alleen in dev.
+import { OVER as O } from '../../data/home';
+import { showPlaceholders } from '../../data/site';
+---
+<section class:list={['over', { 'over--solo': !showPlaceholders }]} id="over" aria-labelledby="over-h">
+  {showPlaceholders && (
+    <div class="over__fig">
+      <div class="over__tilt">
+        <div class="over__ph mono">Portret — [Levi aan het werk, 4:5]</div>
+        <div class="over__sticker" aria-hidden="true">Klundijk</div>
+      </div>
+      <p class="over__cap placeholder-flag">{O.portraitCaption}</p>
+    </div>
+  )}
+  <div class="over__txt">
+    <p class="mono over__kicker">{O.kicker}</p>
+    <h2 id="over-h" class="over__h">{O.title}</h2>
+    <p class="over__p">{O.text}</p>
+    <a class="link-strong" href="/over">{O.cta}</a>
+  </div>
+</section>
+<style>
+  .over { border-top: 1px solid var(--k-ink); padding: 3.5rem var(--pad-x); display: flex; flex-direction: column; gap: 1.375rem; }
+  @media (min-width: 768px) { .over { padding-block: var(--pad-y); } }
+  .over__fig { display: flex; flex-direction: column; gap: 0.875rem; }
+  .over__tilt { position: relative; transform: rotate(-2.5deg); margin: 0.5rem 0.5rem 0; }
+  .over__ph { height: 21.25rem; background: #dad5cb; border: 1px dashed var(--k-ink); border-radius: 16px; display: flex; align-items: flex-end; padding: 0.875rem; }
+  .over__sticker { position: absolute; right: -0.5rem; top: -1rem; width: 5.25rem; height: 5.25rem; border-radius: 50%; background: var(--k-accent); color: var(--k-ink); display: flex; align-items: center; justify-content: center; font-weight: 800; font-stretch: 118%; font-size: 0.875rem; transform: rotate(12deg); }
+  .over__cap { align-self: flex-start; font-size: 0.9375rem; }
+  .over__txt { display: flex; flex-direction: column; gap: 1.375rem; align-items: flex-start; }
+  .over__kicker { margin: 0; color: var(--k-muted); letter-spacing: 0.08em; }
+  .over__h { margin: 0; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1; letter-spacing: -0.04em; }
+  .over__p { margin: 0; max-width: 37.5rem; font-size: clamp(1.125rem, 1.46vw, 1.3125rem); line-height: 1.5; }
+  @media (min-width: 768px) { .over__h { font-stretch: 118%; line-height: 0.98; } .over__txt { gap: 1.75rem; } }
+  @media (min-width: 1100px) {
+    .over:not(.over--solo) { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-items: center; }
+    .over__fig { grid-column: span 5; }
+    .over__txt { grid-column: 7 / span 6; }
+    .over__ph { height: 32.5rem; border-radius: 20px; padding: 1rem; }
+    .over__sticker { width: 7.5rem; height: 7.5rem; font-size: 1.125rem; right: -1rem; top: -1.25rem; }
+    .over__tilt { margin: 0.75rem 0.75rem 0; }
+    .over__h { font-size: clamp(4rem, 4.72vw, 4.25rem); }
+  }
+  .over--solo .over__txt { max-width: 62rem; }
+</style>

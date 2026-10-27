@@ -1,0 +1,22 @@
+---
+// Klanten (bord X · Home): één doorlopende regel namen met een accentstreep ertussen. De quote is nog te leveren
+// ("alleen echt en met toestemming") en verschijnt alleen in dev.
+import { CLIENTS } from '../../data/home';
+import { showPlaceholders } from '../../data/site';
+---
+<section class="kl" aria-labelledby="kl-h">
+  <h2 id="kl-h" class="mono kl__k">Klanten</h2>
+  <ul class="kl__list">{CLIENTS.map((c) => <li>{c}</li>)}</ul>
+  {showPlaceholders && <p class="kl__quote placeholder-flag">[Klantquote — alleen echt en met toestemming.]</p>}
+</section>
+<style>
+  .kl { border-top: 1px solid var(--k-ink); padding: 3.5rem var(--pad-x); display: flex; flex-direction: column; gap: clamp(1.375rem, 2.8vw, 2.5rem); }
+  @media (min-width: 768px) { .kl { padding-block: var(--pad-y); } }
+  .kl__k { margin: 0; font-weight: 400; color: var(--k-muted); font-size: 0.8125rem; letter-spacing: 0.08em; }
+  @media (min-width: 768px) { .kl__k { font-size: 0.875rem; } }
+  .kl__list { list-style: none; margin: 0; padding: 0; font-weight: 800; font-stretch: 112%; font-size: clamp(2rem, 4.17vw, 3.75rem); line-height: 1.08; letter-spacing: -0.035em; }
+  @media (min-width: 768px) { .kl__list { font-stretch: 118%; } }
+  .kl__list li { display: inline; }
+  .kl__list li:not(:last-child)::after { content: '\00a0/ ' / ''; color: var(--k-accent); }
+  .kl__quote { align-self: flex-start; font-size: 1rem; }
+</style>

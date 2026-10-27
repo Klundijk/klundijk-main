@@ -1,0 +1,35 @@
+---
+// Contact op de homepage (bord X · Home): kop, uitleg en directe gegevens links, het formulier rechts.
+import ContactForm from '../ContactForm.astro';
+import { site, showPlaceholders } from '../../data/site';
+const { phone, email } = site.contact;
+const tel = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
+---
+<section class="ct on-field" id="contact" aria-labelledby="ct-h">
+  <div class="ct__intro">
+    <h2 id="ct-h" class="ct__h">Heb je iets dat digitaal beter kan?</h2>
+    <p class="ct__p">Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.</p>
+    {(phone || email || showPlaceholders) && (
+      <p class="ct__line">
+        {phone && tel ? <a href={tel}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
+        {email ? <a href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+      </p>
+    )}
+  </div>
+  <div class="ct__form"><ContactForm bare submitLabel="Bespreek je vraagstuk" /></div>
+</section>
+<style>
+  .ct { background: var(--k-field); color: var(--k-on-field); padding: 3.5rem var(--pad-x); display: grid; gap: 1.5rem; }
+  @media (min-width: 768px) { .ct { padding-block: var(--pad-y); gap: 2.5rem; } }
+  .ct__intro { display: flex; flex-direction: column; gap: clamp(1.375rem, 1.95vw, 1.75rem); }
+  .ct__h { margin: 0; font-weight: 800; font-stretch: 118%; font-size: clamp(2.625rem, 5.83vw, 5.25rem); line-height: 0.95; letter-spacing: -0.045em; }
+  .ct__p { margin: 0; max-width: 32.5rem; font-size: clamp(1.125rem, 1.4vw, 1.25rem); line-height: 1.5; }
+  .ct__line { margin: 0; display: flex; flex-direction: column; gap: 0.125rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; }
+  .ct__line a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; }
+  @media (min-width: 768px) { .ct__line { font-size: 0.9375rem; } }
+  @media (min-width: 1100px) {
+    .ct { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); align-content: center; }
+    .ct__intro { grid-column: span 6; }
+    .ct__form { grid-column: 8 / span 5; }
+  }
+</style>
