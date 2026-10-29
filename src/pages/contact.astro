@@ -85,7 +85,8 @@ const steps = [
 
   .wrap-full { padding-inline: var(--pad-x); }
   .next { padding-block: var(--pad-y); display: flex; flex-direction: column; gap: 2.5rem; }
-  .h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 0.98; letter-spacing: -0.04em; }
+  .h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; }
+  @media (min-width: 768px) { .h2 { line-height: 0.98; } }
   .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.75rem; grid-template-columns: 1fr; }
   .step { display: flex; flex-direction: column; gap: 0.75rem; border-top: 2px solid var(--k-ink); padding-top: 1rem; min-width: 0; }
   .step p { margin: 0; color: var(--k-muted); font-size: 1rem; line-height: 1.5; }

@@ -63,9 +63,9 @@ const stages = STEPS.map((s) => blockStyles(PROCES_ART, s.t));
   @media (min-width: 768px) { .proc { padding-block: var(--pad-y); gap: 3rem; } }
   .proc__head { display: flex; flex-direction: column; gap: 1.25rem; }
   .proc__kicker { margin: 0; color: var(--k-muted); letter-spacing: 0.08em; }
-  .proc__h { margin: 0; max-width: 62rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1; letter-spacing: -0.04em; }
+  .proc__h { margin: 0; max-width: 62rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; }
   @media (min-width: 768px) { .proc__h { font-stretch: 118%; line-height: 0.98; } }
-  .proc__grid { display: grid; gap: 1.5rem; }
+  .proc__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   .proc__list { display: contents; }
   .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.625rem; }
   .step__btn { width: 100%; text-align: left; cursor: pointer; display: flex; align-items: baseline; gap: 1rem; min-height: 60px; padding: 0.75rem 1.125rem; border-radius: 16px;

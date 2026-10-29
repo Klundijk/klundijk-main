@@ -104,7 +104,7 @@ const cardHref = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
     .n3 { left: 62.5%; top: calc(var(--t-hero) * 1.69); }
   }
 
-  .hero__row { display: grid; gap: 1.5rem; }
+  .hero__row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   .hero__copy { display: flex; flex-direction: column; gap: 1.5rem; }
   .hero__sub { font-size: clamp(1.75rem, 3.05vw, 2.75rem); font-weight: 500; font-stretch: 112%; line-height: 1.05; letter-spacing: -0.02em; margin: 0;
     transition: opacity 0.9s ease 0.3s, transform 0.9s ease 0.3s; }
