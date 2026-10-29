@@ -17,10 +17,9 @@ client: Drenthe Caravans
 sector: Caravans
 year: 2025
 scope: [Logo, Huisstijl, Website]
-technology: [Wix, Canva]
 challengeHeading: Een site die doet wat hij moet doen.
 challenge: 'Drenthe Caravans vroeg om een logo, een huisstijl en een website. De wensen waren concreet. Het logo moest groen zijn, strak en modern, en niet te exclusief en niet te simpel. De website moest vooral doen wat hij moet doen: een grote foto met sfeer, duidelijke informatie en een persoonlijke uitstraling. Een voorbeeldsite die er goed uitzag maar zijn doel niet haalde, gold als waarschuwing.'
 approach: 'Klundijk begon met een gesprek over de wensen en maakte daarna een offerte in twee delen: logo en huisstijl, en de website.'
 placeholder: true
 ---
-Klundijk ontwierp het logo, richtte de huisstijl in een Canva-account in en bouwde de website in Wix, met de teksten erbij.
+Klundijk ontwierp het logo, richtte de huisstijl in een Canva-account in en bouwde een moderne website, met de teksten erbij.
