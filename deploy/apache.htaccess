@@ -1,6 +1,6 @@
 # Klundijk: Apache-instellingen voor de statische build (hosting FXW / DirectAdman).
 # Gebruik: kopieer dit bestand naar de webroot (public_html) als ".htaccess", naast de inhoud van dist/.
-# Dit bestand is niet getest op de echte host: controleer na de eerste deploy /werk, /werk/ en een onbekende URL.
+# Gevonden op de testomgeving bij FXW: zonder de regel voor index.html gaf /werk een 403. Controleer na elke deploy /werk, /werk/ en een onbekende URL.
 # Vereist mod_rewrite, mod_headers, mod_expires en mod_deflate (staan standaard aan op DirectAdmin).
 
 Options -Indexes
@@ -20,6 +20,12 @@ DirectorySlash Off
 
   # /werk/ wordt /werk (behalve de root).
   RewriteRule ^(.+)/$ /$1 [L,R=301]
+
+  # Met DirectorySlash Off serveert Apache bij /werk niet vanzelf werk/index.html (dat geeft 403).
+  # Daarom intern doorsturen naar de index.html in die map.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+)$ /$1/index.html [L]
 </IfModule>
 
 <IfModule mod_headers.c>
