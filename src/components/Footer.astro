@@ -30,8 +30,8 @@ const year = new Date().getFullYear();
   </div>
 </footer>
 <style>
-  .site-footer { background: var(--k-ink); color: var(--k-paper); padding: 2.5rem var(--pad-x); display: grid; gap: 3.5rem; }
-  .cols { display: grid; gap: 2.5rem; }
+  .site-footer { background: var(--k-ink); color: var(--k-paper); padding: 2.5rem var(--pad-x); display: grid; grid-template-columns: minmax(0, 1fr); gap: 3.5rem; }
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
   .brand { margin: 0 0 0.875rem; }
   .brand { --mark-h: 2.25rem; }
   .line { max-width: 22.5rem; font-size: 1rem; line-height: 1.5; color: var(--k-muted-dark); }
