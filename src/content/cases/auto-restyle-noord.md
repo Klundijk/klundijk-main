@@ -18,6 +18,7 @@ sector: Auto restyling
 scope: [Nieuwe naam, Huisstijl, Website, Online inrichting]
 challengeHeading: Een nieuwe naam en een nieuwe locatie.
 challenge: 'Auto Restyle Noord is specialist in auto restyling. Door een nieuwe naam en verhuizing moest de online uitstraling opnieuw kloppen. Niet alleen het logo en de website moesten vernieuwd worden, ook online gegevens en zichtbaarheid moesten zorgvuldig worden aangepast.'
-placeholder: true
+approach: 'Klundijk dacht eerst mee over de positionering onder de nieuwe naam. Van daaruit volgden het logo, de huisstijl en de website.'
+result: 'Auto Restyle Noord heeft een nieuwe branding, een nieuw logo en een nieuwe website gekregen, passend bij de nieuwe naam na de verhuizing.'
 ---
 Klundijk dacht mee over de positionering, ontwikkelde de huisstijl en website en hielp met de online inrichting rondom de nieuwe naam en locatie.
