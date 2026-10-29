@@ -28,6 +28,6 @@ choices:
     reason: 'De algemene tussenstap in de productkeuze is overgeslagen. Vanaf de homepage kies je een type en daarna een kleur, en kom je direct op de productpagina.'
   - title: Proefstuk met kortingscode
     reason: 'Een klant kan eerst een proefstuk bestellen. De kortingscode ter waarde van het proefstuk wordt bij de definitieve bestelling in mindering gebracht.'
-placeholder: true
+result: 'Rudi Schipper laat klanten nu zonder tussenkomst van een medewerker zelf dakgoten bestellen. De webshop verzamelt en verwerkt de orders geautomatiseerd.'
 ---
 Klundijk richtte de webshop in met categorieën per productgroep en per kleur. Bij elk product staat eerst een foto in kleur en daarna een technische tekening. Voor de verzending zijn twee varianten ingesteld: los leveren zonder montage, volgens een staffel op afstand, of levering inclusief montage.

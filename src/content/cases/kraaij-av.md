@@ -18,8 +18,8 @@ sector: Audiovisuele oplossingen
 year: 2026
 scope: [Logo, Huisstijl, Website]
 challengeHeading: Een AV-specialist met een duidelijk verhaal.
-challenge: 'Kraaij AV helpt bedrijven en organisaties met betrouwbare, gebruiksvriendelijke en toekomstbestendige audiovisuele oplossingen, van hybride vergaderzaal en leslokaal tot raadzaal. Het bedrijf heeft ruim 15 jaar ervaring in de AV-wereld en staat voor duidelijke communicatie en oplossingen die in de praktijk werken. Daar hoorden een eigen logo, een huisstijl en een website bij.'
+challenge: 'Kraaij AV helpt bedrijven en organisaties met betrouwbare, gebruiksvriendelijke en toekomstbestendige audiovisuele oplossingen, van hybride vergaderzaal en leslokaal tot raadzaal. Het bedrijf heeft ruim 15 jaar ervaring in de AV-wereld en staat voor duidelijke communicatie en oplossingen die in de praktijk werken. Een eigen logo, huisstijl en website had het nog niet.'
 approach: 'Klundijk presenteerde eerst een voorstel voor het merk en het logo en verwerkte de feedback daarop. Daarna volgden de oplevering van de logobestanden en de uitwerking van huisstijl en website.'
-placeholder: true
+result: 'Kraaij AV begon zonder logo, huisstijl en website en heeft die nu alle drie. De klant was erg tevreden, vooral over het persoonlijke contact en het snelle handelen op een menselijke manier.'
 ---
 Klundijk ontwikkelde het logo en de huisstijl en bouwde de website. Het logo is uitgewerkt in meerdere varianten, waaronder een witte versie en een ronde markering met de letters AV.
