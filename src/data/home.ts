@@ -96,7 +96,7 @@ export const HOME_CASE = {
     { k: 'Vraagstuk', v: 'Door een nieuwe naam en een verhuizing moest de online uitstraling opnieuw kloppen: logo, website, online gegevens en zichtbaarheid.' },
     { k: 'Belangrijkste keuze', v: null as string | null, ph: '[Welke keuze maakte het verschil? Levi en SEO & content vullen aan.]' },
     { k: 'Uitvoering', v: 'Klundijk dacht mee over de positionering, ontwikkelde de huisstijl en website en hielp met de online inrichting rondom de nieuwe naam en locatie.' },
-    { k: 'Resultaat', v: null as string | null, ph: '[Aantoonbaar resultaat. Alleen echte feiten, geen aangenomen cijfers.]' },
+    { k: 'Resultaat', v: 'Auto Restyle Noord heeft een nieuwe branding, een nieuw logo en een nieuwe website gekregen, passend bij de nieuwe naam na de verhuizing.' as string | null, ph: '' },
   ],
   slot: { kicker: 'Slot — tweede uitgelichte case', title: '[Webshop-case — bijv. Acta Buitenleven, zodra aantoonbaar]', note: 'Alleen met echte resultaten en toestemming.' },
 };
