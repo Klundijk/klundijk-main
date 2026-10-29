@@ -1,0 +1,110 @@
+name: Deploy test (new.klundijk.com)
+
+# Bouwt de site en zet hem via SSH (rsync) op de testomgeving bij FXW.
+# Servergegevens en sleutel staan als geheimen in GitHub (Settings > Secrets and variables > Actions):
+#   TEST_SSH_HOST, TEST_SSH_USER, TEST_SSH_PORT, TEST_SSH_PATH, TEST_SSH_KEY
+# Optioneel: TEST_AUTH_FILE = absoluut pad naar het .htpasswd-bestand op de server (zet een wachtwoord op de testsite).
+# De testsite blijft altijd noindex: de workflow stopt als dat niet klopt.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-test
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: ${{ secrets.TEST_SSH_HOST }}
+      DEPLOY_USER: ${{ secrets.TEST_SSH_USER }}
+      DEPLOY_PORT: ${{ secrets.TEST_SSH_PORT }}
+      DEPLOY_PATH: ${{ secrets.TEST_SSH_PATH }}
+      AUTH_FILE: ${{ secrets.TEST_AUTH_FILE }}
+      SSH_KEY: ${{ secrets.TEST_SSH_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Controle geheimen en doelmap
+        run: |
+          for v in DEPLOY_HOST DEPLOY_USER DEPLOY_PORT DEPLOY_PATH; do
+            [ -n "${!v}" ] || { echo "::error::Geheim voor $v ontbreekt"; exit 1; }
+          done
+          [ -n "$SSH_KEY" ] || { echo "::error::Geheim TEST_SSH_KEY ontbreekt"; exit 1; }
+          # Veiligheid: alleen de map van de testsite, nooit de hoofdsite.
+          case "$DEPLOY_PATH" in
+            domains/new.klundijk.com/public_html|*/domains/new.klundijk.com/public_html) ;;
+            *) echo "::error::TEST_SSH_PATH moet naar new.klundijk.com/public_html wijzen"; exit 1 ;;
+          esac
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Type- en contentcontrole
+        run: npm run check
+      - name: Productiebuild
+        run: npm run build
+        env:
+          SITE_URL: https://new.klundijk.com
+
+      - name: Controle noindex (testsite mag nooit indexeerbaar zijn)
+        run: |
+          for f in $(find dist -name '*.html'); do
+            grep -q 'name="robots" content="noindex, nofollow"' "$f" || { echo "::error::$f mist noindex"; exit 1; }
+          done
+          grep -q 'Disallow: /' dist/robots.txt
+
+      - name: Apache-instellingen toevoegen
+        run: |
+          cp deploy/apache.htaccess dist/.htaccess
+          if [ -n "$AUTH_FILE" ]; then
+            {
+              echo
+              echo '# Wachtwoord op de testsite'
+              echo 'AuthType Basic'
+              echo 'AuthName "Klundijk test"'
+              echo "AuthUserFile $AUTH_FILE"
+              echo 'Require valid-user'
+            } >> dist/.htaccess
+            echo "Wachtwoordbeveiliging toegevoegd"
+          fi
+
+      - name: SSH instellen
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          # Vaste hostsleutel van de FXW-server (openbaar), zodat we niet naar een andere server uploaden.
+          HOSTKEY='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHhaEkiV0CejQNgO17q/zvJY0zpu3XlbIMaWWPOOcOwB'
+          if [ "$DEPLOY_PORT" = "22" ]; then H="$DEPLOY_HOST"; else H="[$DEPLOY_HOST]:$DEPLOY_PORT"; fi
+          echo "$H $HOSTKEY" > ~/.ssh/known_hosts
+
+      - name: Uploaden met rsync
+        run: |
+          rsync -rlptz --delete --delay-updates --omit-dir-times --chmod=D755,F644 \
+            --exclude 'cgi-bin/' --exclude '.well-known/' \
+            -e "ssh -i $HOME/.ssh/deploy_key -p $DEPLOY_PORT -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+            dist/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+      - name: Controle op de testsite
+        run: |
+          sleep 3
+          fail=0
+          for p in / /werk /werk/rudi-schipper /over /contact; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' "https://new.klundijk.com$p" || echo 000)
+            echo "$p -> $code"
+            # 200 = ok, 401 = wachtwoord actief. Alles anders (bijv. 403 of 500) is een fout.
+            case "$code" in 200|401) ;; *) fail=1 ;; esac
+          done
+          code=$(curl -sS -o /dev/null -w '%{http_code}' https://new.klundijk.com/bestaat-niet || echo 000)
+          echo "/bestaat-niet -> $code (verwacht 404 of 401)"
+          case "$code" in 404|401) ;; *) fail=1 ;; esac
+          exit $fail

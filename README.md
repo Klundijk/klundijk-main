@@ -50,6 +50,7 @@ SITE_URL=https://klundijk.com PUBLIC_INDEXABLE=1 npm run build
 ## Livegang en hosting
 
 - **Vercel** (previews): `vercel.json` zet beveiligings- en cacheheaders.
+- **Testomgeving (new.klundijk.com bij FXW):** `.github/workflows/deploy-test.yml` bouwt bij elke merge in `main` en uploadt via rsync over SSH. De testsite blijft altijd noindex (de workflow stopt anders). Servergegevens en sleutel staan als geheimen in GitHub (`TEST_SSH_HOST`, `TEST_SSH_USER`, `TEST_SSH_PORT`, `TEST_SSH_PATH`, `TEST_SSH_KEY`; optioneel `TEST_AUTH_FILE` voor een wachtwoord op de testsite). De upload overschrijft `.htaccess` met `deploy/apache.htaccess` en laat `cgi-bin/` en `.well-known/` ongemoeid.
 - **FXW / DirectAdmin** (voorstel productie): zie `deploy/apache.htaccess`. Daarin staan HTTPS, URL's zonder slash, `404.html` als foutpagina, beveiligingsheaders en caching. Dit is nog niet op de echte host getest. De 404-status moet door de host komen (`ErrorDocument`), niet door de pagina.
 - De Content-Security-Policy staat `connect-src` en `form-action` toe op `https:`. Zet die vast op het echte formulier-endpoint zodra dat bekend is.
 
