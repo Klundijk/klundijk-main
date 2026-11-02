@@ -63,8 +63,14 @@ const hasCommerceCase = false; // slot voor een tweede commerce-case: pas tonen 
       if (!first && status) status.textContent = n === 0 ? 'Geen projecten bij deze dienst.' : `${n} ${n === 1 ? 'project' : 'projecten'}`;
       first = false;
     };
-    chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter!)));
-    document.querySelector('[data-reset]')?.addEventListener('click', () => { apply('all'); chips[0].focus(); });
+    // Houd de adresbalk gelijk aan het filter (?dienst=<id>), zodat de gefilterde weergave deelbaar is.
+    const sync = (id: string) => {
+      const url = new URL(location.href);
+      if (id === 'all') url.searchParams.delete('dienst'); else url.searchParams.set('dienst', id);
+      history.replaceState(null, '', url.pathname + url.search + url.hash);
+    };
+    chips.forEach((c) => c.addEventListener('click', () => { apply(c.dataset.filter!); sync(c.dataset.filter!); }));
+    document.querySelector('[data-reset]')?.addEventListener('click', () => { apply('all'); sync('all'); chips[0].focus(); });
     // ?dienst=<id> (link vanaf een dienstpagina) opent het overzicht vooraf gefilterd.
     const wanted = new URLSearchParams(location.search).get('dienst');
     apply(wanted && chips.some((c) => c.dataset.filter === wanted && c.getAttribute('aria-disabled') !== 'true') ? wanted : 'all');

@@ -1,4 +1,5 @@
 ---
+import MailLink from './MailLink.astro';
 // Contactband: op alle pagina's onder de inhoud, boven de footer (ontwerpbord X · Componenten, sectie 05).
 import { site, showPlaceholders } from '../data/site';
 interface Props { heading?: string; text?: string; cta?: { label: string; href: string }; }
@@ -20,7 +21,7 @@ const showContactLine = Boolean(phone || email || showPlaceholders);
       <p class="band__line">
         {phone ? <a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
         {(phone || showPlaceholders) && (email || showPlaceholders) && <span aria-hidden="true"> · </span>}
-        {email ? <a href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+        {email ? <MailLink email={email} /> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
       </p>
     )}
   </div>
