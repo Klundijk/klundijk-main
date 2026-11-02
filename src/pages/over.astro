@@ -63,7 +63,8 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
   .mono { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; margin: 0; }
   .muted { color: var(--k-muted); }
   .kicker { color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
-  .h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 0.98; letter-spacing: -0.04em; text-wrap: balance; overflow-wrap: anywhere; }
+  .h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; text-wrap: balance; overflow-wrap: anywhere; }
+  @media (min-width: 768px) { .h2 { line-height: 0.98; } }
   .pill { display: inline-block; border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: 0.75rem; letter-spacing: 0.04em; color: var(--k-ink); }
   .flag { align-self: flex-start; border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: 0.75rem; letter-spacing: 0.04em; }
 
@@ -71,7 +72,7 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
   .hero__title { margin: 0; font-weight: 800; font-stretch: 118%; font-size: clamp(1.875rem, 10.2vw, 2.5rem); line-height: 0.94; letter-spacing: -0.045em; max-width: 20ch; text-wrap: balance; overflow-wrap: anywhere; }
   .hero__lead { margin: 0; max-width: 40rem; font-size: clamp(1.125rem, 1.67vw, 1.5rem); line-height: 1.5; }
 
-  .person { background: var(--k-paper); padding: var(--pad-y) var(--pad-x); display: grid; gap: 2.5rem; align-items: center; }
+  .person { background: var(--k-paper); padding: var(--pad-y) var(--pad-x); display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; align-items: center; }
   .portrait { position: relative; padding: 1rem 1.5rem 2rem; }
   .portrait__img { transform: rotate(-3deg); height: 22rem; border-radius: 28px; background: #dad5cb; border: 1px dashed var(--k-ink); box-sizing: border-box; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1rem; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.06em; text-transform: uppercase; }
   .sticker { position: absolute; right: 0; bottom: 0; background: var(--k-accent); color: var(--k-ink); border-radius: 999px; padding: 0.625rem 1.125rem; transform: rotate(3deg); }

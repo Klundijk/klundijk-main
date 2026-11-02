@@ -26,9 +26,10 @@ const showContactLine = Boolean(phone || email || showPlaceholders);
   </div>
 </section>
 <style>
-  .band { background: var(--k-field); color: var(--k-on-field); padding: var(--pad-y) var(--pad-x); display: grid; gap: 1.75rem; justify-items: start; }
+  .band { background: var(--k-field); color: var(--k-on-field); padding: var(--pad-y) var(--pad-x); display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.75rem; justify-items: start; }
   .band__kicker { color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
-  .band__title { font-weight: 800; font-stretch: 118%; font-size: clamp(2.25rem, 5vw, 4.5rem); line-height: 0.95; letter-spacing: -0.045em; max-width: 22ch; }
+  .band__title { font-weight: 800; font-stretch: 118%; font-size: clamp(2.25rem, 5vw, 4.5rem); line-height: 1.04; letter-spacing: -0.045em; max-width: 22ch; }
+  @media (min-width: 768px) { .band__title { line-height: 0.95; } }
   .band__text { max-width: 38rem; font-size: var(--t-body); }
   .band__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; }
   .band__line { font-family: var(--f-mono); font-size: 0.9375rem; letter-spacing: 0.04em; }

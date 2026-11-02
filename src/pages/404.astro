@@ -65,7 +65,7 @@ const { phone, email } = site.contact;
 
   .hero { background: var(--k-field); color: var(--k-on-field); padding: 1.5rem var(--pad-x) var(--pad-y); display: flex; flex-direction: column; gap: 2.5rem; }
   .hero__main { display: flex; flex-direction: column; gap: 1.375rem; min-width: 0; }
-  .big { font-weight: 800; font-stretch: 125%; font-size: clamp(8.75rem, 26.4vw, 23.75rem); line-height: 0.8; letter-spacing: -0.06em; color: rgb(255 255 255 / 0.16); margin: 0 0 0.5rem -0.25rem; user-select: none; }
+  .big { font-weight: 800; font-stretch: 125%; font-size: clamp(min(8.75rem, 38vw), 26.4vw, 23.75rem); line-height: 0.8; letter-spacing: -0.06em; color: rgb(255 255 255 / 0.16); margin: 0 0 0.5rem -0.25rem; user-select: none; }
   /* Decoratief: via ::before, zodat het geen leesbare tekst of contrastcontrole is. */
   .big::before { content: '404'; content: '404' / ''; }
   .title { margin: 0; font-weight: 800; font-stretch: 118%; font-size: clamp(2.5rem, 5.83vw, 5.25rem); line-height: 0.95; letter-spacing: -0.045em; max-width: 16ch; text-wrap: balance; }
