@@ -1,0 +1,91 @@
+// Privacyverklaring: CONCEPT-tekst, opgesteld door Developer op basis van wat de site nu doet (2 nov 2026).
+// Levi bevestigt de feiten (bewaartermijn, e-mail- en formulierverwerking, verwerkers) vóór livegang; SEO & content
+// is eigenaar van de eindtekst. Bij wijziging van de site (analytics, formulierdienst, nieuwsbrief) deze tekst bijwerken.
+export const privacy = {
+  title: 'Privacyverklaring',
+  lead: 'Wat we met je gegevens doen als je contact opneemt of onze website bezoekt, in gewone taal.',
+  updated: '2 november 2026',
+  sections: [
+    {
+      id: 'wie',
+      title: 'Wie we zijn',
+      paragraphs: [
+        'Klundijk is een digitale partner voor merk, websites, webshops en slimme processen, gevestigd in Veendam (KvK 95075127). Wij zijn verantwoordelijk voor de verwerking van je gegevens zoals in deze verklaring beschreven.',
+        'Vragen over privacy? Mail naar info@klundijk.com of bel 06 83 79 30 22.',
+      ],
+    },
+    {
+      id: 'gegevens',
+      title: 'Welke gegevens we verwerken',
+      paragraphs: ['We verwerken alleen wat je zelf met ons deelt of wat nodig is om de website veilig te laten werken:'],
+      list: [
+        'Contactformulier: je naam, bedrijf (optioneel), e-mailadres en je bericht.',
+        'E-mail en telefoon: wat je ons zelf vertelt en je contactgegevens.',
+        'Technische gegevens: je IP-adres en gegevens over je bezoek (zoals pagina, tijdstip en browsertype) in serverlogs, voor beveiliging en om de website goed te laten werken.',
+      ],
+    },
+    {
+      id: 'doel',
+      title: 'Waarvoor we ze gebruiken',
+      paragraphs: ['We gebruiken je gegevens om:'],
+      list: [
+        'te reageren op je vraag of bericht en eventueel een kennismaking te plannen (op jouw verzoek, voordat er een overeenkomst is);',
+        'onze dienstverlening uit te voeren als we samen gaan werken;',
+        'de website te beveiligen en storingen op te sporen (gerechtvaardigd belang).',
+      ],
+      after: 'We sturen geen nieuwsbrief en gebruiken je gegevens niet voor reclame. We verkopen je gegevens niet.',
+    },
+    {
+      id: 'bewaren',
+      title: 'Hoe lang we ze bewaren',
+      paragraphs: [
+        'We bewaren je gegevens niet langer dan nodig is. Een bericht waar geen vervolg op komt, bewaren we maximaal twaalf maanden. Werken we samen, dan bewaren we gegevens zolang de samenwerking duurt. Facturen en andere administratie bewaren we zeven jaar, omdat de wet dat vraagt. Serverlogs bewaren we kort.',
+      ],
+    },
+    {
+      id: 'delen',
+      title: 'Met wie we ze delen',
+      paragraphs: [
+        'We delen gegevens alleen met partijen die ons helpen de website en onze communicatie te laten werken:',
+      ],
+      list: [
+        'onze hostingpartij, die de website aanbiedt;',
+        'Cloudflare, dat het websiteverkeer versnelt en beschermt en daarbij je IP-adres verwerkt;',
+        'onze e-mailaanbieder, waarlangs je bericht bij ons binnenkomt.',
+      ],
+      after: 'Met deze partijen hebben we of krijgen we afspraken over de verwerking van gegevens. Als een partij gegevens buiten de Europese Economische Ruimte verwerkt, gebeurt dat alleen met passende waarborgen. Verder verstrekken we gegevens alleen aan derden als de wet dat verplicht.',
+    },
+    {
+      id: 'cookies',
+      title: 'Cookies en tracking',
+      paragraphs: [
+        'Op dit moment plaatsen we geen cookies en gebruiken we geen analytics of advertentietracking. Lettertypen laden we van onze eigen server. Voor de intro op de homepage onthoudt je browser tijdens je bezoek of je die al hebt gezien; dat blijft in je eigen browser en komt niet bij ons terecht.',
+        'Gaan we ooit analytics gebruiken, dan vragen we daar eerst toestemming voor en werken we deze verklaring bij.',
+      ],
+    },
+    {
+      id: 'rechten',
+      title: 'Jouw rechten',
+      paragraphs: ['Je mag ons vragen om:'],
+      list: [
+        'inzage in de gegevens die we van je hebben;',
+        'je gegevens te corrigeren of te verwijderen;',
+        'de verwerking te beperken of er bezwaar tegen te maken;',
+        'je gegevens in een gangbaar formaat aan je mee te geven.',
+      ],
+      after: 'Mail daarvoor naar info@klundijk.com. We reageren binnen een maand. Ben je het niet eens met hoe we met je gegevens omgaan, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens (autoriteitpersoonsgegevens.nl).',
+    },
+    {
+      id: 'beveiliging',
+      title: 'Beveiliging',
+      paragraphs: [
+        'De website is alleen via een beveiligde verbinding (https) bereikbaar en toegang tot je gegevens is beperkt tot wie ze nodig heeft. Merk je iets verdachts of denk je dat er iets misgaat met je gegevens? Laat het ons direct weten.',
+      ],
+    },
+    {
+      id: 'wijzigen',
+      title: 'Wijzigingen',
+      paragraphs: ['We passen deze verklaring aan als onze website of werkwijze verandert. De datum bovenaan geeft aan wanneer de laatste wijziging was.'],
+    },
+  ] as { id: string; title: string; paragraphs: string[]; list?: string[]; after?: string }[],
+};
