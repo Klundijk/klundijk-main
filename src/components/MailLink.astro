@@ -1,0 +1,8 @@
+---
+// E-maillink die Cloudflare's "Email Address Obfuscation" niet herschrijft. Voor de FXW-host staat Cloudflare ervoor:
+// zonder de email_off-markering verandert het adres in "[email protected]" in de ruwe HTML (mailto werkt dan alleen met JS).
+interface Props { email: string; class?: string; }
+const { email, class: cls } = Astro.props;
+const attr = cls ? ` class="${cls}"` : '';
+---
+<Fragment set:html={`<!--email_off--><a${attr} href="mailto:${email}">${email}</a><!--/email_off-->`} />

@@ -8,6 +8,9 @@ interface Props { bare?: boolean; submitLabel?: string; }
 const { bare = false, submitLabel = cfg.copy.submit } = Astro.props;
 const f = cfg.fields;
 const privacyHref = site.legal.privacyHref;
+// Fallback zonder JavaScript: het endpoint, of (zolang dat er niet is) een mailto naar het contactadres, zodat een post nooit op /contact stukloopt.
+// Met JavaScript onderschept het clientscript de verzending; zonder endpoint toont het de serverfout-staat.
+const action = cfg.endpoint ?? (site.contact.email ? `mailto:${site.contact.email}` : undefined);
 // Alleen platte strings naar het clientscript (functies overleven define:vars niet).
 const clientCopy = {
   submit: submitLabel,
@@ -20,7 +23,7 @@ const clientCopy = {
 };
 ---
 <div class:list={['cform', 'on-field', { 'cform--bare': bare }]} data-cform data-endpoint={cfg.endpoint ?? ''}>
-  <form method="post" action={cfg.endpoint ?? undefined} onsubmit={cfg.endpoint ? undefined : 'return false'} aria-labelledby="cform-title" novalidate={false} data-form>
+  <form method="post" action={action} enctype={cfg.endpoint ? undefined : 'text/plain'} onsubmit={cfg.endpoint ? undefined : 'return false'} aria-labelledby="cform-title" novalidate={false} data-form>
     <h2 id="cform-title" class="sr-only">Contactformulier</h2>
 
     <div class="summary" data-summary role="alert" tabindex="-1" hidden>
