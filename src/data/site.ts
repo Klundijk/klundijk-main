@@ -5,7 +5,7 @@ export const site = {
   name: 'Klundijk',
   tagline: 'Digitaal kan beter. Dus maken we het beter.',
   description:
-    'Klundijk helpt bedrijven vooruit met sterke merken, websites, webshops en slimme digitale oplossingen. We beginnen bij het vraagstuk, niet bij het platform.',
+    'Klundijk helpt bedrijven hun merk, website, webshop en digitale processen beter maken. We beginnen bij wat er nodig is en kiezen daarna pas de oplossing.',
   primaryCta: { label: 'Bespreek je vraagstuk', href: '/contact' },
   secondaryCta: { label: 'Bekijk ons werk', href: '/werk' },
   commerceCta: { label: 'Plan een kennismaking', href: '/contact' },
