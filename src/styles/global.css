@@ -72,7 +72,7 @@ h1, h2, h3, p { margin: 0; }
 .chip[aria-disabled='true']:hover { background: transparent; }
 
 /* Tekstlink */
-.link-strong { font-size: var(--t-small); font-weight: 600; text-underline-offset: 6px; }
+.link-strong { font-size: var(--t-small); font-weight: 700; text-underline-offset: 6px; }
 .link-strong { transition: text-underline-offset 0.25s var(--ease); }
 .link-strong:hover { text-decoration-thickness: 3px; text-underline-offset: 9px; }
 /* Tikdoel: losse links en knoppen minimaal 44 px hoog (handoff v5.5, punt 4). */
