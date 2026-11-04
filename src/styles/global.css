@@ -29,8 +29,8 @@ h1, h2, h3, p { margin: 0; }
 .skip-link:focus { top: 1rem; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.mono { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.06em; text-transform: uppercase; }
-.wide { font-weight: 800; font-stretch: 118%; letter-spacing: -0.04em; line-height: 0.98; }
+.mono { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.wide { font-weight: 800; font-stretch: 112%; letter-spacing: -0.04em; line-height: 0.98; }
 .section { padding: var(--pad-y) var(--pad-x); }
 
 /* ---- Knoppen (ontwerpbord X · Componenten, sectie 03) ----
@@ -40,10 +40,10 @@ h1, h2, h3, p { margin: 0; }
 .btn { --b-bg: var(--k-accent); --b-fg: var(--k-ink); --b-border: var(--b-bg); --h-bg: var(--k-ink); --h-fg: var(--k-paper);
   display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; box-sizing: border-box; min-height: 56px; padding: 0 2rem;
   border-radius: 999px; border: 2px solid var(--b-border); background: var(--b-bg); color: var(--b-fg);
-  font-family: var(--f-sans); font-size: 1.125rem; font-weight: 700; line-height: 1.2; text-decoration: none; text-align: center; cursor: pointer;
+  font-family: var(--f-sans); font-size: var(--t-small); font-weight: 700; line-height: 1.2; text-decoration: none; text-align: center; cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.25s var(--ease); }
 .btn--lg { min-height: 60px; }
-.btn--md { min-height: 48px; padding: 0 1.5rem; font-size: 1rem; }
+.btn--md { min-height: 48px; padding: 0 1.5rem; font-size: var(--t-small); }
 .btn--primary { --b-border: var(--k-btn-outline, var(--k-accent)); }
 .btn--secondary { --b-bg: var(--k-ink); --b-fg: var(--k-paper); --h-bg: var(--k-accent); --h-fg: var(--k-ink); }
 .btn--ghost { --b-bg: transparent; --b-fg: currentColor; --b-border: currentColor; --h-bg: var(--k-ink); --h-fg: var(--k-paper); }
@@ -64,7 +64,7 @@ h1, h2, h3, p { margin: 0; }
 
 /* Filter-chip (werkoverzicht): aria-pressed="true" = actief. */
 .chip { display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; min-height: 48px; padding: 0 1.375rem; border-radius: 999px;
-  border: 2px solid var(--k-ink); background: transparent; color: var(--k-ink); font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase;
+  border: 2px solid var(--k-ink); background: transparent; color: var(--k-ink); font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.04em; text-transform: uppercase;
   cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease; }
 .chip:hover { background: var(--k-line); }
 .chip[aria-pressed='true'], .chip:active { background: var(--k-ink); color: var(--k-paper); }
@@ -72,7 +72,7 @@ h1, h2, h3, p { margin: 0; }
 .chip[aria-disabled='true']:hover { background: transparent; }
 
 /* Tekstlink */
-.link-strong { font-size: 1.125rem; font-weight: 600; text-underline-offset: 6px; }
+.link-strong { font-size: var(--t-small); font-weight: 600; text-underline-offset: 6px; }
 .link-strong { transition: text-underline-offset 0.25s var(--ease); }
 .link-strong:hover { text-decoration-thickness: 3px; text-underline-offset: 9px; }
 /* Tikdoel: losse links en knoppen minimaal 44 px hoog (handoff v5.5, punt 4). */
@@ -97,7 +97,7 @@ h1, h2, h3, p { margin: 0; }
 .wrap { max-width: 78rem; margin-inline: auto; padding-inline: var(--pad-x); }
 .muted { color: var(--k-muted); }
 /* Alleen zichtbaar in dev of met PUBLIC_SHOW_PLACEHOLDERS=1: markeert inhoud die nog geleverd moet worden. */
-.placeholder-flag { display: inline-block; background: #fff3c4; color: #5a4500; padding: 0.1em 0.5em; font-size: 0.8rem; border-radius: 4px; }
+.placeholder-flag { display: inline-block; background: #fff3c4; color: #5a4500; padding: 0.1em 0.5em; font-size: var(--t-mono); border-radius: 4px; }
 
 /* Oudere Safari (< 16) kent overflow: clip niet: daar met hidden, zodat de pagina nooit zijwaarts kan scrollen. */
 @supports not (overflow: clip) { html, body { overflow-x: hidden; } }
