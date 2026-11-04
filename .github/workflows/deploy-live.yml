@@ -1,0 +1,134 @@
+name: Deploy live (klundijk.com)
+
+# Zet de site op het echte domein. Draait ALLEEN handmatig (Actions > Deploy live > Run workflow) en vraagt om bevestiging.
+# Geheimen (Settings > Secrets and variables > Actions):
+#   LIVE_SSH_PATH = domains/klundijk.com/public_html (verplicht)
+#   LIVE_SSH_HOST, LIVE_SSH_USER, LIVE_SSH_PORT, LIVE_SSH_KEY (optioneel: vallen terug op de TEST_*-waarden, zelfde FXW-account)
+#   RESEND_API_KEY en de variabelen CONTACT_FROM / CONTACT_TO worden gedeeld met de testsite.
+# De build krijgt SITE_URL=https://klundijk.com en PUBLIC_INDEXABLE=1: geen noindex, robots.txt open, sitemap en canonicals op het echte domein.
+# De controle na het uploaden gaat rechtstreeks naar de server (zonder DNS), zodat je ook kunt deployen voordat het domein is omgezet.
+
+on:
+  workflow_dispatch:
+    inputs:
+      bevestig:
+        description: 'Typ LIVE om naar klundijk.com te deployen'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-live
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && inputs.bevestig == 'LIVE'
+    env:
+      DEPLOY_HOST: ${{ secrets.LIVE_SSH_HOST || secrets.TEST_SSH_HOST }}
+      DEPLOY_USER: ${{ secrets.LIVE_SSH_USER || secrets.TEST_SSH_USER }}
+      DEPLOY_PORT: ${{ secrets.LIVE_SSH_PORT || secrets.TEST_SSH_PORT }}
+      DEPLOY_PATH: ${{ secrets.LIVE_SSH_PATH }}
+      SSH_KEY: ${{ secrets.LIVE_SSH_KEY || secrets.TEST_SSH_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Controle geheimen en doelmap
+        run: |
+          for v in DEPLOY_HOST DEPLOY_USER DEPLOY_PORT DEPLOY_PATH; do
+            [ -n "${!v}" ] || { echo "::error::Geheim voor $v ontbreekt"; exit 1; }
+          done
+          [ -n "$SSH_KEY" ] || { echo "::error::SSH-sleutel ontbreekt"; exit 1; }
+          # Veiligheid: alleen de map van klundijk.com, nooit de testsite of een andere map.
+          case "$DEPLOY_PATH" in
+            domains/klundijk.com/public_html|*/domains/klundijk.com/public_html) ;;
+            *) echo "::error::LIVE_SSH_PATH moet naar klundijk.com/public_html wijzen"; exit 1 ;;
+          esac
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Type- en contentcontrole
+        run: npm run check
+      - name: Productiebuild
+        run: npm run build
+        env:
+          SITE_URL: https://klundijk.com
+          PUBLIC_INDEXABLE: '1'
+
+      - name: Controle indexeerbaarheid en domein
+        run: |
+          # 404.html blijft bewust noindex.
+          for f in $(find dist -name '*.html' ! -name 404.html); do
+            if grep -q 'name="robots" content="noindex' "$f"; then echo "::error::$f staat nog op noindex"; exit 1; fi
+          done
+          grep -q '^Allow: /' dist/robots.txt || { echo "::error::robots.txt staat niet open"; exit 1; }
+          grep -q 'https://klundijk.com/sitemap-index.xml' dist/robots.txt || { echo "::error::robots.txt noemt de sitemap niet"; exit 1; }
+          [ -f dist/sitemap-index.xml ] || { echo "::error::sitemap-index.xml ontbreekt"; exit 1; }
+          if grep -rq 'new\.klundijk\.com' dist; then echo "::error::dist verwijst nog naar new.klundijk.com"; exit 1; fi
+          grep -q 'rel="canonical" href="https://klundijk.com/' dist/index.html || { echo "::error::canonical op home klopt niet"; exit 1; }
+
+      - name: Apache-instellingen toevoegen
+        run: cp deploy/apache.htaccess dist/.htaccess
+
+      - name: SSH instellen
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          HOSTKEY='ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHhaEkiV0CejQNgO17q/zvJY0zpu3XlbIMaWWPOOcOwB'
+          if [ "$DEPLOY_PORT" = "22" ]; then H="$DEPLOY_HOST"; else H="[$DEPLOY_HOST]:$DEPLOY_PORT"; fi
+          echo "$H $HOSTKEY" > ~/.ssh/known_hosts
+
+      - name: Uploaden met rsync
+        run: |
+          rsync -rlptz --delete --delay-updates --omit-dir-times --chmod=D755,F644 \
+            --exclude 'cgi-bin/' --exclude '.well-known/' \
+            -e "ssh -i $HOME/.ssh/deploy_key -p $DEPLOY_PORT -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+            dist/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+      - name: Formulierkoppeling (Resend) naar de server schrijven
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CONTACT_FROM: ${{ vars.CONTACT_FROM }}
+          CONTACT_TO: ${{ vars.CONTACT_TO }}
+        run: |
+          [ -n "$RESEND_API_KEY" ] || { echo "::error::RESEND_API_KEY ontbreekt: live zonder werkend formulier is niet toegestaan"; exit 1; }
+          [[ "$RESEND_API_KEY" =~ ^re_[A-Za-z0-9_]+$ ]] || { echo "::error::RESEND_API_KEY heeft een onverwacht formaat"; exit 1; }
+          FROM="${CONTACT_FROM:-Klundijk website <website@klundijk.com>}"
+          TO="${CONTACT_TO:-info@klundijk.com}"
+          re_from='^([A-Za-z0-9 ._-]+ <[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+>|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)$'
+          re_to='^[A-Za-z0-9._%+@,-]+$'
+          [[ "$FROM" =~ $re_from ]] || { echo "::error::CONTACT_FROM heeft een onverwacht formaat"; exit 1; }
+          [[ "$TO" =~ $re_to ]] || { echo "::error::CONTACT_TO heeft een onverwacht formaat"; exit 1; }
+          umask 077
+          printf "<?php return ['api_key' => '%s', 'from' => '%s', 'to' => '%s'];\n" "$RESEND_API_KEY" "$FROM" "$TO" > "$RUNNER_TEMP/resend-config.php"
+          PARENT="${DEPLOY_PATH%/public_html}"
+          rsync -t --chmod=F600 \
+            -e "ssh -i $HOME/.ssh/deploy_key -p $DEPLOY_PORT -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+            "$RUNNER_TEMP/resend-config.php" "$DEPLOY_USER@$DEPLOY_HOST:$PARENT/resend-config.php"
+          rm -f "$RUNNER_TEMP/resend-config.php"
+          echo "Formulierkoppeling geschreven (sleutel niet getoond)"
+
+      - name: Controle rechtstreeks op de server (zonder DNS)
+        run: |
+          sleep 3
+          IP=$(getent ahostsv4 "$DEPLOY_HOST" | awk 'NR==1{print $1}')
+          [ -n "$IP" ] || { echo "::error::kan het IP-adres van de server niet bepalen"; exit 1; }
+          c() { curl -sS -k --resolve "klundijk.com:443:$IP" -o /dev/null -w '%{http_code}' "https://klundijk.com$1" || echo 000; }
+          fail=0
+          for p in / /werk /werk/rudi-schipper /over /contact /privacy /wat-we-doen /robots.txt /sitemap-index.xml; do
+            code=$(c "$p"); echo "$p -> $code"; [ "$code" = 200 ] || fail=1
+          done
+          code=$(c /bestaat-niet); echo "/bestaat-niet -> $code (verwacht 404)"; [ "$code" = 404 ] || fail=1
+          code=$(c /api/contact.php); echo "/api/contact.php (GET) -> $code (verwacht 405)"; [ "$code" = 405 ] || fail=1
+          # Oude Webflow-adressen moeten doorverwijzen (301).
+          for p in /projecten /projecten/kraaijav /branding /website /webshops /klundijk /blog; do
+            code=$(c "$p"); echo "$p -> $code (verwacht 301)"; [ "$code" = 301 ] || fail=1
+          done
+          exit $fail

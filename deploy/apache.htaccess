@@ -18,6 +18,17 @@ DirectorySlash Off
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # Oude Webflow-adressen van klundijk.com naar de nieuwe pagina's (301, zodat zoekmachines en bestaande links meeverhuizen).
+  # Controleer bij livegang met de lijst in Notion 04 of er nog adressen bij moeten komen.
+  RewriteRule ^projecten/?$ /werk [R=301,L]
+  RewriteRule ^projecten/kraaijav/?$ /werk/kraaij-av [R=301,L]
+  RewriteRule ^projecten/auto-restyle-noord/?$ /werk/auto-restyle-noord [R=301,L]
+  RewriteRule ^branding/?$ /wat-we-doen/merk-identiteit [R=301,L]
+  RewriteRule ^website/?$ /wat-we-doen/websites-digitale-ervaringen [R=301,L]
+  RewriteRule ^webshops/?$ /wat-we-doen/webshops-commerce [R=301,L]
+  RewriteRule ^klundijk/?$ /over [R=301,L]
+  RewriteRule ^blog/?$ /werk [R=301,L]
+
   # /werk/ wordt /werk (behalve de root).
   RewriteRule ^(.+)/$ /$1 [L,R=301]
 
