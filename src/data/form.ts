@@ -1,9 +1,9 @@
 // Contactformulier: configuratie en teksten op één plek.
 // Alle teksten zijn CONCEPT: SEO & content is eigenaar van de definitieve tekst (ontwerpbord X · Componenten, sectie 04).
-// De formulierarchitectuur (externe formservice, serverless functie of Astro-endpoint) is nog niet gekozen:
-// zolang `endpoint` null is, verstuurt het formulier niets en toont het de serverfout-staat.
+// Verzending loopt via public/api/contact.php (PHP op de FXW-host) naar Resend; de API-sleutel staat buiten de webroot en komt uit
+// GitHub-geheimen (zie README). Zolang het endpoint null is, verstuurt het formulier niets en toont het de serverfout-staat.
 export const form = {
-  endpoint: null as string | null,
+  endpoint: '/api/contact.php' as string | null,
   responseTime: null as string | null, // bijv. 'één werkdag'; null laat de zin zonder termijn
   copy: {
     summaryTitle: 'Er is iets niet goed ingevuld',

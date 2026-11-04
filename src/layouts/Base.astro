@@ -65,5 +65,29 @@ const crumbs = breadcrumb && breadcrumb.length > 0 ? {
     <main id="main"><slot /></main>
     {contactBand && <ContactBand {...band} />}
     <Footer />
+    <script>
+      // Scroll-reveal: blokken onder de vouw krijgen .rv en schuiven in beeld zodra ze binnenkomen. Overslaan bij verminderde beweging,
+      // in geautomatiseerde browsers (screenshots, tests) en zonder IntersectionObserver.
+      (() => {
+        if (!matchMedia('(prefers-reduced-motion: no-preference)').matches || !('IntersectionObserver' in window) || navigator.webdriver) return;
+        const groups = ['.sit__grid > *', '.wlist > li', '.steps > *', '.principles > *', '.services > *'];
+        const items = new Set<HTMLElement>();
+        const staggered = new Set<Element>();
+        groups.forEach((g) => document.querySelectorAll<HTMLElement>(g).forEach((el, i) => {
+          el.style.setProperty('--rv-d', `${Math.min(i, 4) * 90}ms`);
+          items.add(el); const sec = el.closest('section'); if (sec) staggered.add(sec);
+        }));
+        document.querySelectorAll<HTMLElement>('main > section, main > article > section').forEach((sec) => { if (!staggered.has(sec)) items.add(sec); });
+        const vh = innerHeight;
+        const targets = [...items].filter((el) => el.getBoundingClientRect().top > vh * 0.92);
+        if (!targets.length) return;
+        const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          io.unobserve(en.target);
+          en.target.classList.add('rv-in');
+        }), { rootMargin: '0px 0px -10% 0px' });
+        targets.forEach((el) => { el.classList.add('rv'); io.observe(el); });
+      })();
+    </script>
   </body>
 </html>

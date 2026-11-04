@@ -1,16 +1,18 @@
 ---
 // Situaties (bord X · Home): vier tegels met een illustratie die van "nu" naar "beter" gaat. De eerste tegel (webshops) is groot.
-// Zonder JavaScript staat elke tegel op "Nu" en verdwijnen de knoppen (ze zijn een verbetering, geen vereiste).
+// Sinds 4 nov (besluit Levi) zonder knoppen "Maak het beter" / "Maak alles beter": de illustratie beweegt vanzelf naar "beter"
+// zodra de tegel in beeld komt, en elke tegel heeft een echte link naar de bijbehorende dienstpagina.
+// Zonder JavaScript staat elke tegel op "Nu".
 import { TILES } from '../../data/home';
+import { dienstHref } from '../../data/diensten';
 import { blockStyles, lineStyles } from '../../lib/stage';
 ---
 <section class="sit" aria-labelledby="sit-h">
   <div class="sit__head">
     <div class="sit__titles">
       <h2 id="sit-h" class="sit__h">Waar kunnen we iets beter maken?</h2>
-      <p class="mono sit__sub">Kies een situatie en zie wat ‘beter’ betekent</p>
+      <p class="mono sit__sub">Vier situaties waar we vaak bij helpen</p>
     </div>
-    <button type="button" class="sit__all" id="sit-all" aria-pressed="false" hidden>Maak alles beter</button>
   </div>
   <div class="sit__grid">
     {TILES.map((t, i) => {
@@ -31,7 +33,7 @@ import { blockStyles, lineStyles } from '../../lib/stage';
             <h3 id={`sit-${t.id}`} class="tile__h">{t.heading}</h3>
             <p class="tile__copy">{t.copy}</p>
             <p class="tile__acts">
-              <button type="button" class="tbtn" data-toggle aria-pressed="false" hidden>Maak het beter</button>
+              <a class="tbtn" href={dienstHref(t.id)}>Bekijk {t.label.toLowerCase()}<span class="tbtn__arrow" aria-hidden="true">→</span></a>
               {i === 0 && <a class="tbtn tbtn--accent" href="#contact">Plan een kennismaking</a>}
             </p>
           </div>
@@ -41,35 +43,28 @@ import { blockStyles, lineStyles } from '../../lib/stage';
   </div>
 </section>
 <script>
+  // De illustratie beweegt van "nu" naar "beter" zodra de tegel in beeld komt (eenmalig). Zonder IntersectionObserver
+  // of bij verminderde beweging springt hij direct naar "beter".
   const tiles = [...document.querySelectorAll<HTMLElement>('[data-tile]')];
-  const all = document.getElementById('sit-all') as HTMLButtonElement | null;
   const apply = (t: HTMLElement, better: boolean) => {
     t.dataset.better = String(better);
     t.querySelectorAll<HTMLElement>('.blk, .ln').forEach((b) => b.setAttribute('style', (better ? b.dataset.after : b.dataset.before) || ''));
-    const btn = t.querySelector<HTMLButtonElement>('[data-toggle]');
-    btn?.setAttribute('aria-pressed', String(better));
-    if (btn) btn.textContent = better ? 'Zie hoe het was' : 'Maak het beter';
     const st = t.querySelector('[data-state]');
     if (st) st.textContent = better ? 'Beter' : 'Nu';
   };
-  const sync = () => {
-    if (!all) return;
-    const every = tiles.every((t) => t.dataset.better === 'true');
-    all.setAttribute('aria-pressed', String(every));
-    all.textContent = every ? 'Alles terug naar hoe het was' : 'Maak alles beter';
-  };
-  tiles.forEach((t) => {
-    t.dataset.better = 'false';
-    const btn = t.querySelector<HTMLButtonElement>('[data-toggle]');
-    if (btn) { btn.hidden = false; btn.addEventListener('click', () => { apply(t, t.dataset.better !== 'true'); sync(); }); }
-  });
-  if (all) {
-    all.hidden = false;
-    all.addEventListener('click', () => {
-      const go = !tiles.every((t) => t.dataset.better === 'true');
-      tiles.forEach((t) => apply(t, go));
-      sync();
-    });
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    tiles.forEach((t) => apply(t, true));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        const t = en.target as HTMLElement;
+        setTimeout(() => apply(t, true), 350);
+      });
+    }, { threshold: 0.5 });
+    tiles.forEach((t) => io.observe(t));
   }
 </script>
 <style>
@@ -82,10 +77,7 @@ import { blockStyles, lineStyles } from '../../lib/stage';
   @media (min-width: 768px) { .sit__h { font-stretch: 118%; line-height: 0.98; } }
   .sit__sub { color: var(--k-muted); margin: 0; font-size: 0.75rem; }
   @media (min-width: 768px) { .sit__sub { font-size: 0.8125rem; } }
-  .sit__all { min-height: 56px; background: var(--k-ink); color: var(--k-paper); border: 0; border-radius: 999px; padding: 0 1.5rem; font-size: 1.0625rem; font-weight: 600; cursor: pointer; flex: none; }
-  .sit__all[hidden] { display: none; }
-  @media (min-width: 768px) { .sit__all { padding: 0 1.75rem; } }
-  .sit__all:hover, .tbtn:hover { background: var(--k-accent); color: var(--k-ink); }
+  .tbtn:hover { background: var(--k-accent); color: var(--k-ink); }
 
   .sit__grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
   @media (min-width: 768px) { .sit__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); } .tile--lg { grid-column: 1 / -1; } }
@@ -96,14 +88,16 @@ import { blockStyles, lineStyles } from '../../lib/stage';
   }
 
   .tile { background: var(--k-white); border: 1px solid var(--k-line); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  @media (hover: hover) { .tile { transition: border-color 0.25s ease, box-shadow 0.35s var(--ease); } .tile:hover { border-color: var(--k-ink); box-shadow: 0 14px 32px rgb(14 14 18 / 0.1); } }
   .tile__body { display: flex; flex-direction: column; gap: 1.125rem; align-items: flex-start; flex: 1; }
   .tile__meta { align-self: stretch; max-width: none; display: flex; justify-content: space-between; align-items: center; color: var(--k-muted); margin: 0; }
   .tile__h { font-weight: 700; font-stretch: 110%; font-size: clamp(1.625rem, 1.74vw, 1.5625rem); line-height: 1.1; letter-spacing: -0.02em; margin: 0; }
   .tile__copy { margin: 0; font-size: 1.0625rem; line-height: 1.5; color: var(--k-muted); transition: color 0.6s; }
   .tile[data-better='true'] .tile__copy { color: var(--k-ink); }
   .tile__acts { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin: auto 0 0; }
-  .tbtn { min-height: 48px; display: inline-flex; align-items: center; background: var(--k-ink); color: var(--k-paper); border: 0; border-radius: 999px; padding: 0 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; }
-  .tbtn[hidden] { display: none; }
+  .tbtn { min-height: 48px; display: inline-flex; align-items: center; gap: 0.625rem; background: var(--k-ink); color: var(--k-paper); border: 0; border-radius: 999px; padding: 0 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: background-color 0.2s ease, color 0.2s ease; }
+  .tbtn__arrow { display: inline-block; transition: transform 0.3s var(--ease); }
+  .tbtn:hover .tbtn__arrow, .tbtn:focus-visible .tbtn__arrow { transform: translateX(4px); }
   .tbtn--accent { background: var(--k-accent); color: var(--k-ink); font-weight: 700; }
   .tbtn--accent:hover { background: var(--k-ink); color: var(--k-paper); }
 
@@ -123,5 +117,5 @@ import { blockStyles, lineStyles } from '../../lib/stage';
     .tile--lg .tile__h { font-weight: 800; font-stretch: 112%; font-size: clamp(1.875rem, 3.05vw, 2.75rem); line-height: 1.04; letter-spacing: -0.03em; }
     .tile--lg .tile__copy { font-size: clamp(1.0625rem, 1.4vw, 1.25rem); }
   }
-  @media (prefers-reduced-motion: reduce) { .blk, .ln, .tile__copy { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .blk, .ln, .tile__copy, .tbtn__arrow { transition: none; } }
 </style>

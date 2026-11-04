@@ -51,7 +51,8 @@ export const privacy = {
       list: [
         'onze hostingpartij, die de website aanbiedt;',
         'Cloudflare, dat het websiteverkeer versnelt en beschermt en daarbij je IP-adres verwerkt;',
-        'onze e-mailaanbieder, waarlangs je bericht bij ons binnenkomt.',
+        'Resend, de e-mailservice waarmee het contactformulier je bericht als e-mail aan ons bezorgt;',
+        'onze e-mailaanbieder, waarlangs e-mail bij ons binnenkomt.',
       ],
       after: 'Met deze partijen hebben we of krijgen we afspraken over de verwerking van gegevens. Als een partij gegevens buiten de Europese Economische Ruimte verwerkt, gebeurt dat alleen met passende waarborgen. Verder verstrekken we gegevens alleen aan derden als de wet dat verplicht.',
     },

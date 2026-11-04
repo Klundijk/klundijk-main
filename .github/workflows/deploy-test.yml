@@ -3,6 +3,7 @@ name: Deploy test (new.klundijk.com)
 # Bouwt de site en zet hem via SSH (rsync) op de testomgeving bij FXW.
 # Servergegevens en sleutel staan als geheimen in GitHub (Settings > Secrets and variables > Actions):
 #   TEST_SSH_HOST, TEST_SSH_USER, TEST_SSH_PORT, TEST_SSH_PATH, TEST_SSH_KEY
+# Formulier (Resend): geheim RESEND_API_KEY; optioneel repository-variabelen CONTACT_FROM en CONTACT_TO.
 # Optioneel: TEST_AUTH_FILE = absoluut pad naar het .htpasswd-bestand op de server (zet een wachtwoord op de testsite).
 # De testsite blijft altijd noindex: de workflow stopt als dat niet klopt.
 
@@ -94,6 +95,33 @@ jobs:
             -e "ssh -i $HOME/.ssh/deploy_key -p $DEPLOY_PORT -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
             dist/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
 
+      - name: Formulierkoppeling (Resend) naar de server schrijven
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          CONTACT_FROM: ${{ vars.CONTACT_FROM }}
+          CONTACT_TO: ${{ vars.CONTACT_TO }}
+        run: |
+          # Zet public/api/contact.php aan: de sleutel komt in ../resend-config.php, naast (dus buiten) public_html.
+          if [ -z "$RESEND_API_KEY" ]; then
+            echo "::warning::Geheim RESEND_API_KEY ontbreekt: het formulier blijft op 'nog niet gekoppeld'"
+            exit 0
+          fi
+          [[ "$RESEND_API_KEY" =~ ^re_[A-Za-z0-9_]+$ ]] || { echo "::error::RESEND_API_KEY heeft een onverwacht formaat"; exit 1; }
+          FROM="${CONTACT_FROM:-Klundijk website <website@klundijk.com>}"
+          TO="${CONTACT_TO:-info@klundijk.com}"
+          re_from='^([A-Za-z0-9 ._-]+ <[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+>|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+)$'
+          re_to='^[A-Za-z0-9._%+@,-]+$'
+          [[ "$FROM" =~ $re_from ]] || { echo "::error::CONTACT_FROM heeft een onverwacht formaat"; exit 1; }
+          [[ "$TO" =~ $re_to ]] || { echo "::error::CONTACT_TO heeft een onverwacht formaat"; exit 1; }
+          umask 077
+          printf "<?php return ['api_key' => '%s', 'from' => '%s', 'to' => '%s'];\n" "$RESEND_API_KEY" "$FROM" "$TO" > "$RUNNER_TEMP/resend-config.php"
+          PARENT="${DEPLOY_PATH%/public_html}"
+          rsync -t --chmod=F600 \
+            -e "ssh -i $HOME/.ssh/deploy_key -p $DEPLOY_PORT -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts" \
+            "$RUNNER_TEMP/resend-config.php" "$DEPLOY_USER@$DEPLOY_HOST:$PARENT/resend-config.php"
+          rm -f "$RUNNER_TEMP/resend-config.php"
+          echo "Formulierkoppeling geschreven (sleutel niet getoond)"
+
       - name: Controle op de testsite
         run: |
           sleep 3
@@ -107,4 +135,8 @@ jobs:
           code=$(curl -sS -o /dev/null -w '%{http_code}' https://new.klundijk.com/bestaat-niet || echo 000)
           echo "/bestaat-niet -> $code (verwacht 404 of 401)"
           case "$code" in 404|401) ;; *) fail=1 ;; esac
+          # Het formulier-script moet draaien (PHP actief): een GET geeft 405. Een 200 zou betekenen dat de broncode als tekst wordt getoond.
+          code=$(curl -sS -o /dev/null -w '%{http_code}' https://new.klundijk.com/api/contact.php || echo 000)
+          echo "/api/contact.php (GET) -> $code (verwacht 405 of 401)"
+          case "$code" in 405|401) ;; *) fail=1 ;; esac
           exit $fail
