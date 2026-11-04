@@ -129,7 +129,7 @@ const { phone, email } = site.contact;
 
   /* Menupaneel: volledig scherm in veldkleur. */
   .menu { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0;
-    background: var(--k-field); color: var(--k-on-field); overflow-y: auto; }
+    background: var(--k-field); color: var(--k-on-field); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; }
   .menu[open] { display: flex; flex-direction: column; }
   .menu::backdrop { background: var(--k-field); }
   .menu__bar { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem var(--pad-x) 0.75rem; }
@@ -182,7 +182,7 @@ const { phone, email } = site.contact;
     .menu__bar, .menu__nav, .menu__foot { padding-inline: var(--pad-x); }
     .menu__label { font-size: clamp(2.5rem, 4.4vw, 4rem); }
     .menu__main { min-height: 84px; }
-    .menu__sub { display: grid; grid-template-columns: repeat(4, max-content); column-gap: 2.5rem; padding-left: 4rem !important; }
+    .menu__sub { display: flex; flex-wrap: wrap; column-gap: 2.5rem; padding-left: 4rem !important; }
     .menu__foot { flex-direction: row; align-items: center; justify-content: space-between; }
     .menu__contact { gap: 2rem; align-items: center; }
     .menu__foot .btn { width: auto; }

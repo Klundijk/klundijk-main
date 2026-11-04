@@ -98,3 +98,6 @@ h1, h2, h3, p { margin: 0; }
 .muted { color: var(--k-muted); }
 /* Alleen zichtbaar in dev of met PUBLIC_SHOW_PLACEHOLDERS=1: markeert inhoud die nog geleverd moet worden. */
 .placeholder-flag { display: inline-block; background: #fff3c4; color: #5a4500; padding: 0.1em 0.5em; font-size: 0.8rem; border-radius: 4px; }
+
+/* Oudere Safari (< 16) kent overflow: clip niet: daar met hidden, zodat de pagina nooit zijwaarts kan scrollen. */
+@supports not (overflow: clip) { html, body { overflow-x: hidden; } }
