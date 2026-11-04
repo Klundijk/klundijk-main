@@ -13,14 +13,7 @@ import Contact from '../components/home/Contact.astro';
 import { site } from '../data/site';
 ---
 <Base description={site.description} heroHeader contactBand={false}>
-  <script is:inline slot="head">
-    (function(){try{
-      var r=document.documentElement, reduce=matchMedia('(prefers-reduced-motion: reduce)').matches, seen=sessionStorage.getItem('kl-intro');
-      if(!reduce&&!seen){r.dataset.intro='rough';r.dataset.introAuto='1';sessionStorage.setItem('kl-intro','1');}
-      else r.dataset.intro='refined';
-    }catch(e){document.documentElement.dataset.intro='refined';}})();
-  </script>
-  <noscript slot="head"><style>.wpanel[hidden] { display: block !important; }</style></noscript>
+  <noscript slot="head"><style>.wpanel:not([data-open]) { grid-template-rows: 1fr !important; visibility: visible !important; } .wpanel:not([data-open]) .wcard { opacity: 1 !important; transform: none !important; }</style></noscript>
   <Hero />
   <Werk />
   <Marquee />

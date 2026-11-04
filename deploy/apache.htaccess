@@ -34,7 +34,7 @@ DirectorySlash Off
   Header always set X-Frame-Options "DENY"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
   Header always set Strict-Transport-Security "max-age=31536000"
-  # Past aan zodra het formulier-endpoint bekend is (connect-src en form-action).
+  # Het formulier post naar /api/contact.php op dezelfde site ('self'); connect-src/form-action 'https:' is ruimer dan nodig en kan bij livegang dicht.
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:; form-action 'self' https:; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
 
   # Bestanden met hash in de naam en de lettertypen mogen een jaar in de cache.

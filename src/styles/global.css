@@ -41,7 +41,7 @@ h1, h2, h3, p { margin: 0; }
   display: inline-flex; align-items: center; justify-content: center; gap: 0.75rem; box-sizing: border-box; min-height: 56px; padding: 0 2rem;
   border-radius: 999px; border: 2px solid var(--b-border); background: var(--b-bg); color: var(--b-fg);
   font-family: var(--f-sans); font-size: 1.125rem; font-weight: 700; line-height: 1.2; text-decoration: none; text-align: center; cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.25s var(--ease); }
 .btn--lg { min-height: 60px; }
 .btn--md { min-height: 48px; padding: 0 1.5rem; font-size: 1rem; }
 .btn--primary { --b-border: var(--k-btn-outline, var(--k-accent)); }
@@ -50,6 +50,7 @@ h1, h2, h3, p { margin: 0; }
 .on-field .btn--primary { --h-bg: var(--k-paper); --h-fg: var(--k-ink); }
 .on-field .btn--ghost { --h-bg: var(--k-on-field); --h-fg: var(--k-field); }
 .btn:hover { background: var(--h-bg); color: var(--h-fg); border-color: var(--h-bg); }
+@media (hover: hover) { .btn:hover { transform: translateY(-2px); } }
 .btn:active { transform: translateY(1px); }
 /* Uitgeschakeld: zelfde kleuren bij hover, geen verplaatsing. */
 .btn[aria-disabled='true'] { --b-bg: var(--k-line); --b-fg: var(--k-muted); --b-border: var(--k-line); cursor: not-allowed; }
@@ -72,10 +73,20 @@ h1, h2, h3, p { margin: 0; }
 
 /* Tekstlink */
 .link-strong { font-size: 1.125rem; font-weight: 600; text-underline-offset: 6px; }
-.link-strong:hover { text-decoration-thickness: 3px; }
+.link-strong { transition: text-underline-offset 0.25s var(--ease); }
+.link-strong:hover { text-decoration-thickness: 3px; text-underline-offset: 9px; }
 /* Tikdoel: losse links en knoppen minimaal 44 px hoog (handoff v5.5, punt 4). */
 .link-strong { display: inline-flex; align-items: center; min-height: 44px; }
 .tag { display: inline-block; border: 1px solid currentColor; border-radius: 999px; padding: 0.5rem 1rem; }
+
+/* ---- Beweging bij scrollen: secties en kaartjes schuiven zacht in beeld (alleen opacity en transform, geen layoutverschuiving).
+   De klasse .rv zet het clientscript in Base.astro alleen op blokken die nog onder de vouw staan; zonder JavaScript, bij verminderde
+   beweging, in geautomatiseerde browsers en bij afdrukken blijft alles gewoon zichtbaar. */
+@media (prefers-reduced-motion: no-preference) {
+  .rv { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.8s var(--ease); transition-delay: var(--rv-d, 0s); }
+  .rv.rv-in { opacity: 1; transform: none; }
+}
+@media print { .rv { opacity: 1 !important; transform: none !important; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

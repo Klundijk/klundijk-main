@@ -9,10 +9,10 @@ export const theme = {
   paper: palette.paper,
 } as const;
 
-/** Afgeleide waarden, op build-tijd berekend (WCAG): geel voor "beter." op blauw. */
+/** Afgeleide waarden, op build-tijd berekend (WCAG): mintgroen (#00FFB9, 5,1:1) voor "beter." op blauw. */
 export const derived = {
   onField: onField(theme.field),
   accentText: accentText(theme.field, theme.accent),
 };
 
-export const themeCss = `:root{--k-field:${theme.field};--k-accent:${theme.accent};--k-ink:${theme.ink};--k-paper:${theme.paper};--k-on-field:${derived.onField};--k-accent-text:${derived.accentText};}`;
+export const themeCss = `:root{--k-field:${theme.field};--k-accent:${theme.accent};--k-ink:${theme.ink};--k-paper:${theme.paper};--k-on-field:${derived.onField};--k-accent-text:${derived.accentText};--k-error:${palette.coral};}`;

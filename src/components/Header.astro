@@ -28,6 +28,11 @@ const { phone, email } = site.contact;
     {site.nav.map((i) => <a href={i.href} aria-current={cur(inSection(i.href))}>{i.label}</a>)}
   </nav>
 
+  <!-- Zwevende menuknop: verschijnt zodra de kop uit beeld is (op elk scherm), opent hetzelfde menu. Alleen met JavaScript. -->
+  <button type="button" class="menu-fab" id="menu-fab" aria-expanded="false" aria-controls="menu" aria-haspopup="dialog" hidden>
+    <span class="menu-btn__icon" aria-hidden="true"></span>Menu
+  </button>
+
   <dialog id="menu" class="menu" aria-label="Menu" aria-modal="true">
     <div class="menu__bar">
       <span class="menu__brand"><span class="sr-only">{site.name}</span><Wordmark class="brand__mark" /></span>
@@ -63,24 +68,39 @@ const { phone, email } = site.contact;
 </header>
 
 <script>
-  // Mobiel menu als modale dialoog: showModal() zorgt voor focus-trap, inert achtergrond en Escape.
+  // Menu als modale dialoog: showModal() zorgt voor focus-trap, inert achtergrond en Escape. Twee openers: de knop in de kop
+  // (mobiel/tablet) en de zwevende knop (alle schermen, zodra de kop uit beeld is).
   const dlg = document.getElementById('menu') as HTMLDialogElement | null;
   const open = document.getElementById('menu-open') as HTMLButtonElement | null;
+  const fab = document.getElementById('menu-fab') as HTMLButtonElement | null;
   const close = document.getElementById('menu-close') as HTMLButtonElement | null;
   if (dlg && open && close && typeof dlg.showModal === 'function') {
     document.documentElement.classList.add('has-menu');
     open.hidden = false;
-    const desktop = matchMedia('(min-width: 1100px)');
+    let opener: HTMLButtonElement = open;
     const lock = (on: boolean) => document.documentElement.classList.toggle('menu-open', on);
-    const show = () => { dlg.showModal(); open.setAttribute('aria-expanded', 'true'); lock(true); close.focus(); };
+    const show = (from: HTMLButtonElement) => { opener = from; dlg.showModal(); from.setAttribute('aria-expanded', 'true'); lock(true); close.focus(); };
     const hide = () => { if (dlg.open) dlg.close(); };
-    open.addEventListener('click', show);
+    open.addEventListener('click', () => show(open));
     close.addEventListener('click', hide);
-    dlg.addEventListener('close', () => { open.setAttribute('aria-expanded', 'false'); lock(false); open.focus(); });
+    dlg.addEventListener('close', () => {
+      open.setAttribute('aria-expanded', 'false'); fab?.setAttribute('aria-expanded', 'false'); lock(false);
+      (opener.offsetParent || opener === fab ? opener : open).focus({ preventScroll: true });
+    });
     // Klik op een link in het paneel (ook een #anker op dezelfde pagina) sluit het paneel.
     dlg.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('a[href]')) hide(); });
-    // Breedte groeit tot desktop terwijl het paneel open staat: sluiten.
-    desktop.addEventListener('change', (e) => { if (e.matches) hide(); });
+
+    if (fab) {
+      fab.hidden = false;
+      fab.addEventListener('click', () => show(fab));
+      const header = document.querySelector('.site-header');
+      if (header && 'IntersectionObserver' in window) {
+        // De knop in de kop is zichtbaar zolang de kop in beeld is; daarna neemt de zwevende knop het over.
+        new IntersectionObserver(([en]) => fab.classList.toggle('is-visible', !en.isIntersecting), { rootMargin: '-40px 0px 0px 0px' }).observe(header);
+      } else {
+        addEventListener('scroll', () => fab.classList.toggle('is-visible', scrollY > 240), { passive: true });
+      }
+    }
   }
 </script>
 
@@ -130,6 +150,16 @@ const { phone, email } = site.contact;
   .menu__contact a { display: inline-flex; align-items: center; min-height: 44px; }
   .menu .btn { --h-bg: var(--k-paper); --h-fg: var(--k-ink); }
 
+  /* Zwevende menuknop: oranje pil rechtsboven, glijdt in zodra de kop uit beeld is. */
+  .menu-fab { position: fixed; z-index: 30; top: max(0.75rem, env(safe-area-inset-top)); right: max(var(--pad-x), env(safe-area-inset-right)); min-height: 48px; display: inline-flex; align-items: center; gap: 0.625rem;
+    background: var(--k-accent); color: var(--k-ink); border: 0; border-radius: 999px; padding: 0 1.25rem; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    box-shadow: 0 8px 24px rgb(14 14 18 / 0.22); opacity: 0; visibility: hidden; transform: translateY(-14px) scale(0.96); pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.4s var(--ease), visibility 0s linear 0.4s, background-color 0.2s ease, color 0.2s ease; }
+  .menu-fab[hidden] { display: none; }
+  .menu-fab.is-visible { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition-delay: 0s; }
+  .menu-fab:hover { background: var(--k-ink); color: var(--k-paper); }
+  :global(html.menu-open) .menu-fab { opacity: 0; visibility: hidden; }
+
   @media (prefers-reduced-motion: no-preference) {
     .menu[open] { animation: menu-in 250ms var(--ease); }
     @keyframes menu-in { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
@@ -138,7 +168,7 @@ const { phone, email } = site.contact;
   @media (min-width: 1100px) {
     .site-header { padding-block: 1.75rem; flex-wrap: nowrap; }
     .brand { --mark-h: 1.6rem; }
-    .menu-btn, .nav-fallback, .menu { display: none !important; }
+    .site-header > .menu-btn, .nav-fallback { display: none !important; }
     .nav-desktop { display: flex; align-items: center; gap: 2.25rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
     .nav-desktop a { text-decoration: none; display: inline-block; padding: 6px 0; border-bottom: 2px solid transparent; }
     .nav-desktop a:hover { border-bottom-color: currentColor; }
@@ -149,6 +179,13 @@ const { phone, email } = site.contact;
     .on-hero .cta:hover { background: var(--k-paper); color: var(--k-ink); }
     .site-header:not(.on-hero) .cta:hover { background: var(--k-ink); color: var(--k-paper); }
     .nav-desktop .cta:hover { transition-duration: 0.15s; }
+    .menu__bar, .menu__nav, .menu__foot { padding-inline: var(--pad-x); }
+    .menu__label { font-size: clamp(2.5rem, 4.4vw, 4rem); }
+    .menu__main { min-height: 84px; }
+    .menu__sub { display: grid; grid-template-columns: repeat(4, max-content); column-gap: 2.5rem; padding-left: 4rem !important; }
+    .menu__foot { flex-direction: row; align-items: center; justify-content: space-between; }
+    .menu__contact { gap: 2rem; align-items: center; }
+    .menu__foot .btn { width: auto; }
   }
 </style>
 <style is:global>

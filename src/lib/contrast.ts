@@ -16,16 +16,16 @@ export function ratio(a: string, b: string): number {
   return (l1 + 0.05) / (l2 + 0.05);
 }
 
-export const palette = { ink: '#0E0E12', paper: '#F3F1EA', white: '#FFFFFF', yellow: '#FFD400', accent: '#FF6A3D' };
-export const fieldOptions = ['#1F3BFF', '#FFD400', '#0B0B0F', '#0F4D3A'] as const;
+export const palette = { ink: '#0E0E12', paper: '#F3F1EA', white: '#FFFFFF', mint: '#00FFB9', coral: '#FFD0C4', accent: '#FF6A3D' };
+export const fieldOptions = ['#1F3BFF', '#00FFB9', '#0B0B0F', '#0F4D3A'] as const;
 
 /** Tekstkleur op het veld: wit of inkt, op basis van luminantiedrempel 0,4 (zoals in de handoff). */
 export function onField(field: string): string {
   return luminance(field) > 0.4 ? palette.ink : palette.white;
 }
-/** Accent als >= 3:1 op het veld; anders geel (>= 3:1); anders de tekstkleur op het veld. */
+/** Accent als >= 3:1 op het veld; anders mintgroen (>= 3:1); anders de tekstkleur op het veld. */
 export function accentText(field: string, accent = palette.accent): string {
   if (ratio(accent, field) >= 3) return accent;
-  if (ratio(palette.yellow, field) >= 3) return palette.yellow;
+  if (ratio(palette.mint, field) >= 3) return palette.mint;
   return onField(field);
 }

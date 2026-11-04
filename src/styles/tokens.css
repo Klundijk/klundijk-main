@@ -4,7 +4,7 @@
 :root {
   --k-field: #1f3bff;
   --k-accent: #ff6a3d;
-  --k-accent-text: #ffd400;
+  --k-accent-text: #00ffb9;
   --k-on-field: #ffffff;
   --k-ink: #0e0e12;
   --k-paper: #f3f1ea;
@@ -13,7 +13,7 @@
   --k-muted: #57534b;
   --k-muted-dark: #b9b5aa;
   --k-footer-line: #3a3a42;
-  --k-error: var(--k-accent-text); /* foutkleur op het veld: geel (4,69:1), altijd met icoon + tekst */
+  --k-error: #ffd0c4; /* foutkleur op het veld: lichtkoraal (4,8:1), altijd met icoon + tekst; bewust niet mint (groen leest als succes) */
 
   --f-sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --f-serif: 'Instrument Serif', Georgia, serif;
