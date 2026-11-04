@@ -15,6 +15,7 @@ heroImage:
 promise: 'Nieuwe naam, nieuwe locatie: de online uitstraling opnieuw op orde.'
 client: Auto Restyle Noord
 sector: Auto restyling
+year: 2026
 scope: [Nieuwe naam, Huisstijl, Website, Online inrichting]
 challengeHeading: Een nieuwe naam en een nieuwe locatie.
 challenge: 'Auto Restyle Noord is specialist in auto restyling. Door een nieuwe naam en verhuizing moest de online uitstraling opnieuw kloppen. Niet alleen het logo en de website moesten vernieuwd worden, ook online gegevens en zichtbaarheid moesten zorgvuldig worden aangepast.'

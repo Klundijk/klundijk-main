@@ -18,19 +18,20 @@ DirectorySlash Off
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+  # Redirects zijn absoluut op basis van de aangevraagde host, zodat ze nooit naar een ander domein (zoals het testsubdomein) wijzen.
   # Oude Webflow-adressen van klundijk.com naar de nieuwe pagina's (301, zodat zoekmachines en bestaande links meeverhuizen).
   # Controleer bij livegang met de lijst in Notion 04 of er nog adressen bij moeten komen.
-  RewriteRule ^projecten/?$ /werk [R=301,L]
-  RewriteRule ^projecten/kraaijav/?$ /werk/kraaij-av [R=301,L]
-  RewriteRule ^projecten/auto-restyle-noord/?$ /werk/auto-restyle-noord [R=301,L]
-  RewriteRule ^branding/?$ /wat-we-doen/merk-identiteit [R=301,L]
-  RewriteRule ^website/?$ /wat-we-doen/websites-digitale-ervaringen [R=301,L]
-  RewriteRule ^webshops/?$ /wat-we-doen/webshops-commerce [R=301,L]
-  RewriteRule ^klundijk/?$ /over [R=301,L]
-  RewriteRule ^blog/?$ /werk [R=301,L]
+  RewriteRule ^projecten/?$ https://%{HTTP_HOST}/werk [R=301,L]
+  RewriteRule ^projecten/kraaijav/?$ https://%{HTTP_HOST}/werk/kraaij-av [R=301,L]
+  RewriteRule ^projecten/auto-restyle-noord/?$ https://%{HTTP_HOST}/werk/auto-restyle-noord [R=301,L]
+  RewriteRule ^branding/?$ https://%{HTTP_HOST}/wat-we-doen/merk-identiteit [R=301,L]
+  RewriteRule ^website/?$ https://%{HTTP_HOST}/wat-we-doen/websites-digitale-ervaringen [R=301,L]
+  RewriteRule ^webshops/?$ https://%{HTTP_HOST}/wat-we-doen/webshops-commerce [R=301,L]
+  RewriteRule ^klundijk/?$ https://%{HTTP_HOST}/over [R=301,L]
+  RewriteRule ^blog/?$ https://%{HTTP_HOST}/werk [R=301,L]
 
   # /werk/ wordt /werk (behalve de root).
-  RewriteRule ^(.+)/$ /$1 [L,R=301]
+  RewriteRule ^(.+)/$ https://%{HTTP_HOST}/$1 [L,R=301]
 
   # Met DirectorySlash Off serveert Apache bij /werk niet vanzelf werk/index.html (dat geeft 403).
   # Daarom intern doorsturen naar de index.html in die map.
