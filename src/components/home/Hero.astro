@@ -47,10 +47,10 @@ const cardHref = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
 <style>
   :global(:root) { --hero-bg: var(--k-field); --hero-fg: var(--k-on-field); --hero-muted: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
   .hero { background: var(--hero-bg); color: var(--hero-fg); transition: background 0.9s ease, color 0.9s ease;
-    padding: clamp(6.5rem, 10.3vw, 9.25rem) var(--pad-x) clamp(3rem, 6.1vw, 5.5rem);
+    padding: clamp(6rem, 7.5vw, 7rem) var(--pad-x) clamp(3rem, 6.1vw, 5.5rem);
     display: flex; flex-direction: column; gap: clamp(2rem, 3.34vw, 3rem); overflow: clip; }
 
-  .hero__top { position: relative; display: flex; flex-direction: column; gap: clamp(1.5rem, 2.2vw, 2rem); min-height: clamp(12.5rem, 27.8vw, 25rem); }
+  .hero__top { position: relative; display: flex; flex-direction: column; gap: clamp(1.5rem, 2.2vw, 2rem); justify-content: flex-end; min-height: clamp(9rem, 18vw, 16rem); }
   .hero__eyebrow { color: var(--hero-muted); letter-spacing: 0.08em; font-size: var(--t-mono); transition: color 0.9s ease; }
   .hero__stage { position: relative; }
   .hero__title { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: clamp(1rem, 2.2vw, 2rem); font-weight: 800; font-stretch: 125%;
