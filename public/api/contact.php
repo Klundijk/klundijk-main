@@ -6,6 +6,8 @@
 //   <?php return ['api_key' => 're_...', 'from' => 'Klundijk website <website@klundijk.com>', 'to' => 'info@klundijk.com'];
 // Zonder configuratie antwoordt dit script met 503, zodat de site de foutmelding toont en er niets verloren lijkt te gaan.
 //
+// Compatibel met PHP 7.2 (de testserver): geen pijlfuncties of andere PHP 7.4+-syntax.
+//
 // Aanroep: POST (multipart of urlencoded) met naam, bedrijf, email, vraagstuk en het verborgen spamveld "website".
 // Met "Accept: application/json" (het formulier-script) komt er JSON terug; zonder (formulier zonder JavaScript) een kleine pagina.
 
@@ -96,14 +98,14 @@ $bucket = rtrim($cfg['rate_dir'] ?? sys_get_temp_dir(), '/') . '/klundijk-contac
 $now = time();
 $hits = [];
 if (is_file($bucket)) {
-    $hits = array_values(array_filter((array) json_decode((string) @file_get_contents($bucket), true), static fn ($t) => is_int($t) && $t > $now - 600));
+    $hits = array_values(array_filter((array) json_decode((string) @file_get_contents($bucket), true), static function ($t) use ($now) { return is_int($t) && $t > $now - 600; }));
 }
 if (count($hits) >= 5) {
     respond($wantsJson, 429, false, 'rate', 'Er zijn net al meerdere berichten verstuurd. Probeer het over een paar minuten opnieuw.');
 }
 
 // Bericht opstellen.
-$e = static fn (string $s): string => htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+$e = static function (string $s): string { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); };
 $subject = 'Nieuw bericht via de website: ' . $naam;
 $text = "Nieuw bericht via klundijk.com\n\nNaam: $naam\nBedrijf: " . ($bedrijf !== '' ? $bedrijf : '-') . "\nE-mail: $email\n\nBericht:\n$vraag\n";
 $html = '<p><strong>Nieuw bericht via klundijk.com</strong></p>'
