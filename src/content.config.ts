@@ -48,6 +48,8 @@ const cases = defineCollection({
       result: z.string().optional(),
       metrics: z.array(z.object({ label: z.string(), value: z.string() })).max(3).optional(),
       quote: z.object({ text: z.string(), author: z.string(), role: z.string() }).optional(),
+      soon: z.boolean().default(false).describe('True = project in uitvoering: kaart toont "Binnenkort" met logo (of merknaam) in plaats van een beeld'),
+      logo: image.optional().describe('Logo van de klant (bij soon: true), bij voorkeur SVG of PNG met transparante achtergrond'),
       featured: z.boolean().default(false),
       draft: z.boolean().default(false),
       placeholder: z.boolean().default(false).describe('True = niet publiceren als casepagina (nog niet compleet of voorbeeldinhoud)'),
