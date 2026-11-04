@@ -112,7 +112,7 @@ const { phone, email } = site.contact;
   .brand, .menu__brand { --mark-h: 1.3rem; }
 
   /* Zonder JS (en tot 'has-menu' gezet is): links als rij onder de kop. */
-  .nav-fallback { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0 1.5rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
+  .nav-fallback { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 0 1.5rem; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.04em; text-transform: uppercase; }
   .nav-fallback a { text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; border-bottom: 2px solid transparent; }
   .nav-fallback a[aria-current='page'] { border-bottom-color: currentColor; }
   :global(html.has-menu) .nav-fallback { display: none; }
@@ -120,12 +120,12 @@ const { phone, email } = site.contact;
 
   /* Menuknop (gesloten: papier of hero) en sluitknop (veld): ronde rand in de tekstkleur. */
   .menu-btn { min-height: 48px; display: inline-flex; align-items: center; gap: 0.625rem; background: transparent; color: inherit; border: 1.5px solid currentColor;
-    border-radius: 999px; padding: 0 1.125rem; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    border-radius: 999px; padding: 0 1.125rem; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease; }
   .menu-btn[hidden] { display: none; }
   .menu-btn:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
   .menu-btn__icon { display: inline-block; width: 16px; height: 10px; border-block: 2px solid currentColor; }
-  .menu-btn__x { font-size: 1.25rem; line-height: 1; }
+  .menu-btn__x { font-size: var(--t-body); line-height: 1; }
 
   /* Menupaneel: volledig scherm in veldkleur. */
   .menu { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; max-height: none; margin: 0; padding: 0; border: 0;
@@ -139,20 +139,20 @@ const { phone, email } = site.contact;
   .menu__nav > ul { border-bottom: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); }
   .menu__nav > ul > li { border-top: 1px solid color-mix(in srgb, var(--k-on-field) 35%, transparent); }
   .menu__main { display: flex; align-items: baseline; gap: 1rem; min-height: 60px; padding: 0.625rem 0; text-decoration: none; }
-  .menu__num { font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.08em; color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
-  .menu__label { font-weight: 800; font-stretch: 112%; font-size: 2.125rem; line-height: 1.05; letter-spacing: -0.03em; }
+  .menu__num { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; color: color-mix(in srgb, var(--k-on-field) 78%, transparent); }
+  .menu__label { font-weight: 800; font-stretch: 112%; font-size: var(--t-card); line-height: 1.05; letter-spacing: -0.03em; }
   .menu__sub { padding: 0 0 0.75rem 2.25rem !important; }
-  .menu__sub a { display: flex; align-items: center; min-height: 44px; font-size: 1.125rem; font-weight: 600; text-decoration: none; }
+  .menu__sub a { display: flex; align-items: center; min-height: 44px; font-size: var(--t-small); font-weight: 600; text-decoration: none; }
   .menu__nav a[aria-current='page'] .menu__label, .menu__sub a[aria-current='page'] { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
   .menu__foot { margin-top: auto; padding: 1.25rem var(--pad-x); display: flex; flex-direction: column; gap: 0.875rem; }
   .menu__foot .btn { width: 100%; }
-  .menu__contact { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; }
+  .menu__contact { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 1rem; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.04em; }
   .menu__contact a { display: inline-flex; align-items: center; min-height: 44px; }
   .menu .btn { --h-bg: var(--k-paper); --h-fg: var(--k-ink); }
 
   /* Zwevende menuknop: oranje pil rechtsboven, glijdt in zodra de kop uit beeld is. */
   .menu-fab { position: fixed; z-index: 30; top: max(0.75rem, env(safe-area-inset-top)); right: max(var(--pad-x), env(safe-area-inset-right)); min-height: 48px; display: inline-flex; align-items: center; gap: 0.625rem;
-    background: var(--k-accent); color: var(--k-ink); border: 0; border-radius: 999px; padding: 0 1.25rem; font-family: var(--f-mono); font-size: 0.8125rem; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+    background: var(--k-accent); color: var(--k-ink); border: 0; border-radius: 999px; padding: 0 1.25rem; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
     box-shadow: 0 8px 24px rgb(14 14 18 / 0.22); opacity: 0; visibility: hidden; transform: translateY(-14px) scale(0.96); pointer-events: none;
     transition: opacity 0.3s ease, transform 0.4s var(--ease), visibility 0s linear 0.4s, background-color 0.2s ease, color 0.2s ease; }
   .menu-fab[hidden] { display: none; }
@@ -169,7 +169,7 @@ const { phone, email } = site.contact;
     .site-header { padding-block: 1.75rem; flex-wrap: nowrap; }
     .brand { --mark-h: 1.6rem; }
     .site-header > .menu-btn, .nav-fallback { display: none !important; }
-    .nav-desktop { display: flex; align-items: center; gap: 2.25rem; font-family: var(--f-mono); font-size: 0.875rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .nav-desktop { display: flex; align-items: center; gap: 2.25rem; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.04em; text-transform: uppercase; }
     .nav-desktop a { text-decoration: none; display: inline-block; padding: 6px 0; border-bottom: 2px solid transparent; }
     .nav-desktop a:hover { border-bottom-color: currentColor; }
     .nav-desktop a[aria-current='page'] { border-bottom-color: currentColor; }
@@ -180,7 +180,7 @@ const { phone, email } = site.contact;
     .site-header:not(.on-hero) .cta:hover { background: var(--k-ink); color: var(--k-paper); }
     .nav-desktop .cta:hover { transition-duration: 0.15s; }
     .menu__bar, .menu__nav, .menu__foot { padding-inline: var(--pad-x); }
-    .menu__label { font-size: clamp(2.5rem, 4.4vw, 4rem); }
+    .menu__label { font-size: var(--t-display); }
     .menu__main { min-height: 84px; }
     .menu__sub { display: flex; flex-wrap: wrap; column-gap: 2.5rem; padding-left: 4rem !important; }
     .menu__foot { flex-direction: row; align-items: center; justify-content: space-between; }

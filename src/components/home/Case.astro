@@ -43,7 +43,7 @@ const cols = H.cols.filter((c) => c.v || showPlaceholders);
   .case__titles { display: flex; flex-direction: column; gap: 1.25rem; }
   .case__kicker { margin: 0; color: var(--k-muted-dark); letter-spacing: 0.08em; }
   .case__h { margin: 0; max-width: 56rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; }
-  @media (min-width: 768px) { .case__h { font-stretch: 118%; line-height: 0.98; } }
+  @media (min-width: 768px) { .case__h { font-stretch: 112%; line-height: 0.98; } }
   .case__more { order: 3; flex: none; }
   @media (max-width: 767px) { .case__head { display: contents; } .case__titles { order: 0; } .case__more { order: 5; } }
   .case__img { width: 100%; height: clamp(18.75rem, 36.1vw, 32.5rem); object-fit: cover; border-radius: 24px; }
@@ -52,13 +52,13 @@ const cols = H.cols.filter((c) => c.v || showPlaceholders);
   @media (min-width: 1100px) { .cols { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); } }
   .col { display: flex; flex-direction: column; gap: 0.75rem; }
   @media (min-width: 768px) { .col { border-top: 1px solid var(--k-paper); padding-top: 1.25rem; } }
-  .col dt { color: var(--k-muted-dark); letter-spacing: 0.1em; }
-  .col dd { margin: 0; font-size: clamp(1.0625rem, 1.25vw, 1.125rem); line-height: 1.5; }
+  .col dt { color: var(--k-muted-dark); letter-spacing: 0.08em; }
+  .col dd { margin: 0; font-size: var(--t-small); line-height: 1.5; }
   .col dd.is-ph { color: var(--k-muted-dark); }
   .slot { border: 1px dashed var(--k-paper); border-radius: 20px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.625rem; }
   @media (min-width: 1100px) { .slot { flex-direction: row; justify-content: space-between; align-items: center; gap: 2rem; padding: 1.75rem 2rem; } .slot__k, .slot__n { max-width: 16.25rem; } .slot__t { flex: 1; } }
   .slot p { margin: 0; }
   .slot__k { color: var(--k-muted-dark); }
-  .slot__t { font-weight: 800; font-stretch: 118%; font-size: clamp(1.5rem, 2.22vw, 2rem); line-height: 1.1; letter-spacing: -0.03em; }
-  .slot__n { color: var(--k-muted-dark); font-size: 0.9375rem; line-height: 1.4; }
+  .slot__t { font-weight: 800; font-stretch: 112%; font-size: var(--t-card); line-height: 1.1; letter-spacing: -0.03em; }
+  .slot__n { color: var(--k-muted-dark); font-size: var(--t-small); line-height: 1.4; }
 </style>

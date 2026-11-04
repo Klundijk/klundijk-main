@@ -19,18 +19,21 @@
   --f-serif: 'Instrument Serif', Georgia, serif;
   --f-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* Fluïde typografie: desktopontwerp 1440 px, mobiel 390 px. Gebouwde curve = de spec (handoff X v5.5):
-     kop (--t-hero)  52 / 79 / 113 / 148 px op 390 / 768 / 1100 / 1440
-     tussenkop (--t-display) 36 px op 390 · subkop (--t-lead) 24 px op 390 · hubtitel (--t-hub) 44 px mobiel, 92 px desktop. */
+  /* Typografie: één rustige schaal van negen stappen, fluïde tussen 390 px (mobiel) en 1440 px (desktop).
+     Koppen: Archivo 800, uitgerekt (112%); alleen de hero is breder (125%). Lopende tekst en knoppen: Archivo 400/600.
+     Labels: DM Mono, hoofdletters, één maat. Instrument Serif cursief alleen voor het accentwoord "beter.".
+       hero 52 -> 148 · h1 44 -> 96 · display (h2) 36 -> 72 · row 28 -> 48 · card 22 -> 30
+       lead 19 -> 24 · body 17 -> 20 · small 17 -> 18 · mono (label) 13 */
   --t-hero: clamp(max(2rem, min(3.25rem, 13.33vw)), 10.28vw, 9.25rem);     /* 52 -> 148 px */
   --t-hero-serif: 1.12em;
+  --t-h1: clamp(max(2rem, min(2.75rem, 11.28vw)), 6.67vw, 6rem);           /* 44 -> 96 px */
   --t-display: clamp(max(1.75rem, min(2.25rem, 9.23vw)), 5vw, 4.5rem);        /* 36 -> 72 px */
-  --t-hub: clamp(max(2rem, min(2.75rem, 11.28vw)), 6.67vw, 6rem);           /* 44 -> 96 px */
   --t-row: clamp(max(1.5rem, min(1.75rem, 7.18vw)), 3.34vw, 3rem);           /* 28 -> 48 px */
-  --t-lead: clamp(max(1.25rem, min(1.5rem, 6.15vw)), 3.06vw, 2.75rem);        /* 24 -> 44 px */
-  --t-card: clamp(1.375rem, 1.74vw, 1.5625rem);
-  --t-body: clamp(1.0625rem, 1.4vw, 1.25rem);      /* 17 -> 20 px */
-  --t-mono: 0.8125rem;
+  --t-card: clamp(1.375rem, 2.08vw, 1.875rem);                              /* 22 -> 30 px */
+  --t-lead: clamp(1.1875rem, 1.67vw, 1.5rem);                               /* 19 -> 24 px */
+  --t-body: clamp(1.0625rem, 1.4vw, 1.25rem);                               /* 17 -> 20 px */
+  --t-small: clamp(1.0625rem, 1.25vw, 1.125rem);                            /* 17 -> 18 px */
+  --t-mono: 0.8125rem;                                                      /* 13 px */
 
   /* Onder 390 px (ingezoomd of grote tekst) krimpen de koppen mee, zodat niets zijwaarts uitsteekt. Op 390 px en groter ongewijzigd. */
   --pad-x: clamp(1.25rem, 4.45vw, 4rem);           /* 20 -> 64 px */

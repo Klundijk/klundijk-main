@@ -12,8 +12,8 @@ const pair = 'Digitaal kan beter. — Dus maken we het beter. — ';
 <style>
   .marquee { background: var(--k-ink); color: var(--k-paper); overflow: hidden; position: relative; padding: 2.25rem 0 1.5rem; }
   /* Snelheid gelijk aan het ontwerp: één "paar" zinnen per 40 s (twee paren per helft, dus 80 s). */
-  .marquee__track { display: flex; width: max-content; animation: mq 80s linear infinite; font-family: var(--f-sans); font-weight: 800; font-stretch: 125%;
-    font-size: clamp(3.5rem, 8.33vw, 7.5rem); letter-spacing: -0.04em; line-height: 1; text-transform: uppercase; white-space: nowrap; }
+  .marquee__track { display: flex; width: max-content; animation: mq 80s linear infinite; font-family: var(--f-sans); font-weight: 800; font-stretch: 112%;
+    font-size: var(--t-h1); letter-spacing: -0.04em; line-height: 1; text-transform: uppercase; white-space: nowrap; }
   .marquee:hover .marquee__track, .marquee:focus-within .marquee__track, .marquee__track.is-paused { animation-play-state: paused; }
   @keyframes mq { to { transform: translateX(-50%); } }
   @media (min-width: 768px) { .marquee { padding: 2.5rem 0 2.25rem; } }
