@@ -1,4 +1,5 @@
 ---
+import MailLink from '../MailLink.astro';
 // Contact op de homepage (bord X · Home): kop, uitleg en directe gegevens links, het formulier rechts.
 import ContactForm from '../ContactForm.astro';
 import { site, showPlaceholders } from '../../data/site';
@@ -12,7 +13,7 @@ const tel = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
     {(phone || email || showPlaceholders) && (
       <p class="ct__line">
         {phone && tel ? <a href={tel}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
-        {email ? <a href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+        {email ? <MailLink email={email} /> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
       </p>
     )}
   </div>

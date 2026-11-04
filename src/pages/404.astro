@@ -1,4 +1,5 @@
 ---
+import MailLink from '../components/MailLink.astro';
 // 404 (bord X · 404, 1440 en 390): blauw veld, decoratieve 404, snelle links. Concepttekst: SEO & content beoordeelt.
 // Status 404 en noindex komen van de host (Vercel serveert 404.html met status 404); meta noindex staat hier ook.
 import Base from '../layouts/Base.astro';
@@ -50,7 +51,7 @@ const { phone, email } = site.contact;
       <h2 id="ask-h" class="ask__h">Vertel Levi wat je zocht.</h2>
     </div>
     <div class="ask__links">
-      {email ? <a class="mono" href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+      {email ? <MailLink email={email} class="mono" /> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
       {phone ? <a class="mono" href={`tel:${phone.replace(/[^+\d]/g, '')}`}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
     </div>
     {showPlaceholders && <p class="flag mono">Concepttekst · SEO &amp; content beoordeelt</p>}

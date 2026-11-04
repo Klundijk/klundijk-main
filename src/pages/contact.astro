@@ -1,4 +1,5 @@
 ---
+import MailLink from '../components/MailLink.astro';
 // Contactpagina (bord X · Contact v5.3): hero op veldkleur met formulier en direct contact, daaronder "Zo gaat het verder".
 // Geen contactband op deze pagina (zou dubbelop zijn), wel de footer.
 import Base from '../layouts/Base.astro';
@@ -34,7 +35,7 @@ const steps = [
         <div class="direct__txt">
           <h2 id="direct-h" class="direct__t">Je praat direct met Levi.</h2>
           {phone && tel ? <a class="mono" href={tel}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
-          {email ? <a class="mono" href={`mailto:${email}`}>{email}</a> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
+          {email ? <MailLink email={email} class="mono" /> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
           <span class="mono place">{location}</span>
         </div>
       </aside>
