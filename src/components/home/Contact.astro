@@ -3,14 +3,14 @@ import MailLink from '../MailLink.astro';
 // Contact op de homepage (bord X · Home): kop, uitleg en directe gegevens links, het formulier rechts.
 import ContactForm from '../ContactForm.astro';
 import { site, showPlaceholders } from '../../data/site';
-import c from '../../data/teksten/contact.json';
+import { HOME_TEXT as t } from '../../data/home';
 const { phone, email } = site.contact;
 const tel = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
 ---
 <section class="ct on-field" id="contact" aria-labelledby="ct-h">
   <div class="ct__intro">
-    <h2 id="ct-h" class="ct__h">{c.title}</h2>
-    <p class="ct__p">{c.lead}</p>
+    <h2 id="ct-h" class="ct__h">{t.contact.title}</h2>
+    <p class="ct__p">{t.contact.lead}</p>
     {(phone || email || showPlaceholders) && (
       <p class="ct__line">
         {phone && tel ? <a href={tel}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}

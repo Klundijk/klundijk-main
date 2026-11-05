@@ -1,25 +1,26 @@
 ---
-// Proces (bord X · Home): zes stappen. Kies een stap en de illustratie wordt per fase "beter".
-// Zonder JavaScript zijn alle zes stappen een gewone lijst met uitleg.
+// Proces (bord X · Home): vier fasen. Kies een fase en de illustratie wordt per fase "beter".
+// Zonder JavaScript zijn alle fasen een gewone lijst met uitleg.
 import { STEPS, PROCES_ART } from '../../data/home';
 import { blockStyles } from '../../lib/stage';
-import { principlesHeading, procesKicker } from '../../data/werkwijze';
+import { principlesHeading, procesKicker, procesIntro, werkwijzeHref, werkwijzeMeer } from '../../data/werkwijze';
 const stages = STEPS.map((s) => blockStyles(PROCES_ART, s.t));
 ---
 <section class="proc" aria-labelledby="pr-h">
   <div class="proc__head">
     <p class="mono proc__kicker">{procesKicker}</p>
     <h2 id="pr-h" class="proc__h">{principlesHeading}</h2>
+    <p class="proc__intro">{procesIntro}</p>
   </div>
   <div class="proc__grid">
     <div class="proc__list" data-proc>
       <ol class="steps">
         {STEPS.map((s, i) => (
-          <li class="step" data-step data-text={s.text} data-role={s.role}>
+          <li class="step" data-step data-text={s.text} data-role={s.kop}>
             <button type="button" class="step__btn" aria-pressed={i === 0 ? 'true' : 'false'} aria-describedby="proc-text" hidden>
               <span class="mono step__n">{String(i + 1).padStart(2, '0')}</span><span class="step__t">{s.title}</span>
             </button>
-            <p class="step__static"><span class="mono step__n">{String(i + 1).padStart(2, '0')}</span> <strong>{s.title}</strong><br />{s.text}</p>
+            <p class="step__static"><span class="mono step__n">{String(i + 1).padStart(2, '0')}</span> <strong>{s.title}</strong><br />{s.kop} {s.text}</p>
           </li>
         ))}
       </ol>
@@ -31,10 +32,11 @@ const stages = STEPS.map((s) => blockStyles(PROCES_ART, s.t));
           {stages[0].map((s, k) => <i class="blk" style={s} data-s={JSON.stringify(stages.map((st) => st[k]))}></i>)}
         </div>
       </div>
-      <div class="proc__meta mono"><span data-no>Fase 1 van 6</span><span data-role>{STEPS[0].role}</span></div>
+      <div class="proc__meta mono"><span data-no>Fase 1 van {STEPS.length}</span><span data-role>{STEPS[0].kop}</span></div>
       <div class="proc__bar" aria-hidden="true">{STEPS.map((_, i) => <i data-bar style={`opacity:${i === 0 ? 1 : 0.3}`}></i>)}</div>
     </div>
   </div>
+  <p class="proc__more"><a class="link-strong" href={werkwijzeHref}>{werkwijzeMeer}</a></p>
 </section>
 <script>
   const root = document.querySelector<HTMLElement>('[data-proc]');
@@ -66,6 +68,8 @@ const stages = STEPS.map((s) => blockStyles(PROCES_ART, s.t));
   .proc__kicker { margin: 0; color: var(--k-muted); letter-spacing: 0.08em; }
   .proc__h { margin: 0; max-width: 62rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; }
   @media (min-width: 768px) { .proc__h { font-stretch: 112%; line-height: 0.98; } }
+  .proc__intro { margin: 0; max-width: 40rem; font-size: var(--t-body); line-height: 1.5; }
+  .proc__more { margin: 0; }
   .proc__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   .proc__list { display: contents; }
   .steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.625rem; }
@@ -86,7 +90,7 @@ const stages = STEPS.map((s) => blockStyles(PROCES_ART, s.t));
   .stage { position: relative; container-type: inline-size; width: min(94cqw, calc(88cqh * 1.4167)); aspect-ratio: 340 / 240; }
   .blk { position: absolute; display: block; transition: left 0.9s var(--ease), top 0.9s var(--ease), width 0.9s var(--ease), height 0.9s var(--ease), background-color 0.9s var(--ease), border-radius 0.9s var(--ease), transform 0.9s var(--ease); }
   .proc__meta { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; color: var(--k-muted); font-size: var(--t-mono); }
-  .proc__bar { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.5rem; }
+  .proc__bar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; }
   .proc__bar i { display: block; height: 6px; background: var(--k-ink); transition: opacity 0.4s; }
   /* Mobiel: eerst de illustratie, dan voortgang, dan de stappen en de uitleg (volgorde zoals in het ontwerp). */
   .proc__view { order: -1; }

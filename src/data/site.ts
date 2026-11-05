@@ -6,6 +6,9 @@ export const site = {
   name: 'Klundijk',
   tagline: i.tagline,
   description: i.description,
+  // Aparte omschrijving voor Organization JSON-LD (los van de meta description); sameAs alleen met bevestigde, officiële profielen.
+  organizationDescription: i.organizationDescription,
+  sameAs: ((i as { sameAs?: string[] }).sameAs ?? []).filter(Boolean),
   primaryCta: { label: i.knoppen.primair, href: '/contact' },
   secondaryCta: { label: i.knoppen.secundair, href: '/werk' },
   commerceCta: { label: i.knoppen.kennismaking, href: '/contact' },

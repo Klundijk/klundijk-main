@@ -1,16 +1,16 @@
 {
   "seo": {
-    "title": "Wat we doen",
-    "description": "Merk, websites, webshops en slimme digitale processen: waarvoor je Klundijk inschakelt."
+    "title": "Websites, webshops, merk & digitale processen | Klundijk",
+    "description": "Webshops, websites, merkidentiteit, SEO, automatisering en digitale optimalisatie. We beginnen bij je vraagstuk en kiezen daarna de aanpak die past."
   },
   "eyebrow": "Wat we doen",
   "title": [
     "Vier terreinen.",
     "Eén aanspreekpunt."
   ],
-  "lead": "We helpen met webshops, websites, groei en slimme processen en merk. We beginnen bij je vraagstuk, adviseren eerst en kiezen daarna de techniek die past.",
+  "lead": "We werken aan webshops, websites, merkidentiteit en digitale groei en processen. We beginnen bij je vraagstuk, adviseren eerst en kiezen daarna de techniek die past.",
   "commerce": {
-    "badge": "Zwaartepunt",
+    "badge": "Uitgelicht",
     "lead": "Je webshop of digitale omgeving is ingewikkelder geworden dan nodig. Dan brengen we techniek, productstructuur, beheer, SEO en klantreis terug naar een logisch geheel.",
     "topics": [
       "Nieuwe webshops",
@@ -22,7 +22,7 @@
   },
   "rows": {
     "websites-digitale-ervaringen": {
-      "text": "Websites, landingspagina's en digitale omgevingen die duidelijk maken wie je bent en bezoekers helpen verder te gaan.",
+      "text": "Websites, redesigns, landingspagina's en digitale omgevingen die duidelijk maken wie je bent en bezoekers helpen verder te gaan.",
       "pills": [
         "Boodschap & structuur",
         "Ontwerp & UX",
@@ -31,7 +31,7 @@
       "example": "auto-restyle-noord"
     },
     "groei-slimme-processen": {
-      "text": "Optimalisatie, analytics, SEO, conversie, koppelingen, automatisering en passende AI-toepassingen na een goede diagnose.",
+      "text": "SEO, analytics, conversie, koppelingen, automatisering en passende AI-toepassingen nadat duidelijk is waar de echte winst zit.",
       "pills": [
         "Analytics & SEO",
         "Conversie",

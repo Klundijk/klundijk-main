@@ -10,9 +10,9 @@ import Proces from '../components/home/Proces.astro';
 import Over from '../components/home/Over.astro';
 import Klanten from '../components/home/Klanten.astro';
 import Contact from '../components/home/Contact.astro';
-import { site } from '../data/site';
+import { HOME_TEXT as t } from '../data/home';
 ---
-<Base description={site.description} heroHeader contactBand={false}>
+<Base title={t.seo.title} description={t.seo.description} heroHeader contactBand={false}>
   <noscript slot="head"><style>.wpanel:not([data-open]) { grid-template-rows: 1fr !important; visibility: visible !important; } .wpanel:not([data-open]) .wcard { opacity: 1 !important; transform: none !important; }</style></noscript>
   <Hero />
   <Werk />

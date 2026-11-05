@@ -17,6 +17,9 @@ import { showPlaceholders } from '../../data/site';
     <p class="mono over__kicker">{O.kicker}</p>
     <h2 id="over-h" class="over__h">{O.title}</h2>
     <p class="over__p">{O.text}</p>
+    <ul class="over__list">
+      {O.punten.map((p) => <li><h3 class="over__pt">{p.title}</h3><p>{p.text}</p></li>)}
+    </ul>
     <a class="link-strong" href="/over">{O.cta}</a>
   </div>
 </section>
@@ -42,5 +45,10 @@ import { showPlaceholders } from '../../data/site';
     .over__tilt { margin: 0.75rem 0.75rem 0; }
     .over__h { font-size: var(--t-display); }
   }
+  .over__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1fr); align-self: stretch; }
+  .over__list li { border-top: 2px solid var(--k-ink); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .over__list p { margin: 0; color: var(--k-muted); font-size: var(--t-small); line-height: 1.5; }
+  .over__pt { margin: 0; font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); line-height: 1.05; letter-spacing: -0.03em; }
+  @media (min-width: 768px) { .over__list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; } }
   .over--solo .over__txt { max-width: 62rem; }
 </style>

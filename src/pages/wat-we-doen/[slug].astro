@@ -4,9 +4,9 @@ import { dims } from '../../lib/images';
 // Blokken zonder inhoud worden niet getoond; conceptteksten krijgen alleen in dev een badge.
 import Base from '../../layouts/Base.astro';
 import WorkCard from '../../components/WorkCard.astro';
+import WerkwijzeKort from '../../components/WerkwijzeKort.astro';
 import { getServices, getWorkItems } from '../../lib/content';
 import { site, showPlaceholders } from '../../data/site';
-import { principles, principlesHeading, steps, werkwijzeHref, werkwijzeMeer } from '../../data/werkwijze';
 
 export async function getStaticPaths() {
   const services = await getServices();
@@ -63,23 +63,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     </section>
   )}
 
-  <section class="block block--rule wrap-full" aria-labelledby="how-h">
-    <p class="mono kicker--dark">Hoe we werken</p>
-    <h2 id="how-h" class="h2">{principlesHeading}</h2>
-    <div class="principles">
-      {principles.map((p) => (
-        <div class="principle"><h3 class="principle__t">{p.title}</h3><p>{p.text}</p></div>
-      ))}
-    </div>
-  </section>
-
-  <section class="steps-block wrap-full" aria-labelledby="steps-h">
-    <p class="mono kicker--dark" id="steps-h">Werkwijze in zes stappen</p>
-    <ol class="steps">
-      {steps.map((t, i) => <li><span class="mono kicker--dark">{num(i)}</span><span class="step__t">{t}</span></li>)}
-    </ol>
-    <a class="link-strong" href={werkwijzeHref}>{werkwijzeMeer}</a>
-  </section>
+  <WerkwijzeKort kicker="Hoe we werken" />
 
   {(work.length > 0 || showPlaceholders) && (
     <section class="block block--rule wrap-full" aria-labelledby="proj-h">
@@ -91,6 +75,17 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
         {work.map(({ e, i }) => <li class="proj__cell"><WorkCard entry={e} index={i} headingLevel="h3" /></li>)}
         {showPlaceholders && work.length < 2 && <li class="proj__cell proj__slot"><p class="slot mono">[Tweede {label.toLowerCase()}-case · alleen tonen als het aantoonbaar is]</p></li>}
       </ul>
+    </section>
+  )}
+  {s.faq.length > 0 && (
+    <section class="block block--rule wrap-full" aria-labelledby="faq-h">
+      <p class="mono kicker--dark">Veelgestelde vragen</p>
+      <h2 id="faq-h" class="h2">Wat je wilt weten voor je contact opneemt.</h2>
+      <div class="faq">
+        {s.faq.map((f) => (
+          <div class="faq__item"><h3 class="faq__q">{f.q}</h3><p>{f.a}</p></div>
+        ))}
+      </div>
     </section>
   )}
 </Base>
@@ -132,19 +127,11 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
   @media (min-width: 1100px) { .moments { grid-template-columns: repeat(4, minmax(0, 1fr)); } .moment__t { font-size: var(--t-card); font-stretch: 112%; } }
   .flag { align-self: flex-start; border: 1px solid var(--k-ink); border-radius: 999px; padding: 0.375rem 0.875rem; font-size: var(--t-mono); letter-spacing: 0.04em; }
 
-  .principles { display: grid; gap: 1.75rem; grid-template-columns: 1fr; }
-  .principle { border-top: 2px solid var(--k-ink); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
-  .principle p { margin: 0; color: var(--k-muted); font-size: var(--t-small); line-height: 1.5; }
-  .principle__t { margin: 0; font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); line-height: 1.02; letter-spacing: -0.03em; overflow-wrap: anywhere; }
-  @media (min-width: 768px) { .principle p { font-size: var(--t-small); } .principle__t { font-size: var(--t-card); } }
-  @media (min-width: 1100px) { .principles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3rem; } .principle__t { font-size: var(--t-card); } }
-
-  .steps-block { padding-bottom: var(--pad-y); display: flex; flex-direction: column; gap: 2rem; align-items: flex-start; }
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; align-self: stretch; }
-  .steps li { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--k-ink); padding-top: 0.75rem; min-width: 0; }
-  .step__t { font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); letter-spacing: -0.02em; line-height: 1.1; }
-  @media (min-width: 768px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; } .step__t { font-size: var(--t-lead); } }
-  @media (min-width: 1100px) { .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .faq { display: grid; gap: 2rem; grid-template-columns: 1fr; max-width: 52rem; }
+  .faq__item { border-top: 2px solid var(--k-ink); padding-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .faq__item p { margin: 0; font-size: var(--t-body); line-height: 1.5; }
+  .faq__q { margin: 0; font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); line-height: 1.1; letter-spacing: -0.03em; text-wrap: balance; }
+  @media (min-width: 1100px) { .faq__q { font-size: var(--t-card); } }
 
   .proj-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; }
   .proj { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; grid-template-columns: 1fr; }

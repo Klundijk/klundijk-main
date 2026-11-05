@@ -1,42 +1,67 @@
 {
+  "seo": {
+    "title": "Klundijk | Websites, webshops, merk & digitale processen",
+    "description": "We ontwikkelen en verbeteren merken, websites, webshops en digitale processen. Eerst begrijpen we wat nodig is; daarna kiezen we de oplossing."
+  },
   "hero": {
     "eyebrow": "Klundijk — digitale partner",
-    "sub": "Dus maken we het beter."
+    "sub": "Dus maken we het beter.",
+    "text": "We maken merken, websites, webshops en digitale processen beter. We beginnen bij wat er nodig is en kiezen daarna pas de oplossing."
   },
   "marquee": {
     "regel1": "Digitaal kan beter.",
     "regel2": "Dus maken we het beter."
   },
   "werk": {
-    "title": "Werk dat iets in beweging zet.",
-    "hint": "Klik een project open"
+    "title": "Werk waar we trots op zijn.",
+    "intro": "We laten liever zien wat we maken. Dit zijn projecten waarin strategie, ontwerp en techniek samenkomen.",
+    "hint": "Klik een project open",
+    "cta": "Bekijk al ons werk"
   },
   "situaties": {
-    "title": "Waar kunnen we iets beter maken?",
-    "sub": "Vier situaties waar we vaak bij helpen",
+    "title": "Waar kan het beter?",
+    "sub": "Soms ligt het aan je merk. Soms aan je website, webshop of een proces dat onnodig veel tijd kost. We beginnen waar het knelt.",
     "items": {
       "webshops-commerce": {
-        "heading": "Je webshop of digitale omgeving is ingewikkelder geworden dan nodig.",
-        "copy": "Dan brengen we techniek, productstructuur, beheer, SEO en klantreis terug naar een logisch geheel."
+        "heading": "Je webshop verkoopt. Maar kost te veel werk.",
+        "copy": "We maken productstructuur, klantreis, techniek en beheer weer logisch — voor de klant én achter de schermen."
       },
       "websites-digitale-ervaringen": {
-        "heading": "Je website ziet er prima uit, maar doet commercieel te weinig.",
-        "copy": "Dan kijken we naar boodschap, structuur, gebruikerservaring en wat bezoekers nodig hebben om verder te gaan."
+        "heading": "Je website ziet er goed uit. Maar doet te weinig.",
+        "copy": "We maken boodschap, structuur en gebruikerservaring scherper, zodat bezoekers sneller begrijpen wat je biedt en wat hun volgende stap is."
       },
       "groei-slimme-processen": {
-        "heading": "Je weet dat processen slimmer kunnen, maar nog niet welke technologie daarbij past.",
-        "copy": "Dan beginnen we bij het proces en kiezen we pas daarna de techniek, automatisering of AI die werkelijk helpt."
+        "heading": "Je processen werken. Maar kunnen slimmer.",
+        "copy": "We verbeteren eerst het proces en kiezen daarna pas de techniek, automatisering of AI die echt iets toevoegt."
       },
       "merk-identiteit": {
-        "heading": "Je merk past niet meer bij het bedrijf dat je bent geworden.",
-        "copy": "Dan helpen we om positie, uitstraling en middelen opnieuw op één lijn te brengen."
+        "heading": "Je bedrijf groeit. Je merk groeit niet mee.",
+        "copy": "We brengen positionering, uitstraling en middelen weer op één lijn."
       }
     }
   },
   "diensten": {
     "kicker": "Wat we doen",
+    "title": "Van merk tot digitaal proces.",
     "link": "Bekijk wat we doen",
-    "hubText": "Nieuwe shops, redesigns en migraties waarbij productdata, UX, SEO, techniek en beheer als één geheel worden bekeken.",
+    "items": {
+      "webshops-commerce": {
+        "statement": "We bouwen webshops.",
+        "text": "Van nieuwe webshop en redesign tot migratie, productstructuur, UX, SEO en koppelingen. We kijken naar de hele verkoopomgeving — voor de klant én achter de schermen."
+      },
+      "websites-digitale-ervaringen": {
+        "statement": "We maken websites.",
+        "text": "Van nieuwe website en redesign tot landingspagina, portal of digitaal platform. Duidelijk in verhaal, sterk in gebruik en technisch goed gebouwd."
+      },
+      "groei-slimme-processen": {
+        "statement": "We verbeteren digitale processen.",
+        "text": "We verbeteren vindbaarheid, conversie en digitale processen met SEO, analytics, automatisering, koppelingen en AI waar dat echt iets toevoegt. Eerst het proces, dan de techniek."
+      },
+      "merk-identiteit": {
+        "statement": "We ontwikkelen merken.",
+        "text": "Van positionering en visuele identiteit tot logo, huisstijl en middelen die samen één herkenbaar verhaal vormen."
+      }
+    },
     "hubMore": "Bekijk webshops & commerce",
     "hubImageCaption": "RootBoxes — logo, huisstijl en webshop"
   },
@@ -49,10 +74,24 @@
     "resultaat": "Auto Restyle Noord heeft een nieuwe branding, een nieuw logo en een nieuwe website gekregen, passend bij de nieuwe naam na de verhuizing."
   },
   "over": {
-    "kicker": "Kleine studio, direct contact",
-    "title": "Korte lijnen, zonder korte blik.",
-    "text": "Klundijk is bewust compact. Je werkt direct met de mensen die inhoudelijk meedenken en het werk maken. Voor specialistische expertise voegen we gericht de juiste kennis toe, zonder onnodige lagen of een groter bureau te spelen dan we zijn.",
-    "cta": "Over Klundijk"
+    "kicker": "Samenwerken",
+    "title": "Nuchter, direct & aanpakken.",
+    "text": "We houden van duidelijke keuzes, korte lijnen en werk dat vooruitgaat. We zeggen wat nodig is, wat niet nodig is en zorgen dat het ook gemaakt wordt.",
+    "punten": [
+      {
+        "title": "Geen lagen tussen vraag en uitvoering.",
+        "text": "Je schakelt direct met ons. Daardoor blijft de inhoud dichtbij, kunnen we snel beslissen en gaat er minder verloren in overdrachten."
+      },
+      {
+        "title": "We zeggen ook wat je niet nodig hebt.",
+        "text": "Niet ieder vraagstuk vraagt om een nieuw platform, meer functies of extra techniek. We kiezen liever de oplossing die past dan de grootste oplossing die we kunnen verkopen."
+      },
+      {
+        "title": "We hoeven niet alles zelf te doen om het goed te doen.",
+        "text": "Waar specialistische kennis nodig is, voegen we die gericht toe. We houden de inhoudelijke lijn en zorgen dat strategie, ontwerp en techniek bij elkaar blijven."
+      }
+    ],
+    "cta": "Meer over Klundijk"
   },
   "klanten": {
     "title": "Klanten",
@@ -67,5 +106,9 @@
       "Pandan Sisters",
       "RootBoxes"
     ]
+  },
+  "contact": {
+    "title": "Iets dat beter kan?",
+    "lead": "Vertel waar je tegenaan loopt, wat je wilt veranderen of waar je naartoe wilt. Je hoeft de oplossing nog niet te weten — daar denken we in mee."
   }
 }

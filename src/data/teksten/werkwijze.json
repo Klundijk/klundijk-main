@@ -1,6 +1,6 @@
 {
-  "kop": "Eerst begrijpen. Dan pas maken of regisseren.",
-  "procesKicker": "Van advies tot regie",
+  "kop": "We beginnen bij de vraag. Niet bij de oplossing.",
+  "procesKicker": "Zo werken we",
   "uitgangspunten": [
     {
       "title": "Advies eerst",
@@ -12,7 +12,7 @@
     },
     {
       "title": "Eén aanspreekpunt",
-      "text": "Klundijk maakt zelf, of regisseert gespecialiseerde partners. Jij praat met één persoon."
+      "text": "We maken zelf en voegen gericht specialistische expertise toe. Je hebt één inhoudelijk aanspreekpunt."
     }
   ],
   "extraUitgangspunt": {
@@ -22,34 +22,25 @@
   "stappen": [
     {
       "title": "Begrijpen",
-      "role": "Klundijk luistert",
-      "text": "Wat speelt er echt in het bedrijf, bij de klant en in de huidige situatie?"
-    },
-    {
-      "title": "Adviseren",
-      "role": "Klundijk adviseert",
-      "text": "Wat is de verstandigste route, en welke opties vallen juist af?"
+      "kop": "We willen weten wat er echt speelt.",
+      "text": "We stellen vragen, kijken mee en brengen het vraagstuk terug tot de kern. Wat moet beter — voor het bedrijf én voor de mensen die ermee werken?"
     },
     {
       "title": "Kiezen",
-      "role": "Samen kiezen",
-      "text": "Aanpak, techniek en prioriteiten leggen we samen vast."
+      "kop": "We kiezen wat nodig is. En wat niet.",
+      "text": "We bepalen de juiste richting, aanpak en techniek. Soms betekent dat iets nieuws bouwen. Soms juist eenvoudiger maken wat er al is."
     },
     {
-      "title": "Maken of regisseren",
-      "role": "Zelf maken · of regisseren",
-      "text": "Klundijk maakt zelf, of regisseert gespecialiseerde partners. Jij houdt één aanspreekpunt."
-    },
-    {
-      "title": "Meten",
-      "role": "Klundijk meet mee",
-      "text": "Wat levert het op? We kijken naar gebruik, conversie en resultaat."
+      "title": "Maken",
+      "kop": "We maken het concreet.",
+      "text": "We vertalen keuzes naar merk, ontwerp, content en techniek. Waar specialistische kennis nodig is, brengen we die gericht samen."
     },
     {
       "title": "Verbeteren",
-      "role": "Klundijk blijft verbeteren",
-      "text": "Na livegang kijken we waar verdere winst te behalen is."
+      "kop": "We blijven kijken waar het beter kan.",
+      "text": "Na oplevering stopt digitaal werk niet automatisch. We scherpen aan, ontwikkelen door en verbeteren waar dat waarde toevoegt."
     }
   ],
-  "meerLabel": "Meer over onze werkwijze"
+  "meerLabel": "Meer over hoe we werken",
+  "intro": "Geen standaardpakket en geen techniek die vooraf vaststaat. We begrijpen eerst wat er speelt, maken keuzes en bouwen daarna wat nodig is."
 }
