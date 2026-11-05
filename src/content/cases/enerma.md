@@ -9,4 +9,5 @@ soon: true
 logo:
   src: /work/logos/enerma.webp
   alt: Logo van Enerma
+website: https://enerma.nl/
 ---

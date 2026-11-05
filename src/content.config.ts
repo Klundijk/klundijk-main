@@ -49,6 +49,7 @@ const cases = defineCollection({
       // Casepagina
       promise: z.string().optional().describe('Korte case-belofte: opgave of uitkomst in een regel'),
       client: z.string().optional(),
+      website: z.string().url().optional().describe('Website van de klant (extern); getoond op de casepagina en bij de klantnamen'),
       sector: z.string().optional(),
       year: z.number().int().optional(),
       scope: z.array(z.string()).default([]),

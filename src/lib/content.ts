@@ -32,3 +32,13 @@ export async function getServices() {
 export function textOn(bg: string) {
   return luminance(bg) > 0.3 ? palette.ink : palette.paper;
 }
+
+/** Website van een klant, gezocht op naam (klantnaam of projecttitel, hoofdletterongevoelig). Geen website bekend = null. */
+export async function getClientSites() {
+  const map = new Map<string, string>();
+  for (const e of await getWorkItems()) {
+    if (!e.data.website) continue;
+    for (const n of [e.data.client, e.data.title]) if (n) map.set(n.trim().toLowerCase(), e.data.website);
+  }
+  return (name: string) => map.get(name.trim().toLowerCase()) ?? null;
+}

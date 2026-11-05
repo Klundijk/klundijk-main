@@ -9,4 +9,5 @@ soon: true
 logo:
   src: /work/logos/buurmeijer-automotive.webp
   alt: Logo van Buurmeijer Automotive
+website: https://www.buurmeijerautomotive.nl/
 ---

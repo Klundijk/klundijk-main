@@ -46,6 +46,7 @@ result: Kraaij AV begon zonder logo, huisstijl en website en heeft die nu alle d
 metrics: []
 quote: null
 seo: null
+website: https://www.kraaijav.nl/
 ---
 
 Klundijk ontwikkelde het logo en de huisstijl en bouwde de website. Het logo is uitgewerkt in meerdere varianten, waaronder een witte versie en een ronde markering met de letters AV.

@@ -28,6 +28,7 @@ const sections = [
   (c.result || c.metrics?.length || c.quote) && 'result',
 ].filter(Boolean) as string[];
 const n = (key: string) => String(sections.indexOf(key) + 1).padStart(2, '0');
+const siteHost = c.website ? new URL(c.website).host.replace(/^www\./, '') : null;
 const heroFg = textOn(c.cardColor);
 const nextFg = next ? textOn(next.data.cardColor) : '';
 ---
@@ -39,6 +40,7 @@ const nextFg = next ? textOn(next.data.cardColor) : '';
         <p class="mono kicker">Case{c.sector ? ` · ${c.sector}` : ''}</p>
         <h1 class="title">{c.title}</h1>
         {c.promise && <p class="promise">{c.promise}</p>}
+        {c.website && <p class="visit"><a class="link-strong" href={c.website} target="_blank" rel="noopener">Bekijk {siteHost}<span class="sr-only"> (opent in een nieuw tabblad)</span><span aria-hidden="true"> ↗</span></a></p>}
         {c.placeholder && <p><span class="placeholder-flag">Nog niet compleet: geen casepagina in productie</span></p>}
       </div>
       <dl class="meta">
@@ -127,6 +129,7 @@ const nextFg = next ? textOn(next.data.cardColor) : '';
   .title { font-weight: 800; font-stretch: 112%; font-size: var(--t-h1); line-height: 0.94; letter-spacing: -0.04em; margin: 0; overflow-wrap: anywhere; }
   .promise { font-size: var(--t-card); line-height: 1.5; max-width: 54rem; margin: 0; }
   /* Mobiel: korte gegevens (klant, jaar) naast elkaar, lange over de volle breedte. */
+  .visit { margin: 0; }
   .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.125rem 1.25rem; margin: 0; }
   .meta__wide { grid-column: 1 / -1; }
   .meta div { display: flex; flex-direction: column; gap: 0.375rem; border-top: 1px solid var(--k-ink); padding-top: 0.75rem; }
