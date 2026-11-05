@@ -55,6 +55,7 @@ const clientCopy = {
 
     <!-- Spamval: verborgen veld buiten beeld en buiten de tabvolgorde; serverkant controleert of het leeg is. -->
     <div class="hp" aria-hidden="true"><label>Laat dit veld leeg <input name="website" type="text" tabindex="-1" autocomplete="off" /></label></div>
+    <input type="hidden" name="ts" value="" />
 
     <div class="servererr" data-servererr role="alert" tabindex="-1" hidden>
       <p class="servererr__title"><span class="icon" aria-hidden="true">!</span>{cfg.copy.errorTitle}</p>
@@ -172,6 +173,7 @@ const clientCopy = {
       root.querySelector('[data-success-text]').textContent = copy.success;
       form.hidden = true; success.hidden = false; title.focus();
     }
+    var ts = form.querySelector('[name="ts"]'); if (ts) ts.value = String(Date.now()); // tijdval voor de server: een bot post direct na het laden
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (busy) return; // geen dubbele verzending
