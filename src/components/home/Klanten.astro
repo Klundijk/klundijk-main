@@ -3,10 +3,12 @@
 // ("alleen echt en met toestemming") en verschijnt alleen in dev.
 import { CLIENTS, HOME_TEXT as t } from '../../data/home';
 import { showPlaceholders } from '../../data/site';
+import { getClientSites } from '../../lib/content';
+const siteOf = await getClientSites();
 ---
 <section class="kl" aria-labelledby="kl-h">
   <h2 id="kl-h" class="mono kl__k">{t.klanten.title}</h2>
-  <ul class="kl__list">{CLIENTS.map((c) => <li>{c}</li>)}</ul>
+  <ul class="kl__list">{CLIENTS.map((c) => { const href = siteOf(c); return <li>{href ? <a class="kl__a" href={href} target="_blank" rel="noopener">{c}<span class="sr-only"> (website, opent in een nieuw tabblad)</span></a> : c}</li>; })}</ul>
   {showPlaceholders && <p class="kl__quote placeholder-flag">[Klantquote — alleen echt en met toestemming.]</p>}
 </section>
 <style>
@@ -18,5 +20,7 @@ import { showPlaceholders } from '../../data/site';
   @media (min-width: 768px) { .kl__list { font-stretch: 112%; } }
   .kl__list li { display: inline; }
   .kl__list li:not(:last-child)::after { content: '\00a0/ ' / ''; color: var(--k-accent); }
+  .kl__a { color: inherit; text-decoration: underline; text-decoration-color: var(--k-accent); text-decoration-thickness: 3px; text-underline-offset: 0.18em; }
+  .kl__a:hover, .kl__a:focus-visible { text-decoration-color: currentColor; }
   .kl__quote { align-self: flex-start; font-size: var(--t-small); }
 </style>

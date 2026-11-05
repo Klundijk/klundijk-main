@@ -3,8 +3,10 @@
 import Base from '../layouts/Base.astro';
 import { site, showPlaceholders } from '../data/site';
 import { over as o } from '../data/over';
+import { getClientSites } from '../lib/content';
 import { principlesAbout, principlesHeading, procesIntro, stappen } from '../data/werkwijze';
 
+const siteOf = await getClientSites();
 const num = (n: number) => String(n + 1).padStart(2, '0');
 const chips = [o.person.region, site.legal.kvk ? `KvK ${site.legal.kvk}` : showPlaceholders ? 'KvK [nummer]' : null].filter(Boolean) as string[];
 const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
@@ -54,7 +56,7 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
   <section class="clients" aria-labelledby="clients-h">
     <div>
       <p id="clients-h" class="mono muted">{o.clients.kicker}</p>
-      <ul class="names">{o.clients.names.map((n, i) => <li>{n}{i < o.clients.names.length - 1 ? ',' : '.'}</li>)}</ul>
+      <ul class="names">{o.clients.names.map((n, i) => { const href = siteOf(n); return <li>{href ? <a class="names__a" href={href} target="_blank" rel="noopener">{n}<span class="sr-only"> (website, opent in een nieuw tabblad)</span></a> : n}{i < o.clients.names.length - 1 ? ',' : '.'}</li>; })}</ul>
     </div>
     <p><a class="link-strong" href="/werk">{o.clients.cta}</a></p>
   </section>
@@ -105,6 +107,8 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
   .clients > div { display: flex; flex-direction: column; gap: 1rem; }
   .clients p { margin: 0; }
   .names { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.75rem; }
+  .names__a { color: inherit; text-decoration: underline; text-decoration-color: var(--k-accent); text-decoration-thickness: 3px; text-underline-offset: 0.18em; }
+  .names__a:hover, .names__a:focus-visible { text-decoration-color: currentColor; }
   .names li { font-weight: 800; font-stretch: 112%; font-size: var(--t-card); letter-spacing: -0.03em; line-height: 1.1; }
 
   @media (min-width: 768px) {

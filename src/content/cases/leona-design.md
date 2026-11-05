@@ -9,4 +9,5 @@ soon: true
 logo:
   src: /work/logos/leona-design.png
   alt: Logo van Leona Design
+website: https://www.leona-design.com/
 ---
