@@ -9,7 +9,7 @@ tags:
 services:
   - merk-identiteit
   - websites-digitale-ervaringen
-excerpt: Logo, huisstijl en website.
+excerpt: Logo, huisstijl en websites.
 cardColor: '#00040E'
 cardImage:
   src: /work/kraaij-av.webp
