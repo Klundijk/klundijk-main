@@ -101,4 +101,11 @@ export const OVER = {
 };
 
 export const CLIENTS = h.klanten.namen;
+
+// Klant aan het woord: alleen echte quotes met toestemming van de klant (vinkje in het CMS). Geen quotes = geen blok.
+export type Quote = { tekst: string; naam: string; bedrijf?: string | null; context?: string | null; case?: string | null; toestemming?: boolean };
+export const QUOTES = {
+  kicker: h.quotes.kicker, title: h.quotes.title, intro: h.quotes.intro,
+  items: ((h.quotes.items ?? []) as Quote[]).filter((q) => q.toestemming === true && q.tekst?.trim() && q.naam?.trim()).slice(0, 3),
+};
 export const HOME_TEXT = h;
