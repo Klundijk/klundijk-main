@@ -8,7 +8,7 @@
 //
 // Compatibel met PHP 7.2 (de testserver): geen pijlfuncties of andere PHP 7.4+-syntax.
 //
-// Aanroep: POST (multipart of urlencoded) met naam, bedrijf, email, vraagstuk en het verborgen spamveld "website".
+// Aanroep: POST (multipart of urlencoded) met naam, bedrijf, email, vraagstuk, het verborgen spamveld "website" en de tijdstempel "ts" (ms).
 // Met "Accept: application/json" (het formulier-script) komt er JSON terug; zonder (formulier zonder JavaScript) een kleine pagina.
 
 declare(strict_types=1);
@@ -73,10 +73,45 @@ $bedrijf = $clean('bedrijf', 120);
 $email = $clean('email', 254);
 $vraag = $clean('vraagstuk', 5000, true);
 
-// Spamval: een mens laat het verborgen veld leeg. Bij een bot doen we alsof het gelukt is en versturen niets.
-if (trim((string) ($_POST['website'] ?? '')) !== '') {
+// Spamfilters. Bij spam doen we alsof het gelukt is en versturen niets, zodat bots niet leren wat er afgekeurd wordt.
+// De reden (zonder persoonsgegevens) gaat naar het serverlog, zodat een onterecht geweerd bericht te herleiden is.
+$spam = static function (string $reason) use ($wantsJson) {
+    error_log('contact.php: spam geweerd (' . $reason . ')');
     respond($wantsJson, 200, true, '', 'Bedankt, we hebben je bericht ontvangen.');
+};
+
+// 1. Verborgen veld: een mens laat het leeg.
+if (trim((string) ($_POST['website'] ?? '')) !== '') { $spam('honeypot'); }
+
+// 2. Tijdval: het formulier-script zet bij het laden van de pagina een tijdstempel (ms). Een bot post meteen of zonder tijdstempel.
+$score = 0;
+$ts = (string) ($_POST['ts'] ?? '');
+if ($ts !== '' && ctype_digit($ts)) {
+    $age = time() - intdiv((int) $ts, 1000);
+    if ($age < 2) { $spam('te snel'); }
+    if ($age > 86400 || $age < -60) { $score += 2; }
+} else {
+    $score += 2; // geen JavaScript of een rechtstreekse post: verdacht, maar niet direct fout (formulier zonder JavaScript).
 }
+
+// 3. Inhoud: links en bekende spamtaal. Een zakelijke vraag bevat zelden meerdere links.
+$all = $naam . ' ' . $bedrijf . ' ' . $vraag;
+$links = preg_match_all('~(?:https?://|www\.|\b[a-z0-9-]+\.(?:com|net|org|ru|cn|top|xyz|site|online|shop|info|biz|co)\b/)~i', $all);
+if (preg_match('~https?://|www\.~i', $naam . ' ' . $bedrijf)) { $spam('link in naam of bedrijf'); }
+if ($links >= 3) { $spam('veel links'); }
+if ($links >= 1) { $score += 1; }
+if ($links >= 2) { $score += 1; }
+if (preg_match('~\b(seo|backlinks?|guest post|casino|viagra|cialis|crypto|bitcoin|forex|loan|escort|porn|telegram|whatsapp me|rank (?:#?1|first)|web ?design(?:er)? (?:offer|service)|we (?:can )?(?:offer|provide) (?:you )?(?:seo|web)|dear (?:sir|madam|webmaster|owner))\b~i', $all)) { $score += 2; }
+if (mb_strtolower($naam, 'UTF-8') === mb_strtolower($vraag, 'UTF-8')) { $score += 2; }
+// Bericht zonder één Nederlands woord én met Cyrillisch of Chinees schrift: bijna altijd massaspam.
+if (preg_match('~[\x{0400}-\x{04FF}\x{4E00}-\x{9FFF}]~u', $all)) { $score += 2; }
+
+// 4. E-maildomein moet bestaan (MX of A-record); wegwerpdomeinen weren.
+$domain = strtolower((string) substr(strrchr($email, '@') ?: '@', 1));
+if ($domain !== '' && function_exists('checkdnsrr') && !checkdnsrr($domain . '.', 'MX') && !checkdnsrr($domain . '.', 'A')) { $score += 2; }
+if (in_array($domain, ['mailinator.com', 'guerrillamail.com', 'yopmail.com', 'tempmail.com', '10minutemail.com', 'trashmail.com', 'sharklasers.com', 'getnada.com', 'dispostable.com'], true)) { $score += 3; }
+
+if ($score >= 3) { $spam('score ' . $score); }
 
 $fields = [];
 if ($naam === '') { $fields[] = 'naam'; }
@@ -92,16 +127,21 @@ if ($fields) {
     respond(false, 400, false, 'validation', 'Controleer je naam, e-mailadres en bericht en probeer het opnieuw.');
 }
 
-// Eenvoudige rem per IP-adres (maximaal 5 berichten per 10 minuten), bestandsgebaseerd en best-effort.
+// Rem: per IP-adres maximaal 3 berichten per 10 minuten, en voor de hele site maximaal 30 per uur (beschermt de inbox en het Resend-tegoed
+// bij een bot met wisselende IP-adressen). Bestandsgebaseerd en best-effort.
 $ip = (string) ($_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '');
-$bucket = rtrim($cfg['rate_dir'] ?? sys_get_temp_dir(), '/') . '/klundijk-contact-' . hash('sha256', $ip . ($cfg['api_key'])) . '.json';
+$dir = rtrim($cfg['rate_dir'] ?? sys_get_temp_dir(), '/');
 $now = time();
-$hits = [];
-if (is_file($bucket)) {
-    $hits = array_values(array_filter((array) json_decode((string) @file_get_contents($bucket), true), static function ($t) use ($now) { return is_int($t) && $t > $now - 600; }));
-}
-if (count($hits) >= 5) {
-    respond($wantsJson, 429, false, 'rate', 'Er zijn net al meerdere berichten verstuurd. Probeer het over een paar minuten opnieuw.');
+$load = static function (string $file, int $window) use ($now): array {
+    if (!is_file($file)) { return []; }
+    return array_values(array_filter((array) json_decode((string) @file_get_contents($file), true), static function ($t) use ($now, $window) { return is_int($t) && $t > $now - $window; }));
+};
+$bucket = $dir . '/klundijk-contact-' . hash('sha256', $ip . ($cfg['api_key'])) . '.json';
+$globalBucket = $dir . '/klundijk-contact-global-' . hash('sha256', $cfg['api_key']) . '.json';
+$hits = $load($bucket, 600);
+$globalHits = $load($globalBucket, 3600);
+if (count($hits) >= 3 || count($globalHits) >= 30) {
+    respond($wantsJson, 429, false, 'rate', 'Er zijn net al meerdere berichten verstuurd. Probeer het over een paar minuten opnieuw of mail naar info@klundijk.com.');
 }
 
 // Bericht opstellen.
@@ -148,5 +188,7 @@ if ($status < 200 || $status >= 300) {
 }
 
 $hits[] = $now;
+$globalHits[] = $now;
 @file_put_contents($bucket, json_encode($hits), LOCK_EX);
+@file_put_contents($globalBucket, json_encode($globalHits), LOCK_EX);
 respond($wantsJson, 200, true, '', 'Bedankt, we hebben je bericht ontvangen.');
