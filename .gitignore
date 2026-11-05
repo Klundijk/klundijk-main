@@ -13,3 +13,6 @@ dist
 .DS_Store
 Thumbs.db
 *.log
+
+# CMS-bestanden worden bij de build uit node_modules gekopieerd (scripts/copy-cms.mjs)
+public/admin/cms/

@@ -1,14 +1,14 @@
-// Globale instellingen. Naam en contactgegevens staan op één plek.
+// Globale instellingen. Naam en structuur staan hier; de teksten, knoplabels en contactgegevens staan in teksten/instellingen.json (bewerkbaar via het CMS).
 import { DIENSTEN, dienstHref, dienstLabels } from './diensten';
+import i from './teksten/instellingen.json';
 
 export const site = {
   name: 'Klundijk',
-  tagline: 'Digitaal kan beter. Dus maken we het beter.',
-  description:
-    'Klundijk helpt bedrijven hun merk, website, webshop en digitale processen beter maken. We beginnen bij wat er nodig is en kiezen daarna pas de oplossing.',
-  primaryCta: { label: 'Bespreek je vraagstuk', href: '/contact' },
-  secondaryCta: { label: 'Bekijk ons werk', href: '/werk' },
-  commerceCta: { label: 'Plan een kennismaking', href: '/contact' },
+  tagline: i.tagline,
+  description: i.description,
+  primaryCta: { label: i.knoppen.primair, href: '/contact' },
+  secondaryCta: { label: i.knoppen.secundair, href: '/werk' },
+  commerceCta: { label: i.knoppen.kennismaking, href: '/contact' },
   nav: [
     { label: 'Werk', href: '/werk' },
     { label: 'Wat we doen', href: '/wat-we-doen' },
@@ -18,11 +18,11 @@ export const site = {
   // Dienstenpagina's onder "Wat we doen" (subnavigatie mobiel menu); volgorde en labels komen uit data/diensten.ts.
   services: DIENSTEN.map((d) => ({ label: d.label, href: dienstHref(d.id) })),
   serviceLabels: dienstLabels as Record<string, string>,
-  footerLine: 'Digitale partner voor merk, websites, webshops en slimme processen.',
+  footerLine: i.footerLine,
   // Telefoon en e-mail aangeleverd door Levi (23 okt). KvK en privacyverklaring aangeleverd (2 nov). Zolang een waarde null is,
   // wordt ze in productie niet getoond (alleen in dev als [placeholder]).
-  contact: { email: 'info@klundijk.com' as string | null, phone: '06 83 79 30 22' as string | null, location: 'Veendam' },
-  legal: { kvk: '95075127' as string | null, privacyHref: '/privacy' as string | null, termsHref: null as string | null },
+  contact: { email: (i.contact.email || null) as string | null, phone: (i.contact.phone || null) as string | null, location: i.contact.location },
+  legal: { kvk: (i.kvk || null) as string | null, privacyHref: '/privacy' as string | null, termsHref: null as string | null },
 } as const;
 
 /** Placeholder-inhoud (nog te leveren) alleen tonen in dev of met PUBLIC_SHOW_PLACEHOLDERS=1. */

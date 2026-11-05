@@ -1,0 +1,55 @@
+{
+  "kop": "Eerst begrijpen. Dan pas maken of regisseren.",
+  "procesKicker": "Van advies tot regie",
+  "uitgangspunten": [
+    {
+      "title": "Advies eerst",
+      "text": "We beginnen bij je vraagstuk, niet bij een platform. Wat past, wat past niet, en wat kun je beter laten."
+    },
+    {
+      "title": "Techniek volgt",
+      "text": "Platform-onafhankelijk: we kiezen samen wat bij je bedrijf past en leggen uit waarom."
+    },
+    {
+      "title": "Eén aanspreekpunt",
+      "text": "Klundijk maakt zelf, of regisseert gespecialiseerde partners. Jij praat met één persoon."
+    }
+  ],
+  "extraUitgangspunt": {
+    "title": "Eerlijk over resultaat",
+    "text": "We beloven geen cijfers die we niet kunnen bewijzen. Wat we maakten laten we zien, met de keuzes erachter."
+  },
+  "stappen": [
+    {
+      "title": "Begrijpen",
+      "role": "Klundijk luistert",
+      "text": "Wat speelt er echt in het bedrijf, bij de klant en in de huidige situatie?"
+    },
+    {
+      "title": "Adviseren",
+      "role": "Klundijk adviseert",
+      "text": "Wat is de verstandigste route, en welke opties vallen juist af?"
+    },
+    {
+      "title": "Kiezen",
+      "role": "Samen kiezen",
+      "text": "Aanpak, techniek en prioriteiten leggen we samen vast."
+    },
+    {
+      "title": "Maken of regisseren",
+      "role": "Zelf maken · of regisseren",
+      "text": "Klundijk maakt zelf, of regisseert gespecialiseerde partners. Jij houdt één aanspreekpunt."
+    },
+    {
+      "title": "Meten",
+      "role": "Klundijk meet mee",
+      "text": "Wat levert het op? We kijken naar gebruik, conversie en resultaat."
+    },
+    {
+      "title": "Verbeteren",
+      "role": "Klundijk blijft verbeteren",
+      "text": "Na livegang kijken we waar verdere winst te behalen is."
+    }
+  ],
+  "meerLabel": "Meer over onze werkwijze"
+}

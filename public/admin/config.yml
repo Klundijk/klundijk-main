@@ -1,0 +1,1191 @@
+# Sveltia CMS voor klundijk.com. Beheer op https://klundijk.com/admin
+# Inloggen met een GitHub-token (fine-grained, alleen repo Klundijk/klundijk-main: Contents lezen/schrijven).
+# Wijzigingen worden commits op main en komen automatisch op de testsite; live zetten via "Deploy live" in GitHub Actions.
+backend:
+  name: github
+  repo: Klundijk/klundijk-main
+  branch: main
+  commit_messages:
+    create: "Nieuw {{collection}}: {{slug}} (CMS)"
+    update: "Bijgewerkt {{collection}}: {{slug}} (CMS)"
+    delete: "Verwijderd {{collection}}: {{slug}} (CMS)"
+    uploadMedia: "Beeld toegevoegd: {{path}} (CMS)"
+    deleteMedia: "Beeld verwijderd: {{path}} (CMS)"
+site_url: https://klundijk.com
+display_url: https://klundijk.com
+publish_mode: simple
+logo:
+  src: /favicon.svg
+show_preview_links: true
+media_folder: public/work
+public_folder: /work
+media_libraries:
+  default:
+    config:
+      slugify_filename: true
+      max_file_size: 15000000
+      transformations:
+        raster_image:
+          format: webp
+          quality: 85
+          width: 2000
+collections:
+  - name: cases
+    label: Projecten
+    label_singular: Project
+    folder: src/content/cases
+    extension: md
+    format: frontmatter
+    create: true
+    delete: false
+    slug: '{{slug}}'
+    identifier_field: title
+    summary: '{{order}} · {{title}}'
+    sortable_fields: [order, title]
+    media_folder: /public/work
+    public_folder: /work
+    fields:
+      - label: "Naam van het project"
+        name: "title"
+        widget: "string"
+      - label: "Soort"
+        name: "kind"
+        widget: "select"
+        hint: "Case = volledige casepagina. Project = alleen een kaart op het werkoverzicht (\"Case volgt\")."
+        options:
+          - label: "Case (eigen pagina)"
+            value: "case"
+          - label: "Project (alleen kaart)"
+            value: "project"
+        default: "project"
+      - label: "Volgorde op het werkoverzicht"
+        name: "order"
+        widget: "number"
+        hint: "Laag getal staat bovenaan."
+        value_type: "int"
+        min: 1
+        default: 99
+      - label: "Labels op de kaart"
+        name: "tags"
+        widget: "list"
+        hint: "Bijv. \"Merk & identiteit\", \"Website\", \"Webshop\"."
+        required: false
+        field:
+          label: "Label"
+          name: "item"
+          widget: "string"
+      - label: "Diensten"
+        name: "services"
+        widget: "select"
+        hint: "Bepaalt onder welke dienst het project verschijnt."
+        required: false
+        multiple: true
+        options:
+          - label: "Webshops & commerce"
+            value: "webshops-commerce"
+          - label: "Websites"
+            value: "websites-digitale-ervaringen"
+          - label: "Groei & slimme processen"
+            value: "groei-slimme-processen"
+          - label: "Merk & identiteit"
+            value: "merk-identiteit"
+      - label: "Regel op de kaart"
+        name: "excerpt"
+        widget: "string"
+        hint: "Eén regel."
+        required: false
+      - label: "Kaartkleur"
+        name: "cardColor"
+        widget: "color"
+        hint: "Achtergrond van kaart en hero zolang er geen beeld is. Zorg voor voldoende contrast met de tekst."
+        enableAlpha: false
+        default: "#DAD5CB"
+      - label: "Kaartbeeld"
+        name: "cardImage"
+        widget: "object"
+        hint: "Beeld op de kaart. Upload bij voorkeur webp of jpg, max. 2000 px breed (wordt automatisch verkleind)."
+        required: false
+        fields:
+          - label: "Beeld"
+            name: "src"
+            widget: "image"
+            required: false
+            choose_url: false
+          - label: "Beschrijving (alt-tekst)"
+            name: "alt"
+            widget: "string"
+            hint: "Beschrijf kort wat er te zien is, voor schermlezers."
+            required: false
+          - label: "Uitsnede (optioneel)"
+            name: "position"
+            widget: "string"
+            hint: "CSS object-position, bijv. \"left top\" of \"30% 50%\"."
+            required: false
+      - label: "Binnenkort (project in uitvoering)"
+        name: "soon"
+        widget: "boolean"
+        hint: "Aan = kaart toont \"Binnenkort\" met logo of merknaam in plaats van een beeld."
+        required: false
+        default: false
+      - label: "Logo van de klant (bij \"Binnenkort\")"
+        name: "logo"
+        widget: "object"
+        hint: "Liefst SVG of PNG met transparante achtergrond (wordt in de map werk geplaatst)."
+        required: false
+        fields:
+          - label: "Beeld"
+            name: "src"
+            widget: "image"
+            required: false
+            choose_url: false
+          - label: "Beschrijving (alt-tekst)"
+            name: "alt"
+            widget: "string"
+            hint: "Beschrijf kort wat er te zien is, voor schermlezers."
+            required: false
+          - label: "Uitsnede (optioneel)"
+            name: "position"
+            widget: "string"
+            hint: "CSS object-position, bijv. \"left top\" of \"30% 50%\"."
+            required: false
+      - label: "Uitgelicht"
+        name: "featured"
+        widget: "boolean"
+        required: false
+        default: false
+      - label: "Concept (niet publiceren)"
+        name: "draft"
+        widget: "boolean"
+        hint: "Aan = verborgen op de site."
+        required: false
+        default: false
+      - label: "Placeholder (geen casepagina)"
+        name: "placeholder"
+        widget: "boolean"
+        hint: "Aan = nog niet compleet; er wordt geen casepagina gemaakt."
+        required: false
+        default: false
+      - label: "Belofte (casepagina)"
+        name: "promise"
+        widget: "string"
+        hint: "Opgave of uitkomst in één regel. Verplicht voor een gepubliceerde case."
+        required: false
+      - label: "Klant"
+        name: "client"
+        widget: "string"
+        required: false
+      - label: "Sector"
+        name: "sector"
+        widget: "string"
+        required: false
+      - label: "Jaar"
+        name: "year"
+        widget: "number"
+        required: false
+        value_type: "int"
+      - label: "Wat we deden (scope)"
+        name: "scope"
+        widget: "list"
+        required: false
+        field:
+          label: "Onderdeel"
+          name: "item"
+          widget: "string"
+      - label: "Technologie"
+        name: "technology"
+        widget: "list"
+        required: false
+        field:
+          label: "Technologie"
+          name: "item"
+          widget: "string"
+      - label: "Hero-beeld casepagina"
+        name: "heroImage"
+        widget: "object"
+        required: false
+        fields:
+          - label: "Beeld"
+            name: "src"
+            widget: "image"
+            required: false
+            choose_url: false
+          - label: "Beschrijving (alt-tekst)"
+            name: "alt"
+            widget: "string"
+            hint: "Beschrijf kort wat er te zien is, voor schermlezers."
+            required: false
+          - label: "Uitsnede (optioneel)"
+            name: "position"
+            widget: "string"
+            hint: "CSS object-position, bijv. \"left top\" of \"30% 50%\"."
+            required: false
+      - label: "Kop: vraagstuk"
+        name: "challengeHeading"
+        widget: "string"
+        required: false
+      - label: "Vraagstuk"
+        name: "challenge"
+        widget: "text"
+        hint: "Verplicht voor een gepubliceerde case."
+        required: false
+      - label: "Kop: aanpak"
+        name: "approachHeading"
+        widget: "string"
+        required: false
+      - label: "Aanpak"
+        name: "approach"
+        widget: "text"
+        hint: "Verplicht voor een gepubliceerde case."
+        required: false
+      - label: "Belangrijkste keuzes (max. 3)"
+        name: "choices"
+        widget: "list"
+        required: false
+        max: 3
+        fields:
+          - label: "Keuze"
+            name: "title"
+            widget: "string"
+          - label: "Waarom"
+            name: "reason"
+            widget: "text"
+      - label: "Detailbeelden (max. 2)"
+        name: "detailImages"
+        widget: "list"
+        required: false
+        max: 2
+        fields:
+          - label: "Beeld"
+            name: "src"
+            widget: "image"
+            required: false
+            choose_url: false
+          - label: "Beschrijving (alt-tekst)"
+            name: "alt"
+            widget: "string"
+            required: false
+          - label: "Uitsnede (optioneel)"
+            name: "position"
+            widget: "string"
+            required: false
+      - label: "Kop: uitvoering"
+        name: "executionHeading"
+        widget: "string"
+        required: false
+        default: "Wat Klundijk deed."
+      - label: "Beeld bij uitvoering"
+        name: "executionImage"
+        widget: "object"
+        required: false
+        fields:
+          - label: "Beeld"
+            name: "src"
+            widget: "image"
+            required: false
+            choose_url: false
+          - label: "Beschrijving (alt-tekst)"
+            name: "alt"
+            widget: "string"
+            hint: "Beschrijf kort wat er te zien is, voor schermlezers."
+            required: false
+          - label: "Uitsnede (optioneel)"
+            name: "position"
+            widget: "string"
+            hint: "CSS object-position, bijv. \"left top\" of \"30% 50%\"."
+            required: false
+      - label: "Kop: resultaat"
+        name: "resultHeading"
+        widget: "string"
+        required: false
+      - label: "Resultaat"
+        name: "result"
+        widget: "text"
+        hint: "Verplicht voor een gepubliceerde case. Nooit cijfers verzinnen."
+        required: false
+      - label: "Cijfers (max. 3)"
+        name: "metrics"
+        widget: "list"
+        hint: "Alleen aantoonbare cijfers."
+        required: false
+        max: 3
+        fields:
+          - label: "Omschrijving"
+            name: "label"
+            widget: "string"
+          - label: "Waarde"
+            name: "value"
+            widget: "string"
+      - label: "Quote van de klant"
+        name: "quote"
+        widget: "object"
+        hint: "Alleen echt en met toestemming."
+        required: false
+        fields:
+          - label: "Tekst"
+            name: "text"
+            widget: "text"
+            required: false
+          - label: "Naam"
+            name: "author"
+            widget: "string"
+            required: false
+          - label: "Rol"
+            name: "role"
+            widget: "string"
+            required: false
+      - label: "Zoekmachine (SEO)"
+        name: "seo"
+        widget: "object"
+        required: false
+        fields:
+          - label: "Titel"
+            name: "title"
+            widget: "string"
+            hint: "Max. 70 tekens. Leeg = standaard."
+            required: false
+          - label: "Beschrijving"
+            name: "description"
+            widget: "text"
+            hint: "Max. 170 tekens. Leeg = standaard."
+            required: false
+      - label: "Uitvoering (tekst onder de casekop)"
+        name: "body"
+        widget: "markdown"
+        required: false
+  - name: services
+    label: Diensten
+    label_singular: Dienst
+    folder: src/content/services
+    extension: md
+    format: frontmatter
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    identifier_field: title
+    summary: '{{order}} · {{title}}'
+    sortable_fields: [order, title]
+    fields:
+      - label: "Naam van de dienst"
+        name: "title"
+        widget: "string"
+      - label: "Volgorde"
+        name: "order"
+        widget: "number"
+        value_type: "int"
+        min: 1
+      - label: "Korte intro"
+        name: "shortIntro"
+        widget: "text"
+      - label: "Hero-statement"
+        name: "heroStatement"
+        widget: "string"
+      - label: "Situaties (herkenbare vraagstukken)"
+        name: "situations"
+        widget: "list"
+        field:
+          label: "Situatie"
+          name: "item"
+          widget: "string"
+      - label: "Uitkomsten"
+        name: "outcomes"
+        widget: "list"
+        field:
+          label: "Uitkomst"
+          name: "item"
+          widget: "string"
+      - label: "Wat je krijgt"
+        name: "deliverables"
+        widget: "list"
+        field:
+          label: "Onderdeel"
+          name: "item"
+          widget: "string"
+      - label: "Aanpak"
+        name: "approach"
+        widget: "list"
+        field:
+          label: "Stap"
+          name: "item"
+          widget: "string"
+      - label: "Veelgestelde vragen"
+        name: "faq"
+        widget: "list"
+        required: false
+        fields:
+          - label: "Vraag"
+            name: "q"
+            widget: "string"
+          - label: "Antwoord"
+            name: "a"
+            widget: "text"
+      - label: "Hero-tekst"
+        name: "heroText"
+        widget: "text"
+        hint: "Intro bovenaan de pagina. Leeg = korte intro."
+        required: false
+      - label: "Project in de hero"
+        name: "heroCase"
+        widget: "relation"
+        hint: "Leeg = het uitgelichte of eerste project van deze dienst."
+        required: false
+        collection: "cases"
+        value_field: "{{slug}}"
+        search_fields: ["title"]
+        display_fields: ["title"]
+      - label: "Kop boven de momenten"
+        name: "momentsHeading"
+        widget: "string"
+        required: false
+      - label: "Momenten (max. 4)"
+        name: "moments"
+        widget: "list"
+        required: false
+        max: 4
+        fields:
+          - label: "Titel"
+            name: "title"
+            widget: "string"
+          - label: "Tekst"
+            name: "text"
+            widget: "text"
+      - label: "Kop boven de projecten"
+        name: "projectsHeading"
+        widget: "string"
+        required: false
+        default: "Ons werk."
+      - label: "Kop contactblok onderaan"
+        name: "contactHeading"
+        widget: "string"
+        required: false
+      - label: "Tekst contactblok onderaan"
+        name: "contactText"
+        widget: "text"
+        required: false
+      - label: "Concepttekst"
+        name: "concept"
+        widget: "boolean"
+        hint: "Aan = nog niet beoordeeld door SEO & content (badge alleen in dev)."
+        required: false
+        default: true
+      - label: "Zoekmachine (SEO)"
+        name: "seo"
+        widget: "object"
+        required: false
+        fields:
+          - label: "Titel"
+            name: "title"
+            widget: "string"
+            hint: "Max. 70 tekens. Leeg = standaard."
+            required: false
+          - label: "Beschrijving"
+            name: "description"
+            widget: "text"
+            hint: "Max. 170 tekens. Leeg = standaard."
+            required: false
+      - label: "Extra tekst"
+        name: "body"
+        widget: "markdown"
+        required: false
+  - name: pagina_teksten
+    label: Pagina's en teksten
+    editor:
+      preview: false
+    files:
+      - name: instellingen
+        label: "Instellingen en contactgegevens"
+        file: src/data/teksten/instellingen.json
+        fields:
+          - label: "Slogan"
+            name: "tagline"
+            widget: "string"
+          - label: "Omschrijving van het bedrijf"
+            name: "description"
+            widget: "text"
+            hint: "Staat ook op de homepage onder \"Dus maken we het beter.\" en is de standaard meta-omschrijving."
+          - label: "Regel in de footer"
+            name: "footerLine"
+            widget: "string"
+          - label: "Knoplabels"
+            name: "knoppen"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Hoofdknop (bijv. Bespreek je vraagstuk)"
+                name: "primair"
+                widget: "string"
+              - label: "Tweede knop (bijv. Bekijk ons werk)"
+                name: "secundair"
+                widget: "string"
+              - label: "Kennismakingsknop (Plan een kennismaking)"
+                name: "kennismaking"
+                widget: "string"
+          - label: "Contactgegevens"
+            name: "contact"
+            widget: "object"
+            hint: "Leeg laten = niet tonen op de site."
+            required: false
+            fields:
+              - label: "E-mailadres"
+                name: "email"
+                widget: "string"
+                required: false
+              - label: "Telefoonnummer"
+                name: "phone"
+                widget: "string"
+                required: false
+              - label: "Plaats"
+                name: "location"
+                widget: "string"
+                required: false
+          - label: "KvK-nummer"
+            name: "kvk"
+            widget: "string"
+            hint: "Leeg = niet tonen."
+            required: false
+      - name: home
+        label: "Homepage"
+        file: src/data/teksten/home.json
+        fields:
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            hint: "De grote kop \"Digitaal kan beter.\" staat vast in het ontwerp. De alinea eronder is de omschrijving bij Instellingen."
+            required: false
+            fields:
+              - label: "Regel boven de kop"
+                name: "eyebrow"
+                widget: "string"
+              - label: "Regel onder de kop"
+                name: "sub"
+                widget: "string"
+          - label: "Tekstband"
+            name: "marquee"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Regel 1"
+                name: "regel1"
+                widget: "string"
+              - label: "Regel 2"
+                name: "regel2"
+                widget: "string"
+          - label: "Blok Werk"
+            name: "werk"
+            widget: "object"
+            hint: "De projecten zelf beheer je bij Projecten."
+            required: false
+            fields:
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Hint"
+                name: "hint"
+                widget: "string"
+          - label: "Blok \"Waar kunnen we iets beter maken?\""
+            name: "situaties"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Subregel"
+                name: "sub"
+                widget: "string"
+              - label: "Vier situaties"
+                name: "items"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Webshops & commerce"
+                    name: "webshops-commerce"
+                    widget: "object"
+                    required: false
+                    fields:
+                      - label: "Kop"
+                        name: "heading"
+                        widget: "string"
+                      - label: "Tekst"
+                        name: "copy"
+                        widget: "text"
+                  - label: "Websites"
+                    name: "websites-digitale-ervaringen"
+                    widget: "object"
+                    required: false
+                    fields:
+                      - label: "Kop"
+                        name: "heading"
+                        widget: "string"
+                      - label: "Tekst"
+                        name: "copy"
+                        widget: "text"
+                  - label: "Groei & slimme processen"
+                    name: "groei-slimme-processen"
+                    widget: "object"
+                    required: false
+                    fields:
+                      - label: "Kop"
+                        name: "heading"
+                        widget: "string"
+                      - label: "Tekst"
+                        name: "copy"
+                        widget: "text"
+                  - label: "Merk & identiteit"
+                    name: "merk-identiteit"
+                    widget: "object"
+                    required: false
+                    fields:
+                      - label: "Kop"
+                        name: "heading"
+                        widget: "string"
+                      - label: "Tekst"
+                        name: "copy"
+                        widget: "text"
+          - label: "Blok Wat we doen"
+            name: "diensten"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Linktekst"
+                name: "link"
+                widget: "string"
+              - label: "Tekst bij Webshops & commerce"
+                name: "hubText"
+                widget: "text"
+              - label: "Linktekst Webshops & commerce"
+                name: "hubMore"
+                widget: "string"
+              - label: "Bijschrift bij het beeld"
+                name: "hubImageCaption"
+                widget: "string"
+          - label: "Uitgelichte case"
+            name: "case"
+            widget: "object"
+            hint: "Het project zelf is Auto Restyle Noord (beeld uit Projecten). \"Belangrijkste keuze\" komt later."
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Linktekst"
+                name: "more"
+                widget: "string"
+              - label: "Vraagstuk"
+                name: "vraagstuk"
+                widget: "text"
+                required: false
+              - label: "Belangrijkste keuze"
+                name: "keuze"
+                widget: "text"
+                hint: "Nog te leveren. Leeg = niet getoond."
+                required: false
+              - label: "Uitvoering"
+                name: "uitvoering"
+                widget: "text"
+                required: false
+              - label: "Resultaat"
+                name: "resultaat"
+                widget: "text"
+                required: false
+          - label: "Blok Over"
+            name: "over"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Tekst"
+                name: "text"
+                widget: "text"
+              - label: "Linktekst"
+                name: "cta"
+                widget: "string"
+          - label: "Klantenlijst"
+            name: "klanten"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "title"
+                widget: "string"
+              - label: "Namen"
+                name: "namen"
+                widget: "list"
+                field:
+                  label: "Naam"
+                  name: "item"
+                  widget: "string"
+      - name: werkwijze
+        label: "Werkwijze (gedeeld)"
+        file: src/data/teksten/werkwijze.json
+        fields:
+          - label: "Kop \"Eerst begrijpen. Dan pas maken of regisseren.\""
+            name: "kop"
+            widget: "string"
+            hint: "Staat op de homepage, Over, Wat we doen en alle dienstpagina's."
+          - label: "Label boven de kop op de homepage"
+            name: "procesKicker"
+            widget: "string"
+          - label: "Drie uitgangspunten"
+            name: "uitgangspunten"
+            widget: "list"
+            hint: "Op de dienstpagina's, Over en Wat we doen."
+            required: false
+            min: 3
+            max: 3
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+              - label: "Tekst"
+                name: "text"
+                widget: "text"
+          - label: "Vierde uitgangspunt (alleen Over)"
+            name: "extraUitgangspunt"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+              - label: "Tekst"
+                name: "text"
+                widget: "text"
+          - label: "Zes stappen"
+            name: "stappen"
+            widget: "list"
+            hint: "Titel wordt gebruikt op de hele site. Volgorde en aantal (6) staan vast in het ontwerp."
+            required: false
+            min: 6
+            max: 6
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+              - label: "Rol (homepage)"
+                name: "role"
+                widget: "string"
+              - label: "Tekst"
+                name: "text"
+                widget: "text"
+          - label: "Linktekst \"Meer over onze werkwijze\""
+            name: "meerLabel"
+            widget: "string"
+      - name: wat-we-doen
+        label: "Wat we doen (overzichtspagina)"
+        file: src/data/teksten/wat-we-doen.json
+        fields:
+          - label: "Zoekmachine (SEO)"
+            name: "seo"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+                hint: "Max. 70 tekens. Leeg = standaard."
+                required: false
+              - label: "Beschrijving"
+                name: "description"
+                widget: "text"
+                hint: "Max. 170 tekens. Leeg = standaard."
+                required: false
+          - label: "Label"
+            name: "eyebrow"
+            widget: "string"
+          - label: "Kop (twee regels)"
+            name: "title"
+            widget: "list"
+            field:
+              label: "Regel"
+              name: "item"
+              widget: "string"
+            min: 2
+            max: 2
+          - label: "Intro"
+            name: "lead"
+            widget: "text"
+          - label: "Webshops & commerce (uitgelicht)"
+            name: "commerce"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Badge"
+                name: "badge"
+                widget: "string"
+              - label: "Tekst"
+                name: "lead"
+                widget: "text"
+              - label: "Onderwerpen"
+                name: "topics"
+                widget: "list"
+                field:
+                  label: "Onderwerp"
+                  name: "item"
+                  widget: "string"
+              - label: "Knoptekst"
+                name: "cta"
+                widget: "string"
+          - label: "Websites, Groei en Merk"
+            name: "rows"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Websites"
+                name: "websites-digitale-ervaringen"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Tekst"
+                    name: "text"
+                    widget: "text"
+                  - label: "Onderwerpen"
+                    name: "pills"
+                    widget: "list"
+                    required: false
+                    field:
+                      label: "Onderwerp"
+                      name: "item"
+                      widget: "string"
+                  - label: "Voorbeeldproject"
+                    name: "example"
+                    widget: "relation"
+                    required: false
+                    collection: "cases"
+                    value_field: "{{slug}}"
+                    search_fields: ["title"]
+                    display_fields: ["title"]
+              - label: "Groei & slimme processen"
+                name: "groei-slimme-processen"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Tekst"
+                    name: "text"
+                    widget: "text"
+                  - label: "Onderwerpen"
+                    name: "pills"
+                    widget: "list"
+                    required: false
+                    field:
+                      label: "Onderwerp"
+                      name: "item"
+                      widget: "string"
+                  - label: "Voorbeeldproject"
+                    name: "example"
+                    widget: "relation"
+                    required: false
+                    collection: "cases"
+                    value_field: "{{slug}}"
+                    search_fields: ["title"]
+                    display_fields: ["title"]
+              - label: "Merk & identiteit"
+                name: "merk-identiteit"
+                widget: "object"
+                required: false
+                fields:
+                  - label: "Tekst"
+                    name: "text"
+                    widget: "text"
+                  - label: "Onderwerpen"
+                    name: "pills"
+                    widget: "list"
+                    required: false
+                    field:
+                      label: "Onderwerp"
+                      name: "item"
+                      widget: "string"
+                  - label: "Voorbeeldproject"
+                    name: "example"
+                    widget: "relation"
+                    required: false
+                    collection: "cases"
+                    value_field: "{{slug}}"
+                    search_fields: ["title"]
+                    display_fields: ["title"]
+          - label: "Blok \"Begin bij je vraagstuk\""
+            name: "vraagstukken"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Vraagstukken"
+                name: "items"
+                widget: "list"
+                required: false
+                min: 4
+                max: 4
+                fields:
+                  - label: "Vraagstuk"
+                    name: "text"
+                    widget: "string"
+                  - label: "Hoort bij"
+                    name: "dienst"
+                    widget: "select"
+                    options:
+                      - label: "Webshops & commerce"
+                        value: "webshops-commerce"
+                      - label: "Websites"
+                        value: "websites-digitale-ervaringen"
+                      - label: "Groei & slimme processen"
+                        value: "groei-slimme-processen"
+                      - label: "Merk & identiteit"
+                        value: "merk-identiteit"
+          - label: "Blok Werkwijze"
+            name: "werkwijze"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+      - name: over
+        label: "Over"
+        file: src/data/teksten/over.json
+        fields:
+          - label: "Zoekmachine (SEO)"
+            name: "seo"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+                hint: "Max. 70 tekens. Leeg = standaard."
+                required: false
+              - label: "Beschrijving"
+                name: "description"
+                widget: "text"
+                hint: "Max. 170 tekens. Leeg = standaard."
+                required: false
+          - label: "Label"
+            name: "eyebrow"
+            widget: "string"
+          - label: "Kop"
+            name: "title"
+            widget: "string"
+          - label: "Intro"
+            name: "lead"
+            widget: "text"
+          - label: "Aanspreekpunt"
+            name: "person"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Korte tekst over Levi"
+                name: "bio"
+                widget: "text"
+                hint: "Maximaal drie zinnen, gewone taal. Leeg = niet getoond."
+                required: false
+              - label: "Tekst"
+                name: "text"
+                widget: "text"
+              - label: "Sticker"
+                name: "sticker"
+                widget: "string"
+                required: false
+              - label: "Regio"
+                name: "region"
+                widget: "string"
+              - label: "Knoptekst"
+                name: "cta"
+                widget: "string"
+          - label: "Blok uitgangspunten"
+            name: "beliefs"
+            widget: "object"
+            hint: "De uitgangspunten zelf staan bij Werkwijze."
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+          - label: "Blok werkwijze"
+            name: "steps"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+          - label: "Blok klanten"
+            name: "clients"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Namen"
+                name: "names"
+                widget: "list"
+                field:
+                  label: "Naam"
+                  name: "item"
+                  widget: "string"
+              - label: "Linktekst"
+                name: "cta"
+                widget: "string"
+      - name: contact
+        label: "Contact"
+        file: src/data/teksten/contact.json
+        fields:
+          - label: "Zoekmachine (SEO)"
+            name: "seo"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+                hint: "Max. 70 tekens. Leeg = standaard."
+                required: false
+              - label: "Beschrijving"
+                name: "description"
+                widget: "text"
+                hint: "Max. 170 tekens. Leeg = standaard."
+                required: false
+          - label: "Label"
+            name: "kicker"
+            widget: "string"
+          - label: "Kop"
+            name: "title"
+            widget: "string"
+            hint: "Ook gebruikt voor het contactblok op de homepage en onderaan alle pagina's."
+          - label: "Tekst"
+            name: "lead"
+            widget: "text"
+            hint: "Idem."
+          - label: "Kop \"direct contact\""
+            name: "directTitle"
+            widget: "string"
+          - label: "Blok \"Zo gaat het verder\""
+            name: "next"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Drie stappen"
+                name: "steps"
+                widget: "list"
+                required: false
+                min: 3
+                max: 3
+                fields:
+                  - label: "Titel"
+                    name: "t"
+                    widget: "string"
+                  - label: "Tekst"
+                    name: "d"
+                    widget: "text"
+      - name: werk
+        label: "Werk (overzichtspagina)"
+        file: src/data/teksten/werk.json
+        fields:
+          - label: "Zoekmachine (SEO)"
+            name: "seo"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+                hint: "Max. 70 tekens. Leeg = standaard."
+                required: false
+              - label: "Beschrijving"
+                name: "description"
+                widget: "text"
+                hint: "Max. 170 tekens. Leeg = standaard."
+                required: false
+          - label: "Label"
+            name: "kicker"
+            widget: "string"
+          - label: "Intro"
+            name: "intro"
+            widget: "text"
+      - name: privacy
+        label: "Privacyverklaring"
+        file: src/data/teksten/privacy.json
+        fields:
+          - label: "Zoekmachine (SEO)"
+            name: "seo"
+            widget: "object"
+            required: false
+            fields:
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+                hint: "Max. 70 tekens. Leeg = standaard."
+                required: false
+              - label: "Beschrijving"
+                name: "description"
+                widget: "text"
+                hint: "Max. 170 tekens. Leeg = standaard."
+                required: false
+          - label: "Titel"
+            name: "title"
+            widget: "string"
+          - label: "Intro"
+            name: "lead"
+            widget: "text"
+          - label: "Laatst bijgewerkt (tekst)"
+            name: "updated"
+            widget: "string"
+            hint: "Bijv. \"2 november 2026\". Pas aan bij elke wijziging."
+          - label: "Onderdelen"
+            name: "sections"
+            widget: "list"
+            hint: "E-mailadres info@klundijk.com in de tekst wordt automatisch beschermd tegen Cloudflare-verhulling."
+            required: false
+            fields:
+              - label: "Anker (zonder spaties)"
+                name: "id"
+                widget: "string"
+                hint: "Bijv. \"wie\". Niet wijzigen voor bestaande onderdelen."
+              - label: "Titel"
+                name: "title"
+                widget: "string"
+              - label: "Alinea's"
+                name: "paragraphs"
+                widget: "list"
+                field:
+                  label: "Alinea"
+                  name: "item"
+                  widget: "text"
+              - label: "Opsomming (optioneel)"
+                name: "list"
+                widget: "list"
+                required: false
+                field:
+                  label: "Punt"
+                  name: "item"
+                  widget: "text"
+              - label: "Slotalinea (optioneel)"
+                name: "after"
+                widget: "text"
+                required: false

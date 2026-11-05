@@ -9,7 +9,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
 const chips = [site.contact.location, o.person.region, site.legal.kvk ? `KvK ${site.legal.kvk}` : showPlaceholders ? 'KvK [nummer]' : null].filter(Boolean) as string[];
 const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
 ---
-<Base title="Over" description="Klundijk helpt ondernemers met merk, websites, webshops en slimme processen. Je praat met één persoon die meedenkt." heroHeader>
+<Base title={o.seo.title} description={o.seo.description} heroHeader>
   <section class="hero on-field" aria-labelledby="over-title">
     <p class="mono kicker">{o.eyebrow}</p>
     <h1 id="over-title" class="hero__title">{o.title}</h1>

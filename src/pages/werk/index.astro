@@ -4,17 +4,18 @@ import WorkCard from '../../components/WorkCard.astro';
 import { getWorkItems } from '../../lib/content';
 import { site, showPlaceholders } from '../../data/site';
 import { DIENSTEN } from '../../data/diensten';
+import w from '../../data/teksten/werk.json';
 
 const items = await getWorkItems();
 const filters = DIENSTEN.map((d) => d.id);
 const count = (id: string) => items.filter((i) => i.data.services.includes(id as never)).length;
 const hasCommerceCase = false; // slot voor een tweede commerce-case: pas tonen als het aantoonbaar is
 ---
-<Base title="Werk" description="Geselecteerd werk van Klundijk: projecten waarin merk, website en webshop samenkomen.">
+<Base title={w.seo.title} description={w.seo.description}>
   <section class="head wrap">
-    <p class="mono kicker">Werk · selectie van projecten</p>
+    <p class="mono kicker">{w.kicker}</p>
     <h1 class="title">Werk<span class="dot">.</span></h1>
-    <p class="intro">Projecten waarin merk, website en webshop samenkomen. Alleen werk dat we echt hebben gemaakt, met de keuzes erbij.</p>
+    <p class="intro">{w.intro}</p>
 
     <!-- Filters werken met JavaScript; zonder JS staan alle projecten zichtbaar en blijft de groep verborgen. -->
     <div class="filters" role="group" aria-label="Filter op dienst" data-filters hidden>

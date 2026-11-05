@@ -2,6 +2,8 @@
 import { dims, srcsetFor } from '../../lib/images';
 // Hero (bord X · Home / X · Mobiel). Sinds 4 nov zonder de "ruwe" intro en de knop "Zie hoe het was" (besluit Levi).
 import { getWorkItems, hasCasePage } from '../../lib/content';
+import { site } from '../../data/site';
+import { HOME_TEXT as t } from '../../data/home';
 const entry = (await getWorkItems()).find((e) => e.id === 'auto-restyle-noord');
 const c = entry?.data;
 const img = c?.cardImage;
@@ -10,7 +12,7 @@ const cardHref = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
 ---
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero__top">
-    <p class="mono hero__eyebrow">Klundijk — digitale partner</p>
+    <p class="mono hero__eyebrow">{t.hero.eyebrow}</p>
     <div class="hero__stage">
       <h1 id="hero-title" class="hero__title">
         <span class="hero__l">Digitaal</span><span class="hero__l">kan</span><span class="hero__l hero__beter">beter.</span>
@@ -20,13 +22,13 @@ const cardHref = entry && hasCasePage(entry) ? `/werk/${entry.id}` : '/werk';
 
   <div class="hero__row">
     <div class="hero__copy">
-      <p class="hero__sub">Dus maken we het beter.</p>
-      <p class="hero__text">Klundijk helpt bedrijven hun merk, website, webshop en digitale processen beter maken. We beginnen bij wat er nodig is en kiezen daarna pas de oplossing.</p>
+      <p class="hero__sub">{t.hero.sub}</p>
+      <p class="hero__text">{site.description}</p>
     </div>
     <div class="hero__ctas">
       <p class="hero__actions">
-        <a class="link-strong hero__more" href="#werk">Bekijk ons werk</a>
-        <a class="btn btn--primary btn--lg hero__cta" href="#contact">Bespreek je vraagstuk</a>
+        <a class="link-strong hero__more" href="#werk">{site.secondaryCta.label}</a>
+        <a class="btn btn--primary btn--lg hero__cta" href="#contact">{site.primaryCta.label}</a>
       </p>
     </div>
   </div>

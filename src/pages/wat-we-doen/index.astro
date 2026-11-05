@@ -6,7 +6,7 @@ import { getWorkItems } from '../../lib/content';
 import { showPlaceholders } from '../../data/site';
 import { DIENSTEN, dienstHref, dienstLabels } from '../../data/diensten';
 import { overzicht as o } from '../../data/overzicht';
-import { principlesHeading, steps, werkwijzeHref } from '../../data/werkwijze';
+import { principlesHeading, steps, werkwijzeHref, werkwijzeMeer } from '../../data/werkwijze';
 
 const work = await getWorkItems();
 const commerceImg = work.find((w) => w.id === 'rootboxes')?.data.cardImage;
@@ -18,7 +18,7 @@ const rows = DIENSTEN.slice(1).map((d, i) => {
 });
 const num = (n: number) => String(n + 1).padStart(2, '0');
 ---
-<Base title="Wat we doen" description="Merk, websites, webshops en slimme digitale processen: waarvoor je Klundijk inschakelt." heroHeader>
+<Base title={o.seo.title} description={o.seo.description} heroHeader>
   <section class="hero on-field" aria-labelledby="wwd-title">
     <p class="mono kicker">{o.eyebrow}</p>
     <h1 id="wwd-title" class="hero__title">{o.title.map((t) => <span class="nb">{t} </span>)}</h1>
@@ -83,7 +83,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     <ol class="steps">
       {steps.map((t, i) => <li><span class="mono muted">{num(i)}</span><span class="step__t">{t}</span></li>)}
     </ol>
-    <a class="link-strong" href={werkwijzeHref}>Meer over onze werkwijze</a>
+    <a class="link-strong" href={werkwijzeHref}>{werkwijzeMeer}</a>
   </section>
 </Base>
 

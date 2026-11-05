@@ -4,6 +4,7 @@
 import { dims, srcsetFor } from '../../lib/images';
 import { getWorkItems, hasCasePage, textOn } from '../../lib/content';
 import { showPlaceholders } from '../../data/site';
+import { HOME_TEXT as t } from '../../data/home';
 const items = await getWorkItems();
 const rows = items.map((e, i) => ({
   id: e.id, n: String(i + 1).padStart(2, '0'), c: e.data, linked: hasCasePage(e), fg: textOn(e.data.cardColor),
@@ -14,8 +15,8 @@ const rows = items.map((e, i) => ({
 ---
 <section class="werk" id="werk" aria-labelledby="werk-h">
   <div class="werk__head">
-    <h2 id="werk-h" class="werk__h">Werk dat iets in beweging zet.</h2>
-    <p class="mono werk__hint">Klik een project open</p>
+    <h2 id="werk-h" class="werk__h">{t.werk.title}</h2>
+    <p class="mono werk__hint">{t.werk.hint}</p>
   </div>
   <ul class="wlist" data-wlist>
     {rows.map((r, i) => (

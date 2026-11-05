@@ -1,0 +1,28 @@
+{
+  "seo": {
+    "title": "Contact",
+    "description": "Bespreek je vraagstuk met Klundijk. Vertel kort waar je tegenaan loopt of naartoe wilt."
+  },
+  "kicker": "Contact",
+  "title": "Heb je iets dat digitaal beter kan?",
+  "lead": "Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.",
+  "directTitle": "Je praat direct met Levi.",
+  "next": {
+    "kicker": "Wat gebeurt er daarna",
+    "title": "Zo gaat het verder.",
+    "steps": [
+      {
+        "t": "Je vertelt kort wat er speelt",
+        "d": "Via het formulier, per telefoon of per e-mail. Een paar zinnen is genoeg."
+      },
+      {
+        "t": "We reageren persoonlijk",
+        "d": "Levi leest je vraagstuk zelf en komt terug met een eerste reactie of een vraag."
+      },
+      {
+        "t": "We plannen een kennismaking",
+        "d": "Samen kijken we wat er speelt en wat de verstandigste route is. Adviseren gaat voor maken."
+      }
+    ]
+  }
+}
