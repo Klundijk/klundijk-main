@@ -6,34 +6,31 @@ import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { site, showPlaceholders } from '../data/site';
 import { form } from '../data/form';
+import c from '../data/teksten/contact.json';
 
 const { phone, email, location } = site.contact;
 const tel = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
 const direct = Boolean(phone || email || showPlaceholders);
-const responseTitle = form.responseTime ? `We reageren binnen ${form.responseTime}` : 'We reageren persoonlijk';
-const steps = [
-  { t: 'Je vertelt kort wat er speelt', d: 'Via het formulier, per telefoon of per e-mail. Een paar zinnen is genoeg.' },
-  { t: responseTitle, d: 'Levi leest je vraagstuk zelf en komt terug met een eerste reactie of een vraag.' },
-  { t: 'We plannen een kennismaking', d: 'Samen kijken we wat er speelt en wat de verstandigste route is. Adviseren gaat voor maken.' },
-];
+// Is er een reactietermijn ingesteld (data/form.ts), dan vervangt die de titel van stap 2.
+const steps = c.next.steps.map((s, i) => (i === 1 && form.responseTime ? { ...s, t: `We reageren binnen ${form.responseTime}` } : s));
 ---
-<Base title="Contact" description="Bespreek je vraagstuk met Klundijk. Vertel kort waar je tegenaan loopt of naartoe wilt." contactBand={false} heroHeader>
+<Base title={c.seo.title} description={c.seo.description} contactBand={false} heroHeader>
   <section class="hero on-field" aria-labelledby="contact-title">
     <div class="intro">
-      <p class="mono kicker">Contact</p>
-      <h1 id="contact-title" class="title">Heb je iets dat digitaal beter kan?</h1>
-      <p class="lead">Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.</p>
+      <p class="mono kicker">{c.kicker}</p>
+      <h1 id="contact-title" class="title">{c.title}</h1>
+      <p class="lead">{c.lead}</p>
     </div>
 
     <div class="formwrap">
-      <ContactForm bare submitLabel="Bespreek je vraagstuk" />
+      <ContactForm bare submitLabel={site.primaryCta.label} />
     </div>
 
     {direct && (
       <aside class="direct" aria-labelledby="direct-h">
         {showPlaceholders && <div class="portrait placeholder-flag" aria-hidden="true">[Portret Levi]</div>}
         <div class="direct__txt">
-          <h2 id="direct-h" class="direct__t">Je praat direct met Levi.</h2>
+          <h2 id="direct-h" class="direct__t">{c.directTitle}</h2>
           {phone && tel ? <a class="mono" href={tel}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
           {email ? <MailLink email={email} class="mono" /> : showPlaceholders && <span class="placeholder-flag">[e-mailadres]</span>}
           <span class="mono place">{location}</span>
@@ -43,8 +40,8 @@ const steps = [
   </section>
 
   <section class="next wrap-full" aria-labelledby="next-h">
-    <p class="mono kicker--dark">Wat gebeurt er daarna</p>
-    <h2 id="next-h" class="h2">Zo gaat het verder.</h2>
+    <p class="mono kicker--dark">{c.next.kicker}</p>
+    <h2 id="next-h" class="h2">{c.next.title}</h2>
     <ol class="steps">
       {steps.map((s, i) => (
         <li class="step">

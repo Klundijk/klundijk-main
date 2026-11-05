@@ -21,7 +21,9 @@ Node 22.12 of nieuwer.
 | --- | --- |
 | `src/pages/` | Routes: `/`, `/werk`, `/werk/[slug]`, `/wat-we-doen`, `/wat-we-doen/[slug]`, `/over`, `/contact`, `404`, `robots.txt` |
 | `src/components/` | Header, Footer, ContactBand, ContactForm, WorkCard; `home/` = secties van de homepage |
-| `src/data/` | Eén bron per soort inhoud: `site.ts` (naam, contact, navigatie), `diensten.ts` (volgorde en labels van de vier diensten), `home.ts`, `over.ts`, `overzicht.ts`, `werkwijze.ts`, `form.ts`, `theme.ts` |
+| `src/data/` | Structuur per soort inhoud: `site.ts`, `diensten.ts` (volgorde en labels van de vier diensten), `home.ts`, `over.ts`, `overzicht.ts`, `werkwijze.ts`, `privacy.ts`, `form.ts`, `theme.ts` |
+| `src/data/teksten/*.json` | **De teksten van de pagina's** (instellingen, home, werkwijze, wat-we-doen, over, contact, werk, privacy); bewerkbaar via het CMS |
+| `public/admin/` | CMS (Sveltia): `config.yml` + `index.html`; de CMS-bestanden zelf komen bij de build uit `node_modules` (`scripts/copy-cms.mjs`) |
 | `src/content/cases`, `src/content/services` | Markdown met schema (`src/content.config.ts`) |
 | `src/styles/` | `tokens.css` (vaste designtokens), `global.css` (basis, knoppen, chips) |
 | `src/lib/` | `content.ts` (werk ophalen), `contrast.ts` (WCAG-berekeningen), `stage.ts` (illustraties "nu / beter") |
@@ -30,7 +32,21 @@ Node 22.12 of nieuwer.
 
 Kleuren (blauw veld, oranje accent) staan op één plek in `src/data/theme.ts`; componenten gebruiken alleen CSS-variabelen.
 
+## Beheer via het CMS (/admin)
+
+Projecten, diensten en alle paginateksten zijn te bewerken op `https://klundijk.com/admin` (Sveltia CMS, direct op de bestanden in deze repo).
+
+- **Inloggen:** "Sign in using access token" met een fine-grained GitHub-token, alleen voor deze repo (Contents: lezen en schrijven). Aanmaken: GitHub > Settings > Developer settings > Personal access tokens > Fine-grained. Elke redacteur heeft een GitHub-account met schrijfrechten nodig.
+- **Wat gebeurt er bij opslaan:** een commit op `main` ("... (CMS)"). Daarop deployt `deploy-test.yml` automatisch naar de testsite. Naar klundijk.com gaat het pas via de workflow "Deploy live".
+- **Config:** `public/admin/config.yml` volgt het schema in `src/content.config.ts` en de vorm van `src/data/teksten/*.json`. Voeg je een veld toe aan een schema of JSON, voeg het dan ook toe aan de config (anders kan het CMS het niet bewerken).
+- **Lege velden:** het CMS schrijft leeg als `null` of `''`; het schema (`clean` in `content.config.ts`) behandelt dat als "niet ingevuld".
+- **Beelden:** uploads worden automatisch naar webp (max 2000 px) omgezet. De `-800`-variant maakt `scripts/prepare-images.mjs` bij elke build.
+- **CSP:** `/admin` heeft een eigen Content-Security-Policy in `deploy/apache.htaccess` (GitHub, jsDelivr en unpkg voor lettertypen en vertalingen).
+
 ## Inhoud toevoegen
+
+Dit kan ook zonder CMS, rechtstreeks in de bestanden:
+
 
 - **Werk:** nieuw bestand in `src/content/cases/`. `kind: project` is een teaser ("Case volgt"), `kind: case` krijgt een eigen pagina zodra `placeholder: false` en de verplichte velden gevuld zijn. Beelden als `.webp` in `public/work/` (1400 px breed, plus `naam-800.webp`).
 - **Diensten:** volgorde en labels in `src/data/diensten.ts`, tekst per dienst in `src/content/services/`.

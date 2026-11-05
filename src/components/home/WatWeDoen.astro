@@ -1,7 +1,7 @@
 ---
 import { dims, srcsetFor } from '../../lib/images';
 // Wat we doen (bord X · Home): Webshops & commerce als zwaartepunt met beeld, daaronder de drie andere diensten.
-import { SERVICES as S } from '../../data/home';
+import { SERVICES as S, HOME_TEXT as t } from '../../data/home';
 import { getWorkItems, hasCasePage } from '../../lib/content';
 const img = (await getWorkItems()).find((e) => e.id === S.hub.imageCase);
 const ci = img?.data.cardImage;
@@ -11,8 +11,8 @@ const srcset = ci ? srcsetFor(ci.src) : undefined;
 <section class="wwd on-field" id="wat-we-doen" aria-labelledby="wwd-h">
   <div class="wwd__in">
     <div class="wwd__bar">
-      <h2 id="wwd-h" class="mono wwd__kicker">Wat we doen</h2>
-      <a class="link-strong" href="/wat-we-doen">Bekijk wat we doen</a>
+      <h2 id="wwd-h" class="mono wwd__kicker">{t.diensten.kicker}</h2>
+      <a class="link-strong" href="/wat-we-doen">{t.diensten.link}</a>
     </div>
     <div class="hub">
       <div class="hub__txt">

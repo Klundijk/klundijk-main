@@ -3,6 +3,9 @@
 import type { Art } from '../lib/stage';
 import { DIENSTEN, dienstHref, type DienstId } from './diensten';
 import { overzicht } from './overzicht';
+import h from './teksten/home.json';
+import i from './teksten/instellingen.json';
+import { stappen } from './werkwijze';
 
 // Illustraties van de vier situaties. Volgorde en nummers volgen data/diensten.ts, zodat 01-04 op de hele pagina
 // dezelfde dienst betekenen (in het bord staan Merk en Processen hier omgewisseld t.o.v. de diensten eronder).
@@ -43,24 +46,8 @@ const ART: Record<DienstId, Art> = {
   ] },
 };
 
-const SITUATIES: Record<DienstId, { heading: string; copy: string }> = {
-  'webshops-commerce': {
-    heading: 'Je webshop of digitale omgeving is ingewikkelder geworden dan nodig.',
-    copy: 'Dan brengen we techniek, productstructuur, beheer, SEO en klantreis terug naar een logisch geheel.',
-  },
-  'websites-digitale-ervaringen': {
-    heading: 'Je website ziet er prima uit, maar doet commercieel te weinig.',
-    copy: 'Dan kijken we naar boodschap, structuur, gebruikerservaring en wat bezoekers nodig hebben om verder te gaan.',
-  },
-  'groei-slimme-processen': {
-    heading: 'Je weet dat processen slimmer kunnen, maar nog niet welke technologie daarbij past.',
-    copy: 'Dan beginnen we bij het proces en kiezen we pas daarna de techniek, automatisering of AI die werkelijk helpt.',
-  },
-  'merk-identiteit': {
-    heading: 'Je merk past niet meer bij het bedrijf dat je bent geworden.',
-    copy: 'Dan helpen we om positie, uitstraling en middelen opnieuw op één lijn te brengen.',
-  },
-};
+// Teksten van de vier situaties staan in teksten/home.json (bewerkbaar via het CMS).
+const SITUATIES = h.situaties.items as Record<DienstId, { heading: string; copy: string }>;
 
 export const TILES = DIENSTEN.map((d, i) => ({
   id: d.id, num: String(i + 1).padStart(2, '0'), label: d.label, ...SITUATIES[d.id], art: ART[d.id],
@@ -72,12 +59,12 @@ export const PROCES_ART: Art = ART['websites-digitale-ervaringen'];
 export const SERVICES = {
   hub: {
     num: '01', title: DIENSTEN[0].label,
-    text: 'Nieuwe shops, redesigns en migraties waarbij productdata, UX, SEO, techniek en beheer als één geheel worden bekeken.',
+    text: h.diensten.hubText,
     tags: overzicht.commerce.topics,
-    cta: { label: 'Plan een kennismaking', href: '/contact' },
-    more: { label: 'Bekijk webshops & commerce', href: dienstHref('webshops-commerce') },
+    cta: { label: i.knoppen.kennismaking, href: '/contact' },
+    more: { label: h.diensten.hubMore, href: dienstHref('webshops-commerce') },
     imageCase: 'rootboxes',
-    imageCaption: 'RootBoxes — logo, huisstijl en webshop',
+    imageCaption: h.diensten.hubImageCaption,
   },
   rows: DIENSTEN.slice(1).map((d, i) => ({
     num: String(i + 2).padStart(2, '0'), title: d.label, href: dienstHref(d.id),
@@ -85,37 +72,30 @@ export const SERVICES = {
   })),
 };
 
-// Uitgelichte case op de homepage. De vraag en uitvoering komen uit de casetekst; keuze en resultaat zijn nog te leveren
-// (Levi en SEO & content) en verschijnen alleen in dev als placeholder. Nooit cijfers verzinnen.
+// Uitgelichte case op de homepage. De vraag en uitvoering komen uit teksten/home.json; keuze is nog te leveren
+// (Levi en SEO & content) en verschijnt alleen in dev als placeholder. Nooit cijfers verzinnen.
 export const HOME_CASE = {
   slug: 'auto-restyle-noord',
-  kicker: 'Uitgelichte case',
-  title: 'Niet alleen wat we maakten, maar waarom.',
-  more: 'Bekijk de volledige case',
+  kicker: h.case.kicker,
+  title: h.case.title,
+  more: h.case.more,
   cols: [
-    { k: 'Vraagstuk', v: 'Door een nieuwe naam en een verhuizing moest de online uitstraling opnieuw kloppen: logo, website, online gegevens en zichtbaarheid.' },
-    { k: 'Belangrijkste keuze', v: null as string | null, ph: '[Welke keuze maakte het verschil? Levi en SEO & content vullen aan.]' },
-    { k: 'Uitvoering', v: 'Klundijk dacht mee over de positionering, ontwikkelde de huisstijl en website en hielp met de online inrichting rondom de nieuwe naam en locatie.' },
-    { k: 'Resultaat', v: 'Auto Restyle Noord heeft een nieuwe branding, een nieuw logo en een nieuwe website gekregen, passend bij de nieuwe naam na de verhuizing.' as string | null, ph: '' },
+    { k: 'Vraagstuk', v: (h.case.vraagstuk || null) as string | null, ph: '[Wat was het vraagstuk? Levi en SEO & content vullen aan.]' },
+    { k: 'Belangrijkste keuze', v: ((h.case as { keuze?: string }).keuze || null) as string | null, ph: '[Welke keuze maakte het verschil? Levi en SEO & content vullen aan.]' },
+    { k: 'Uitvoering', v: (h.case.uitvoering || null) as string | null, ph: '[Wat deed Klundijk? Levi en SEO & content vullen aan.]' },
+    { k: 'Resultaat', v: (h.case.resultaat || null) as string | null, ph: '' },
   ],
   slot: { kicker: 'Slot — tweede uitgelichte case', title: '[Webshop-case — bijv. Acta Buitenleven, zodra aantoonbaar]', note: 'Alleen met echte resultaten en toestemming.' },
 };
 
-export const STEPS = [
-  { title: 'Begrijpen', role: 'Klundijk luistert', text: 'Wat speelt er echt in het bedrijf, bij de klant en in de huidige situatie?', t: 0 },
-  { title: 'Adviseren', role: 'Klundijk adviseert', text: 'Wat is de verstandigste route, en welke opties vallen juist af?', t: 0.25 },
-  { title: 'Kiezen', role: 'Samen kiezen', text: 'Aanpak, techniek en prioriteiten leggen we samen vast.', t: 0.5 },
-  { title: 'Maken of regisseren', role: 'Zelf maken · of regisseren', text: 'Klundijk maakt zelf, of regisseert gespecialiseerde partners. Jij houdt één aanspreekpunt.', t: 1 },
-  { title: 'Meten', role: 'Klundijk meet mee', text: 'Wat levert het op? We kijken naar gebruik, conversie en resultaat.', t: 1 },
-  { title: 'Verbeteren', role: 'Klundijk blijft verbeteren', text: 'Na livegang kijken we waar verdere winst te behalen is.', t: 1 },
-];
+// De zes stappen komen uit teksten/werkwijze.json; `t` is de voortgang van de illustratie (0 = begin, 1 = klaar).
+const T = [0, 0.25, 0.5, 1, 1, 1];
+export const STEPS = stappen.map((s, n) => ({ ...s, t: T[n] ?? 1 }));
 
 export const OVER = {
-  kicker: 'Kleine studio, direct contact',
-  title: 'Korte lijnen, zonder korte blik.',
-  text: 'Klundijk is bewust compact. Je werkt direct met de mensen die inhoudelijk meedenken en het werk maken. Voor specialistische expertise voegen we gericht de juiste kennis toe, zonder onnodige lagen of een groter bureau te spelen dan we zijn.',
-  cta: 'Over Klundijk',
+  ...h.over,
   portraitCaption: 'Levi, [functie] bij Klundijk',
 };
 
-export const CLIENTS = ['Kraaij AV','Drenthe Caravans','Voetbalkooi Nederland','Auto Restyle Groningen','Auto Restyle Noord','Rudi Schipper','Buurmeijer Automotive','Pandan Sisters','RootBoxes'];
+export const CLIENTS = h.klanten.namen;
+export const HOME_TEXT = h;

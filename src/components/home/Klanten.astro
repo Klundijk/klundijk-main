@@ -1,11 +1,11 @@
 ---
 // Klanten (bord X · Home): één doorlopende regel namen met een accentstreep ertussen. De quote is nog te leveren
 // ("alleen echt en met toestemming") en verschijnt alleen in dev.
-import { CLIENTS } from '../../data/home';
+import { CLIENTS, HOME_TEXT as t } from '../../data/home';
 import { showPlaceholders } from '../../data/site';
 ---
 <section class="kl" aria-labelledby="kl-h">
-  <h2 id="kl-h" class="mono kl__k">Klanten</h2>
+  <h2 id="kl-h" class="mono kl__k">{t.klanten.title}</h2>
   <ul class="kl__list">{CLIENTS.map((c) => <li>{c}</li>)}</ul>
   {showPlaceholders && <p class="kl__quote placeholder-flag">[Klantquote — alleen echt en met toestemming.]</p>}
 </section>

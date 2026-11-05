@@ -1,0 +1,35 @@
+{
+  "seo": {
+    "title": "Over",
+    "description": "Klundijk helpt ondernemers met merk, websites, webshops en slimme processen. Je praat met één persoon die meedenkt."
+  },
+  "eyebrow": "Over Klundijk",
+  "title": "Een digitale partner die eerst begrijpt, en dan maakt.",
+  "lead": "Klundijk helpt ondernemers met merk, websites, webshops en slimme processen. Je praat met één persoon die meedenkt, ook als het antwoord geen nieuwe website is.",
+  "person": {
+    "kicker": "Wie je spreekt",
+    "title": "Levi, je aanspreekpunt.",
+    "text": "Levi leest je vraagstuk zelf en komt terug met een eerste reactie of een vraag. Waar het nodig is regisseert hij gespecialiseerde partners, zodat jij één gesprekspartner houdt.",
+    "sticker": "Aanspreekpunt",
+    "region": "Regio Groningen en daarbuiten",
+    "cta": "Bespreek je vraagstuk"
+  },
+  "beliefs": {
+    "kicker": "Waar we in geloven"
+  },
+  "steps": {
+    "kicker": "Werkwijze in zes stappen"
+  },
+  "clients": {
+    "kicker": "Waarmee we werkten",
+    "names": [
+      "Auto Restyle Noord",
+      "Kraaij AV",
+      "Pandan Sisters",
+      "RootBoxes",
+      "Drenthe Caravans",
+      "Rudi Schipper"
+    ],
+    "cta": "Bekijk ons werk"
+  }
+}

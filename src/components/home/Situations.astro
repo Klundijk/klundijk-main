@@ -3,15 +3,16 @@
 // Sinds 4 nov (besluit Levi) zonder knoppen "Maak het beter" / "Maak alles beter": de illustratie beweegt vanzelf naar "beter"
 // zodra de tegel in beeld komt, en elke tegel heeft een echte link naar de bijbehorende dienstpagina.
 // Zonder JavaScript staat elke tegel op "Nu".
-import { TILES } from '../../data/home';
+import { TILES, HOME_TEXT as t } from '../../data/home';
+import { site } from '../../data/site';
 import { dienstHref } from '../../data/diensten';
 import { blockStyles, lineStyles } from '../../lib/stage';
 ---
 <section class="sit" aria-labelledby="sit-h">
   <div class="sit__head">
     <div class="sit__titles">
-      <h2 id="sit-h" class="sit__h">Waar kunnen we iets beter maken?</h2>
-      <p class="mono sit__sub">Vier situaties waar we vaak bij helpen</p>
+      <h2 id="sit-h" class="sit__h">{t.situaties.title}</h2>
+      <p class="mono sit__sub">{t.situaties.sub}</p>
     </div>
   </div>
   <div class="sit__grid">
@@ -34,7 +35,7 @@ import { blockStyles, lineStyles } from '../../lib/stage';
             <p class="tile__copy">{t.copy}</p>
             <p class="tile__acts">
               <a class="tbtn" href={dienstHref(t.id)}>Bekijk {t.label.toLowerCase()}<span class="tbtn__arrow" aria-hidden="true">→</span></a>
-              {i === 0 && <a class="tbtn tbtn--accent" href="#contact">Plan een kennismaking</a>}
+              {i === 0 && <a class="tbtn tbtn--accent" href="#contact">{site.commerceCta.label}</a>}
             </p>
           </div>
         </article>

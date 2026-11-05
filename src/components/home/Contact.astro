@@ -3,13 +3,14 @@ import MailLink from '../MailLink.astro';
 // Contact op de homepage (bord X · Home): kop, uitleg en directe gegevens links, het formulier rechts.
 import ContactForm from '../ContactForm.astro';
 import { site, showPlaceholders } from '../../data/site';
+import c from '../../data/teksten/contact.json';
 const { phone, email } = site.contact;
 const tel = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
 ---
 <section class="ct on-field" id="contact" aria-labelledby="ct-h">
   <div class="ct__intro">
-    <h2 id="ct-h" class="ct__h">Heb je iets dat digitaal beter kan?</h2>
-    <p class="ct__p">Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.</p>
+    <h2 id="ct-h" class="ct__h">{c.title}</h2>
+    <p class="ct__p">{c.lead}</p>
     {(phone || email || showPlaceholders) && (
       <p class="ct__line">
         {phone && tel ? <a href={tel}>{phone}</a> : showPlaceholders && <span class="placeholder-flag">[telefoonnummer]</span>}
@@ -17,7 +18,7 @@ const tel = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
       </p>
     )}
   </div>
-  <div class="ct__form"><ContactForm bare submitLabel="Bespreek je vraagstuk" /></div>
+  <div class="ct__form"><ContactForm bare submitLabel={site.primaryCta.label} /></div>
 </section>
 <style>
   .ct { background: var(--k-field); color: var(--k-on-field); padding: 3.5rem var(--pad-x); display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }

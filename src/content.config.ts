@@ -6,6 +6,24 @@ import { DIENST_IDS } from './data/diensten';
 // Contentmodel uit de "Website research & content blueprint".
 // Bron-onafhankelijk: dezelfde velden kunnen later uit een headless CMS komen.
 
+// Het CMS (Sveltia) schrijft lege optionele velden als `null` of `''` (en lege objecten als `{}`). Die behandelen we als "niet ingevuld",
+// zodat een leeg veld nooit de build breekt of een standaardwaarde overschrijft. Een beeld zonder bestand (alleen alt-tekst) telt ook als leeg.
+const clean = (v: unknown): unknown => {
+  if (v === null || v === '') return undefined;
+  if (Array.isArray(v)) return v.map(clean).filter((x) => x !== undefined);
+  if (typeof v === 'object' && v !== null && !(v instanceof Date)) {
+    const o: Record<string, unknown> = {};
+    for (const [k, x] of Object.entries(v)) {
+      const c = clean(x);
+      if (c !== undefined) o[k] = c;
+    }
+    if (('alt' in o || 'position' in o) && !('src' in o)) return undefined;
+    return Object.keys(o).length ? o : undefined;
+  }
+  return v;
+};
+const cleaned = <T extends z.ZodTypeAny>(schema: T) => z.preprocess((v) => clean(v) ?? {}, schema);
+
 const seo = z.object({
   title: z.string().max(70).optional(),
   description: z.string().max(170).optional(),
@@ -18,7 +36,7 @@ const image = z.object({ src: z.string(), alt: z.string().default(''), position:
 // `kind: case` krijgt een casepagina. Casemodules die leeg zijn, worden niet getoond (geen placeholder-blokken in productie).
 const cases = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/cases' }),
-  schema: z
+  schema: cleaned(z
     .object({
       title: z.string(),
       kind: z.enum(['case', 'project']).default('project'),
@@ -61,12 +79,12 @@ const cases = defineCollection({
           if (!d[k]) ctx.addIssue({ code: 'custom', path: [k], message: `${k} is verplicht voor een gepubliceerde case` });
         }
       }
-    }),
+    })),
 });
 
 const services = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
-  schema: z.object({
+  schema: cleaned(z.object({
     title: z.string(),
     order: z.number().int(),
     shortIntro: z.string(),
@@ -86,7 +104,7 @@ const services = defineCollection({
     contactText: z.string().optional(),
     concept: z.boolean().default(true).describe('Tekst is concept en nog niet beoordeeld door SEO & content (badge alleen in dev)'),
     seo: seo.optional(),
-  }),
+  })),
 });
 
 export const collections = { cases, services };

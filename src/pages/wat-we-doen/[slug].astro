@@ -6,7 +6,7 @@ import Base from '../../layouts/Base.astro';
 import WorkCard from '../../components/WorkCard.astro';
 import { getServices, getWorkItems } from '../../lib/content';
 import { site, showPlaceholders } from '../../data/site';
-import { principles, principlesHeading, steps, werkwijzeHref } from '../../data/werkwijze';
+import { principles, principlesHeading, steps, werkwijzeHref, werkwijzeMeer } from '../../data/werkwijze';
 
 export async function getStaticPaths() {
   const services = await getServices();
@@ -78,7 +78,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     <ol class="steps">
       {steps.map((t, i) => <li><span class="mono kicker--dark">{num(i)}</span><span class="step__t">{t}</span></li>)}
     </ol>
-    <a class="link-strong" href={werkwijzeHref}>Meer over onze werkwijze</a>
+    <a class="link-strong" href={werkwijzeHref}>{werkwijzeMeer}</a>
   </section>
 
   {(work.length > 0 || showPlaceholders) && (

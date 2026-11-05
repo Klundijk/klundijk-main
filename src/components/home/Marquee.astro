@@ -1,13 +1,14 @@
 ---
 // Tekstband (bord X · Home). Decoratief: de tekst staat voor schermlezers één keer in een verborgen regel.
 // Zonder pauzeknop (besluit Levi, 4 nov): de band loopt langzaam, stopt bij hover/focus en staat stil bij verminderde beweging.
-const pair = 'Digitaal kan beter. — Dus maken we het beter. — ';
+import { HOME_TEXT as t } from '../../data/home';
+const pair = `${t.marquee.regel1} — ${t.marquee.regel2} — `;
 ---
 <section class="marquee" aria-label="Motto">
   <div class="marquee__track" id="marquee-track" aria-hidden="true">
     <span>{pair.repeat(2)}</span><span>{pair.repeat(2)}</span>
   </div>
-  <p class="sr-only">Digitaal kan beter. Dus maken we het beter.</p>
+  <p class="sr-only">{t.marquee.regel1} {t.marquee.regel2}</p>
 </section>
 <style>
   .marquee { background: var(--k-ink); color: var(--k-paper); overflow: hidden; position: relative; padding: 2.25rem 0 1.5rem; }

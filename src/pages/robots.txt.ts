@@ -5,7 +5,7 @@ import { indexable } from '../data/site';
 export const GET: APIRoute = ({ site }) =>
   new Response(
     indexable
-      ? `User-agent: *\nAllow: /\n\nSitemap: ${new URL('/sitemap-index.xml', site).href}\n`
+      ? `User-agent: *\nAllow: /\nDisallow: /admin\n\nSitemap: ${new URL('/sitemap-index.xml', site).href}\n`
       : `User-agent: *\nDisallow: /\n`,
     { headers: { 'Content-Type': 'text/plain' } },
   );

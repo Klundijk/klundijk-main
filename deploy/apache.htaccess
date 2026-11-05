@@ -49,6 +49,12 @@ DirectorySlash Off
   # Het formulier post alleen naar /api/contact.php op dezelfde site ('self'). Komt er een externe dienst bij (bijv. Cloudflare Turnstile), dan moet die hier expliciet bij.
   Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
 
+  # Beheerpagina van het CMS (/admin): mag verbinden met GitHub (inloggen en opslaan), blijft verder dicht en uit zoekmachines.
+  <If "%{REQUEST_URI} =~ m#^/admin#">
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: blob: https://*.githubusercontent.com; font-src 'self' data: https://cdn.jsdelivr.net; connect-src 'self' data: https://api.github.com https://github.com https://*.githubusercontent.com https://unpkg.com https://www.githubstatus.com https://cdn.jsdelivr.net; worker-src 'self' blob:; form-action 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'"
+    Header always set X-Robots-Tag "noindex, nofollow"
+  </If>
+
   # Bestanden met hash in de naam en de lettertypen mogen een jaar in de cache.
   <FilesMatch "\.(woff2)$">
     Header set Cache-Control "public, max-age=31536000, immutable"

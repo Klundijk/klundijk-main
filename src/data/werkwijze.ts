@@ -1,20 +1,17 @@
-// Gedeelde werkwijze-teksten op de dienstpagina's (bord X · Commerce). Conceptteksten: SEO & content beoordeelt.
-export const principles = [
-  { title: 'Advies eerst', text: 'We beginnen bij je vraagstuk, niet bij een platform. Wat past, wat past niet, en wat kun je beter laten.' },
-  { title: 'Techniek volgt', text: 'Platform-onafhankelijk: we kiezen samen wat bij je bedrijf past en leggen uit waarom.' },
-  { title: 'Eén aanspreekpunt', text: 'Klundijk maakt zelf, of regisseert gespecialiseerde partners. Jij praat met één persoon.' },
-] as const;
+// Werkwijze-teksten (gedeeld door home, Over, Wat we doen en de dienstpagina's). De tekst staat in teksten/werkwijze.json
+// (bewerkbaar via het CMS); hier alleen de vorm. Volgorde en benaming van de zes stappen is nog niet bevestigd (open punt in Notion).
+import w from './teksten/werkwijze.json';
+
+export const principles = w.uitgangspunten;
 
 // Over-pagina (bord X · Over): de drie uitgangspunten van de dienstpagina's plus een vierde.
-export const principlesAbout = [
-  ...principles,
-  { title: 'Eerlijk over resultaat', text: 'We beloven geen cijfers die we niet kunnen bewijzen. Wat we maakten laten we zien, met de keuzes erachter.' },
-] as const;
+export const principlesAbout = [...w.uitgangspunten, w.extraUitgangspunt];
 
-export const principlesHeading = 'Eerst begrijpen. Dan pas maken of regisseren.';
+export const principlesHeading = w.kop;
+export const procesKicker = w.procesKicker;
+export const steps = w.stappen.map((s) => s.title);
+export const stappen = w.stappen;
 
-// Volgorde en benaming van de zes stappen is nog niet bevestigd (open punt in Notion).
-export const steps = ['Begrijpen', 'Adviseren', 'Kiezen', 'Maken of regisseren', 'Meten', 'Verbeteren'] as const;
-
-// Doel van "Meer over onze werkwijze": de Over-pagina is nog niet ontworpen.
+// Doel van "Meer over onze werkwijze": de Over-pagina.
 export const werkwijzeHref = '/over';
+export const werkwijzeMeer = w.meerLabel;

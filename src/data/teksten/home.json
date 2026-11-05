@@ -1,0 +1,71 @@
+{
+  "hero": {
+    "eyebrow": "Klundijk — digitale partner",
+    "sub": "Dus maken we het beter."
+  },
+  "marquee": {
+    "regel1": "Digitaal kan beter.",
+    "regel2": "Dus maken we het beter."
+  },
+  "werk": {
+    "title": "Werk dat iets in beweging zet.",
+    "hint": "Klik een project open"
+  },
+  "situaties": {
+    "title": "Waar kunnen we iets beter maken?",
+    "sub": "Vier situaties waar we vaak bij helpen",
+    "items": {
+      "webshops-commerce": {
+        "heading": "Je webshop of digitale omgeving is ingewikkelder geworden dan nodig.",
+        "copy": "Dan brengen we techniek, productstructuur, beheer, SEO en klantreis terug naar een logisch geheel."
+      },
+      "websites-digitale-ervaringen": {
+        "heading": "Je website ziet er prima uit, maar doet commercieel te weinig.",
+        "copy": "Dan kijken we naar boodschap, structuur, gebruikerservaring en wat bezoekers nodig hebben om verder te gaan."
+      },
+      "groei-slimme-processen": {
+        "heading": "Je weet dat processen slimmer kunnen, maar nog niet welke technologie daarbij past.",
+        "copy": "Dan beginnen we bij het proces en kiezen we pas daarna de techniek, automatisering of AI die werkelijk helpt."
+      },
+      "merk-identiteit": {
+        "heading": "Je merk past niet meer bij het bedrijf dat je bent geworden.",
+        "copy": "Dan helpen we om positie, uitstraling en middelen opnieuw op één lijn te brengen."
+      }
+    }
+  },
+  "diensten": {
+    "kicker": "Wat we doen",
+    "link": "Bekijk wat we doen",
+    "hubText": "Nieuwe shops, redesigns en migraties waarbij productdata, UX, SEO, techniek en beheer als één geheel worden bekeken.",
+    "hubMore": "Bekijk webshops & commerce",
+    "hubImageCaption": "RootBoxes — logo, huisstijl en webshop"
+  },
+  "case": {
+    "kicker": "Uitgelichte case",
+    "title": "Niet alleen wat we maakten, maar waarom.",
+    "more": "Bekijk de volledige case",
+    "vraagstuk": "Door een nieuwe naam en een verhuizing moest de online uitstraling opnieuw kloppen: logo, website, online gegevens en zichtbaarheid.",
+    "uitvoering": "Klundijk dacht mee over de positionering, ontwikkelde de huisstijl en website en hielp met de online inrichting rondom de nieuwe naam en locatie.",
+    "resultaat": "Auto Restyle Noord heeft een nieuwe branding, een nieuw logo en een nieuwe website gekregen, passend bij de nieuwe naam na de verhuizing."
+  },
+  "over": {
+    "kicker": "Kleine studio, direct contact",
+    "title": "Korte lijnen, zonder korte blik.",
+    "text": "Klundijk is bewust compact. Je werkt direct met de mensen die inhoudelijk meedenken en het werk maken. Voor specialistische expertise voegen we gericht de juiste kennis toe, zonder onnodige lagen of een groter bureau te spelen dan we zijn.",
+    "cta": "Over Klundijk"
+  },
+  "klanten": {
+    "title": "Klanten",
+    "namen": [
+      "Kraaij AV",
+      "Drenthe Caravans",
+      "Voetbalkooi Nederland",
+      "Auto Restyle Groningen",
+      "Auto Restyle Noord",
+      "Rudi Schipper",
+      "Buurmeijer Automotive",
+      "Pandan Sisters",
+      "RootBoxes"
+    ]
+  }
+}

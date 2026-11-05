@@ -5,7 +5,7 @@ import { privacy as p } from '../data/privacy';
 // Cloudflare (voor de host) verhult e-mailadressen in lopende tekst; email_off houdt ze leesbaar in de ruwe HTML.
 const safe = (t: string) => t.replaceAll('info@klundijk.com', '<!--email_off-->info@klundijk.com<!--/email_off-->');
 ---
-<Base title="Privacyverklaring" description="Wat Klundijk met je gegevens doet als je contact opneemt of onze website bezoekt." contactBand={false} heroHeader>
+<Base title={p.seo.title} description={p.seo.description} contactBand={false} heroHeader>
   <section class="hero on-field" aria-labelledby="privacy-title">
     <p class="mono kicker">Privacy</p>
     <h1 id="privacy-title" class="title">{p.title}</h1>

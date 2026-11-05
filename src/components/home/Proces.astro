@@ -3,12 +3,13 @@
 // Zonder JavaScript zijn alle zes stappen een gewone lijst met uitleg.
 import { STEPS, PROCES_ART } from '../../data/home';
 import { blockStyles } from '../../lib/stage';
+import { principlesHeading, procesKicker } from '../../data/werkwijze';
 const stages = STEPS.map((s) => blockStyles(PROCES_ART, s.t));
 ---
 <section class="proc" aria-labelledby="pr-h">
   <div class="proc__head">
-    <p class="mono proc__kicker">Van advies tot regie</p>
-    <h2 id="pr-h" class="proc__h">Eerst begrijpen. Dan pas maken of regisseren.</h2>
+    <p class="mono proc__kicker">{procesKicker}</p>
+    <h2 id="pr-h" class="proc__h">{principlesHeading}</h2>
   </div>
   <div class="proc__grid">
     <div class="proc__list" data-proc>

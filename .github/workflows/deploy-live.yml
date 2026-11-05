@@ -63,8 +63,8 @@ jobs:
 
       - name: Controle indexeerbaarheid en domein
         run: |
-          # 404.html blijft bewust noindex.
-          for f in $(find dist -name '*.html' ! -name 404.html); do
+          # 404.html en de beheerpagina (/admin) blijven bewust noindex.
+          for f in $(find dist -name '*.html' ! -name 404.html ! -path 'dist/admin/*'); do
             if grep -q 'name="robots" content="noindex' "$f"; then echo "::error::$f staat nog op noindex"; exit 1; fi
           done
           grep -q '^Allow: /' dist/robots.txt || { echo "::error::robots.txt staat niet open"; exit 1; }
