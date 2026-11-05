@@ -15,7 +15,10 @@ const rows = items.map((e, i) => ({
 ---
 <section class="werk" id="werk" aria-labelledby="werk-h">
   <div class="werk__head">
-    <h2 id="werk-h" class="werk__h">{t.werk.title}</h2>
+    <div class="werk__titles">
+      <h2 id="werk-h" class="werk__h">{t.werk.title}</h2>
+      <p class="werk__intro">{t.werk.intro}</p>
+    </div>
     <p class="mono werk__hint">{t.werk.hint}</p>
   </div>
   <ul class="wlist" data-wlist>
@@ -58,6 +61,7 @@ const rows = items.map((e, i) => ({
       </li>
     ))}
   </ul>
+  <p class="werk__more"><a class="link-strong" href="/werk">{t.werk.cta}</a></p>
 </section>
 <script>
   const rows = [...document.querySelectorAll<HTMLElement>('[data-wrow]')];
@@ -79,6 +83,9 @@ const rows = items.map((e, i) => ({
   .werk__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; }
   .werk__h { max-width: 56rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; margin: 0; }
   @media (min-width: 768px) { .werk__h { font-stretch: 112%; line-height: 0.98; } }
+  .werk__titles { display: flex; flex-direction: column; gap: 1rem; }
+  .werk__intro { margin: 0; max-width: 40rem; font-size: var(--t-body); line-height: 1.5; }
+  .werk__more { margin: 0; }
   .werk__hint { display: none; color: var(--k-muted); margin: 0; }
   @media (min-width: 768px) { .werk__hint { display: block; } }
 

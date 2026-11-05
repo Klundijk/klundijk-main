@@ -3,10 +3,10 @@
 import Base from '../layouts/Base.astro';
 import { site, showPlaceholders } from '../data/site';
 import { over as o } from '../data/over';
-import { principlesAbout, principlesHeading, steps } from '../data/werkwijze';
+import { principlesAbout, principlesHeading, procesIntro, stappen } from '../data/werkwijze';
 
 const num = (n: number) => String(n + 1).padStart(2, '0');
-const chips = [site.contact.location, o.person.region, site.legal.kvk ? `KvK ${site.legal.kvk}` : showPlaceholders ? 'KvK [nummer]' : null].filter(Boolean) as string[];
+const chips = [o.person.region, site.legal.kvk ? `KvK ${site.legal.kvk}` : showPlaceholders ? 'KvK [nummer]' : null].filter(Boolean) as string[];
 const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
 ---
 <Base title={o.seo.title} description={o.seo.description} heroHeader>
@@ -45,8 +45,9 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
 
   <section class="how" aria-labelledby="how-h">
     <p id="how-h" class="mono">{o.steps.kicker}</p>
+    <p class="how__p">{procesIntro}</p>
     <ol class="steps">
-      {steps.map((t, i) => <li><span class="mono">{num(i)}</span><span class="step__t">{t}</span></li>)}
+      {stappen.map((st, i) => <li><span class="mono">{num(i)}</span><span class="step__t">{st.title}</span><span class="step__k">{st.kop}</span><span class="step__p">{st.text}</span></li>)}
     </ol>
   </section>
 
@@ -95,6 +96,9 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
   .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; }
   .steps li { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid #fff; padding-top: 0.75rem; min-width: 0; }
   .steps .mono { color: rgb(255 255 255 / 0.78); letter-spacing: 0.08em; }
+  .how__p { margin: 0; max-width: 40rem; font-size: var(--t-body); line-height: 1.5; }
+  .step__k { font-weight: 700; font-size: var(--t-small); line-height: 1.3; }
+  .step__p { font-size: var(--t-small); line-height: 1.5; color: rgb(255 255 255 / 0.78); }
   .step__t { font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); letter-spacing: -0.02em; line-height: 1.1; }
 
   .clients { background: var(--k-paper); padding: var(--pad-y) var(--pad-x); display: flex; flex-direction: column; gap: 2.5rem; align-items: flex-start; }
@@ -106,7 +110,7 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
   @media (min-width: 768px) {
     .principles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
     .principle p { font-size: var(--t-small); }
-    .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
     .step__t { font-size: var(--t-lead); }
     .portrait__img { height: 30rem; }
     .names li { font-size: var(--t-row); font-stretch: 112%; }
@@ -120,7 +124,7 @@ const bio = o.person.bio ?? (showPlaceholders ? o.person.bioPlaceholder : null);
     .person--solo .person__text { grid-column: 1 / span 8; }
     .principles { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.5rem; }
     .principle__t { font-stretch: 112%; font-size: var(--t-card); }
-    .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .names li { font-size: var(--t-row); }
   }
 </style>

@@ -1,12 +1,12 @@
 {
   "seo": {
-    "title": "Contact",
-    "description": "Bespreek je vraagstuk met Klundijk. Vertel kort waar je tegenaan loopt of naartoe wilt."
+    "title": "Contact | Klundijk",
+    "description": "Iets dat digitaal beter kan? Bespreek je vraagstuk met Klundijk. Vertel waar je tegenaan loopt; je hoeft de oplossing nog niet te weten."
   },
   "kicker": "Contact",
   "title": "Heb je iets dat digitaal beter kan?",
-  "lead": "Vertel kort waar je tegenaan loopt of naartoe wilt. Je hoeft nog niet precies te weten welke oplossing je nodig hebt.",
-  "directTitle": "Je praat direct met Levi.",
+  "lead": "Vertel waar je tegenaan loopt, wat je wilt veranderen of waar je naartoe wilt. Je hoeft de oplossing nog niet te weten — daar denken we in mee.",
+  "directTitle": "Direct contact met Levi.",
   "next": {
     "kicker": "Wat gebeurt er daarna",
     "title": "Zo gaat het verder.",
@@ -20,8 +20,8 @@
         "d": "Levi leest je vraagstuk zelf en komt terug met een eerste reactie of een vraag."
       },
       {
-        "t": "We plannen een kennismaking",
-        "d": "Samen kijken we wat er speelt en wat de verstandigste route is. Adviseren gaat voor maken."
+        "t": "We bespreken de verstandigste route.",
+        "d": "Samen kijken we wat er speelt, wat eerst nodig is en of een vervolgtraject logisch is. Advies gaat voor maken."
       }
     ]
   }

@@ -6,7 +6,7 @@ import { getWorkItems } from '../../lib/content';
 import { showPlaceholders } from '../../data/site';
 import { DIENSTEN, dienstHref, dienstLabels } from '../../data/diensten';
 import { overzicht as o } from '../../data/overzicht';
-import { principlesHeading, steps, werkwijzeHref, werkwijzeMeer } from '../../data/werkwijze';
+import WerkwijzeKort from '../../components/WerkwijzeKort.astro';
 
 const work = await getWorkItems();
 const commerceImg = work.find((w) => w.id === 'rootboxes')?.data.cardImage;
@@ -16,7 +16,6 @@ const rows = DIENSTEN.slice(1).map((d, i) => {
   const ex = r ? work.find((w) => w.id === r.example && w.data.services.includes(d.id)) : undefined;
   return { d, n: String(i + 2).padStart(2, '0'), r, example: ex?.data.title };
 });
-const num = (n: number) => String(n + 1).padStart(2, '0');
 ---
 <Base title={o.seo.title} description={o.seo.description} heroHeader>
   <section class="hero on-field" aria-labelledby="wwd-title">
@@ -77,14 +76,7 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     </nav>
   </section>
 
-  <section class="how wrap-full" aria-labelledby="how-h">
-    <p class="mono muted">{o.werkwijze.kicker}</p>
-    <h2 id="how-h" class="h2">{principlesHeading}</h2>
-    <ol class="steps">
-      {steps.map((t, i) => <li><span class="mono muted">{num(i)}</span><span class="step__t">{t}</span></li>)}
-    </ol>
-    <a class="link-strong" href={werkwijzeHref}>{werkwijzeMeer}</a>
-  </section>
+  <WerkwijzeKort kicker={o.werkwijze.kicker} />
 </Base>
 
 <style>
@@ -136,18 +128,10 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
   .vlink__q { font-weight: 700; font-size: var(--t-small); line-height: 1.25; max-width: 47rem; }
   .vlink__a { font-size: var(--t-card); transition: transform 0.2s var(--ease); }
 
-  .how { background: var(--k-paper); border-top: 1px solid var(--k-ink); padding-block: 3.5rem var(--pad-y); display: flex; flex-direction: column; gap: 2rem; align-items: flex-start; }
-  .how .h2 { max-width: 20ch; }
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: 1fr; align-self: stretch; }
-  .steps li { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--k-ink); padding-top: 0.75rem; min-width: 0; }
-  .step__t { font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); letter-spacing: -0.02em; line-height: 1.1; }
-
   @media (hover: hover) and (prefers-reduced-motion: no-preference) { .vlink:hover .vlink__a { transform: translateX(4px); } }
   @media (min-width: 768px) {
     .commerce__img { height: 22rem; }
     .drow__p { font-size: var(--t-small); }
-    .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
-    .step__t { font-size: var(--t-lead); }
     .vlink__q { font-size: var(--t-body); }
   }
   @media (min-width: 1100px) {
@@ -163,6 +147,5 @@ const num = (n: number) => String(n + 1).padStart(2, '0');
     .drow__body { grid-column: 6 / span 4; }
     .drow__side { grid-column: 10 / span 3; gap: 0.75rem; }
     .vraag { padding-block: 4.5rem var(--pad-y); }
-    .steps { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   }
 </style>

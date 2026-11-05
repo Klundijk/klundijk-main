@@ -56,10 +56,13 @@ export const TILES = DIENSTEN.map((d, i) => ({
 // Illustratie van het proces (bord X · Home): de website-tegel, die per stap verder "beter" wordt.
 export const PROCES_ART: Art = ART['websites-digitale-ervaringen'];
 
+// Op de homepage is de uitspraak ("We bouwen webshops.") de kop; de dienstnaam staat er klein bij en blijft de linknaam.
+const ITEMS = h.diensten.items as Record<DienstId, { statement: string; text: string }>;
+
 export const SERVICES = {
   hub: {
-    num: '01', title: DIENSTEN[0].label,
-    text: h.diensten.hubText,
+    num: '01', title: ITEMS[DIENSTEN[0].id].statement, label: DIENSTEN[0].label,
+    text: ITEMS[DIENSTEN[0].id].text,
     tags: overzicht.commerce.topics,
     cta: { label: i.knoppen.kennismaking, href: '/contact' },
     more: { label: h.diensten.hubMore, href: dienstHref('webshops-commerce') },
@@ -67,8 +70,8 @@ export const SERVICES = {
     imageCaption: h.diensten.hubImageCaption,
   },
   rows: DIENSTEN.slice(1).map((d, i) => ({
-    num: String(i + 2).padStart(2, '0'), title: d.label, href: dienstHref(d.id),
-    text: overzicht.rows[d.id]?.text ?? '',
+    num: String(i + 2).padStart(2, '0'), title: ITEMS[d.id].statement, label: d.label, href: dienstHref(d.id),
+    text: ITEMS[d.id].text,
   })),
 };
 
@@ -88,8 +91,8 @@ export const HOME_CASE = {
   slot: { kicker: 'Slot — tweede uitgelichte case', title: '[Webshop-case — bijv. Acta Buitenleven, zodra aantoonbaar]', note: 'Alleen met echte resultaten en toestemming.' },
 };
 
-// De zes stappen komen uit teksten/werkwijze.json; `t` is de voortgang van de illustratie (0 = begin, 1 = klaar).
-const T = [0, 0.25, 0.5, 1, 1, 1];
+// De vier fasen komen uit teksten/werkwijze.json; `t` is de voortgang van de illustratie (0 = begin, 1 = klaar).
+const T = [0, 0.4, 0.75, 1];
 export const STEPS = stappen.map((s, n) => ({ ...s, t: T[n] ?? 1 }));
 
 export const OVER = {

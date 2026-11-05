@@ -1,0 +1,28 @@
+---
+// Compact "Hoe we werken"-blok voor Wat we doen en de dienstpagina's: kop, één regel intro, de vier fasen en een link naar Over.
+// De volledige werkwijze (met uitleg per fase) staat op Over; hier alleen de verwijzing (SEO & content, 5 nov).
+import { principlesHeading, procesIntro, steps, werkwijzeHref, werkwijzeMeer } from '../data/werkwijze';
+interface Props { kicker: string; rule?: boolean; }
+const { kicker, rule = true } = Astro.props;
+---
+<section class:list={['wk', { 'wk--rule': rule }]} aria-labelledby="wk-h">
+  <p class="wk__k">{kicker}</p>
+  <h2 id="wk-h" class="wk__h">{principlesHeading}</h2>
+  <p class="wk__p">{procesIntro}</p>
+  <ol class="wk__steps">
+    {steps.map((t, i) => <li><span class="wk__n">{String(i + 1).padStart(2, '0')}</span><span class="wk__t">{t}</span></li>)}
+  </ol>
+  <a class="link-strong" href={werkwijzeHref}>{werkwijzeMeer}</a>
+</section>
+<style>
+  .wk { padding: 3.5rem var(--pad-x) var(--pad-y); display: flex; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+  .wk--rule { border-top: 1px solid var(--k-ink); }
+  .wk__k { margin: 0; font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--k-muted); }
+  .wk__h { margin: 0; max-width: 24ch; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; text-wrap: balance; }
+  .wk__p { margin: 0; max-width: 40rem; font-size: var(--t-body); line-height: 1.5; }
+  .wk__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr)); align-self: stretch; }
+  .wk__steps li { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--k-ink); padding-top: 0.75rem; min-width: 0; }
+  .wk__n { font-family: var(--f-mono); font-size: var(--t-mono); letter-spacing: 0.08em; color: var(--k-muted); }
+  .wk__t { font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); letter-spacing: -0.02em; line-height: 1.1; }
+  @media (min-width: 768px) { .wk__h { line-height: 0.98; } .wk__steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; } }
+</style>

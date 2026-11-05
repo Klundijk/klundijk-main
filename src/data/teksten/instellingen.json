@@ -1,6 +1,6 @@
 {
   "tagline": "Digitaal kan beter. Dus maken we het beter.",
-  "description": "Klundijk helpt bedrijven hun merk, website, webshop en digitale processen beter maken. We beginnen bij wat er nodig is en kiezen daarna pas de oplossing.",
+  "description": "We ontwikkelen en verbeteren merken, websites, webshops en digitale processen. Eerst begrijpen we wat nodig is; daarna kiezen we de oplossing.",
   "footerLine": "Digitale partner voor merk, websites, webshops en slimme processen.",
   "knoppen": {
     "primair": "Bespreek je vraagstuk",
@@ -12,5 +12,7 @@
     "phone": "06 83 79 30 22",
     "location": "Veendam"
   },
-  "kvk": "95075127"
+  "kvk": "95075127",
+  "organizationDescription": "Klundijk is een digitale studio uit Veendam voor merkidentiteit, websites, webshops en digitale procesverbetering, van strategie en ontwerp tot realisatie en optimalisatie.",
+  "sameAs": []
 }
