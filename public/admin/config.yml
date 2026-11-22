@@ -827,6 +827,58 @@ collections:
               - label: "Tekst"
                 name: "lead"
                 widget: "text"
+          - label: "Klant aan het woord"
+            name: "quotes"
+            widget: "object"
+            hint: "Alleen echte quotes, letterlijk overgenomen, en alleen met toestemming van de klant. Zonder quotes wordt het blok niet getoond. Toon er 2 of 3."
+            required: false
+            fields:
+              - label: "Label"
+                name: "kicker"
+                widget: "string"
+              - label: "Kop"
+                name: "title"
+                widget: "string"
+              - label: "Intro"
+                name: "intro"
+                widget: "text"
+              - label: "Quotes (max. 3)"
+                name: "items"
+                widget: "list"
+                required: false
+                max: 3
+                fields:
+                  - label: "Quote"
+                    name: "tekst"
+                    widget: "text"
+                    hint: "Letterlijk, niet herschreven. Een concrete zin is sterker dan een alinea."
+                  - label: "Naam"
+                    name: "naam"
+                    widget: "string"
+                  - label: "Bedrijf"
+                    name: "bedrijf"
+                    widget: "string"
+                    required: false
+                  - label: "Project of context"
+                    name: "context"
+                    widget: "string"
+                    hint: "Bijv. \"Nieuwe webshop, 2026\"."
+                    required: false
+                  - label: "Bijbehorend project"
+                    name: "case"
+                    widget: "relation"
+                    hint: "Optioneel: toont een link \"Bekijk de case\"."
+                    required: false
+                    collection: "cases"
+                    value_field: "{{slug}}"
+                    search_fields: ["title"]
+                    display_fields: ["title"]
+                  - label: "Toestemming van de klant ontvangen"
+                    name: "toestemming"
+                    widget: "boolean"
+                    hint: "Alleen met een vinkje wordt de quote getoond."
+                    required: false
+                    default: false
           - label: "Klantenlijst"
             name: "klanten"
             widget: "object"

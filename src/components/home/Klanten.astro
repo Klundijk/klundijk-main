@@ -1,15 +1,12 @@
 ---
-// Klanten (bord X · Home): één doorlopende regel namen met een accentstreep ertussen. De quote is nog te leveren
-// ("alleen echt en met toestemming") en verschijnt alleen in dev.
+// Klanten (bord X · Home): één doorlopende regel namen met een accentstreep ertussen. De quotes staan in Quotes.astro.
 import { CLIENTS, HOME_TEXT as t } from '../../data/home';
-import { showPlaceholders } from '../../data/site';
 import { getClientSites } from '../../lib/content';
 const siteOf = await getClientSites();
 ---
 <section class="kl" aria-labelledby="kl-h">
   <h2 id="kl-h" class="mono kl__k">{t.klanten.title}</h2>
   <ul class="kl__list">{CLIENTS.map((c) => { const href = siteOf(c); return <li>{href ? <a class="kl__a" href={href} target="_blank" rel="noopener">{c}<span class="sr-only"> (website, opent in een nieuw tabblad)</span></a> : c}</li>; })}</ul>
-  {showPlaceholders && <p class="kl__quote placeholder-flag">[Klantquote — alleen echt en met toestemming.]</p>}
 </section>
 <style>
   .kl { border-top: 1px solid var(--k-ink); padding: 3.5rem var(--pad-x); display: flex; flex-direction: column; gap: clamp(1.375rem, 2.8vw, 2.5rem); }

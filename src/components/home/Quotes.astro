@@ -1,0 +1,65 @@
+---
+// Klant aan het woord (Homepage-handoff blok 7): 2 tot 3 echte quotes met naam, bedrijf en context, server-rendered.
+// Zonder quotes (met toestemming) wordt het blok niet getoond. De quotes beheer je in het CMS bij Homepage.
+import { QUOTES as Q } from '../../data/home';
+import { getWorkItems, hasCasePage } from '../../lib/content';
+import { site } from '../../data/site';
+const work = await getWorkItems();
+const items = Q.items.map((q) => {
+  const c = q.case ? work.find((e) => e.id === q.case) : undefined;
+  return { ...q, caseHref: c && hasCasePage(c) ? `/werk/${c.id}` : null, caseTitle: c?.data.title };
+});
+---
+{items.length > 0 && (
+  <section class="q" aria-labelledby="q-h">
+    <div class="q__head">
+      <p class="mono q__k">{Q.kicker}</p>
+      <h2 id="q-h" class="q__h">{Q.title}</h2>
+      <p class="q__intro">{Q.intro}</p>
+    </div>
+    <ul class:list={['q__list', `q__list--${items.length}`]}>
+      {items.map((q) => (
+        <li>
+          <figure class="qc">
+            <span class="qc__mark" aria-hidden="true">“</span>
+            <blockquote class="qc__t"><p>{q.tekst}</p></blockquote>
+            <figcaption class="qc__by">
+              <span class="qc__name">{q.naam}</span>
+              {(q.bedrijf || q.context) && <span class="mono qc__ctx">{[q.bedrijf, q.context].filter(Boolean).join(' · ')}</span>}
+              {q.caseHref && <a class="link-strong qc__case" href={q.caseHref}>Bekijk de case<span class="sr-only"> {q.caseTitle}</span></a>}
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+    <p class="q__more"><a class="link-strong" href={site.secondaryCta.href}>{site.secondaryCta.label}</a></p>
+  </section>
+)}
+<style>
+  .q { border-top: 1px solid var(--k-ink); padding: 3.5rem var(--pad-x); display: flex; flex-direction: column; gap: clamp(1.5rem, 2.8vw, 2.5rem); }
+  @media (min-width: 768px) { .q { padding-block: var(--pad-y); } }
+  .q__head { display: flex; flex-direction: column; gap: 1rem; }
+  .q__k { margin: 0; color: var(--k-muted); letter-spacing: 0.08em; }
+  .q__h { margin: 0; max-width: 56rem; font-weight: 800; font-stretch: 112%; font-size: var(--t-display); line-height: 1.06; letter-spacing: -0.04em; text-wrap: balance; }
+  @media (min-width: 768px) { .q__h { line-height: 0.98; } }
+  .q__intro { margin: 0; max-width: 40rem; font-size: var(--t-body); line-height: 1.5; }
+  .q__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+  .q__list li { min-width: 0; display: flex; }
+  .qc { margin: 0; width: 100%; background: var(--k-ink); color: var(--k-paper); border-radius: 24px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .qc__mark { font-family: var(--f-serif, 'Instrument Serif', serif); font-style: italic; font-size: 4.5rem; line-height: 0.6; height: 2rem; color: var(--k-accent); }
+  .qc__t { margin: 0; }
+  .qc__t p { margin: 0; font-weight: 800; font-stretch: 112%; font-size: var(--t-lead); line-height: 1.2; letter-spacing: -0.02em; text-wrap: pretty; }
+  .qc__by { margin-top: auto; display: flex; flex-direction: column; gap: 0.375rem; }
+  .qc__name { font-weight: 700; font-size: var(--t-body); }
+  .qc__ctx { color: rgb(255 255 255 / 0.78); letter-spacing: 0.06em; font-size: var(--t-mono); text-transform: uppercase; }
+  .qc__case { margin-top: 0.5rem; align-self: flex-start; color: var(--k-paper); }
+  .q__more { margin: 0; }
+  @media (min-width: 768px) {
+    .q__list--2, .q__list--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gap); }
+    .qc { padding: 2rem; min-height: 20rem; }
+  }
+  @media (min-width: 1100px) {
+    .q__list--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .qc__t p { font-size: var(--t-card); }
+  }
+</style>
