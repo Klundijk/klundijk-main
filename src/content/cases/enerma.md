@@ -35,12 +35,15 @@ choices:
   - title: Snel en veilig
     reason: 'De website laadt razendsnel, en er is nauwelijks iets dat kan haperen of kwetsbaar kan zijn. Bezoekersstatistieken werken zonder cookiebanner, en de vorige website is netjes doorverwezen, zodat bezoekers en Google de nieuwe pagina''s moeiteloos vinden.'
 detailImages:
-  - src: /work/enerma-diensten.webp
-    alt: Dienstenoverzicht op de website van Enerma
-  - src: /work/enerma-formulier.webp
-    alt: Intakeformulier van Enerma met het gevonden adres, bouwjaar en de gekozen dienst
+  - src: /work/enerma-stap-postcode.webp
+    alt: 'Stap 1: de bezoeker vult postcode en huisnummer in'
+  - src: /work/enerma-stap-adres.webp
+    alt: 'Stap 2: de BAG-koppeling toont direct straat, plaats, woonoppervlakte en bouwjaar'
+executionImage:
+  src: /work/enerma-formulier.webp
+  alt: Intakeformulier van Enerma met het uit de BAG gevonden adres en bouwjaar al ingevuld
 resultHeading: Wat het oplevert.
 result: 'Bezoekers vinden hun woning met alleen postcode en huisnummer en maken in een paar klikken een afspraak. Enerma beheert teksten, diensten, artikelen, formuliervragen en aanvragen zelf.'
 website: https://enerma.nl/
 ---
-Voor Enerma bouwden we een website die snel, veilig en modern is: statisch uitgeleverd, met een eigen beheeromgeving en een koppeling met de BAG van het Kadaster. Het formulier verstuurt de aanvraag per e-mail naar Enerma en stuurt de klant meteen een bevestiging.
+Voor Enerma bouwden we een website die snel, veilig en modern is: statisch uitgeleverd, met een eigen beheeromgeving en een koppeling met de BAG van het Kadaster. Op de formulierpagina staat het gevonden adres al klaar. Het formulier verstuurt de aanvraag per e-mail naar Enerma en stuurt de klant meteen een bevestiging.
