@@ -41,6 +41,7 @@ const cases = defineCollection({
       title: z.string(),
       kind: z.enum(['case', 'project']).default('project'),
       order: z.number().int().default(99).describe('Volgorde op het werkoverzicht'),
+      onHome: z.boolean().default(true).describe('Tonen in het werkoverzicht op de home; uit = alleen op de pagina Werk'),
       tags: z.array(z.string()).default([]).describe('Labels op de kaart, bijv. "Merk & identiteit", "Website"'),
       services: z.array(serviceId).default([]),
       excerpt: z.string().optional().describe('Eén regel op de kaart'),

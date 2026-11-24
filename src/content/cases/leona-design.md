@@ -1,6 +1,7 @@
 ---
 title: Leona Design
-order: 11
+order: 12
+onHome: false
 tags: [Webshop]
 services: [webshops-commerce]
 excerpt: Nieuwe webshop.

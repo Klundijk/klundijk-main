@@ -1,7 +1,8 @@
 ---
 title: Drenthe Caravans
 kind: case
-order: 4
+order: 5
+onHome: true
 tags: [Merk, Website]
 services: [merk-identiteit, websites-digitale-ervaringen]
 excerpt: Nieuwe branding en nieuwe website.

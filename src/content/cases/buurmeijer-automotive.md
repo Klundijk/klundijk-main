@@ -1,6 +1,7 @@
 ---
 title: Buurmeijer Automotive
-order: 9
+order: 10
+onHome: false
 tags: [Website]
 services: [websites-digitale-ervaringen]
 excerpt: Nieuwe website.

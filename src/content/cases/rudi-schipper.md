@@ -1,7 +1,8 @@
 ---
 title: Rudi Schipper
 kind: case
-order: 5
+order: 6
+onHome: true
 tags: [Webshop, Automatisering]
 services: [webshops-commerce, groei-slimme-processen]
 excerpt: Automatisering van de verkoop met een nieuwe webshop.

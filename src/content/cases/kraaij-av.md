@@ -2,6 +2,7 @@
 title: Kraaij Audio Visueel
 kind: case
 order: 2
+onHome: true
 tags:
   - Logo
   - Huisstijl

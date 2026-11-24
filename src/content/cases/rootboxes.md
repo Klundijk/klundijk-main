@@ -1,6 +1,7 @@
 ---
 title: RootBoxes
-order: 6
+order: 7
+onHome: false
 tags: [Logo, Huisstijl, Webshop]
 services: [merk-identiteit, webshops-commerce]
 excerpt: Logo, huisstijl en webshop.

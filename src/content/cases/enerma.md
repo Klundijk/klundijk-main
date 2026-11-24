@@ -1,7 +1,8 @@
 ---
 title: Enerma
 kind: case
-order: 12
+order: 1
+onHome: true
 tags: [Website, Formulieren]
 services: [websites-digitale-ervaringen, groei-slimme-processen]
 excerpt: Een snelle, veilige website waarop bezoekers met alleen postcode en huisnummer hun woning laten opzoeken via de BAG van het Kadaster.
@@ -17,7 +18,7 @@ heroImage:
 logo:
   src: /work/logos/enerma.webp
   alt: Logo van Enerma
-promise: Een nieuwe website waarop je in een paar klikken je woning vindt.
+promise: Een moderne website waarop je snel en makkelijk een energielabel aanvraagt.
 client: Enerma
 sector: Energielabels en woningadvies
 year: 2026
