@@ -1,7 +1,8 @@
 ---
 title: Auto Restyle Noord
 kind: case
-order: 1
+order: 3
+onHome: true
 tags: [Merk & identiteit, Website]
 services: [merk-identiteit, websites-digitale-ervaringen]
 excerpt: 'Nieuwe naam, nieuwe locatie: de online uitstraling opnieuw op orde.'

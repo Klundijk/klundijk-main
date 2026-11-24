@@ -1,6 +1,7 @@
 ---
 title: OakBase
-order: 7
+order: 8
+onHome: false
 tags: [Logo, Huisstijl, Website]
 services: [merk-identiteit, websites-digitale-ervaringen]
 excerpt: Logo, huisstijl en website.

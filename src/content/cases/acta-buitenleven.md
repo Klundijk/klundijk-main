@@ -1,6 +1,7 @@
 ---
 title: Acta Buitenleven
-order: 10
+order: 11
+onHome: false
 tags: [Webshop]
 services: [webshops-commerce]
 excerpt: Nieuwe webshop.

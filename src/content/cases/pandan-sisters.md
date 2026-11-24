@@ -1,6 +1,7 @@
 ---
 title: Pandan Sisters
-order: 3
+order: 4
+onHome: true
 tags: [Logo, Huisstijl]
 services: [merk-identiteit]
 excerpt: Logo en huisstijl.

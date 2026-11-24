@@ -1,11 +1,11 @@
 ---
-// Werk (bord X · Home): accordeon met alle projecten, het eerste staat open. Zonder JavaScript staan alle panelen open.
+// Werk (bord X · Home): accordeon met de projecten die op de home staan (onHome), het eerste staat open. Zonder JavaScript staan alle panelen open.
 // Open en dicht animeren (hoogte via grid-rows, inhoud fade); bij verminderde beweging zonder animatie.
 import { dims, srcsetFor } from '../../lib/images';
 import { getWorkItems, hasCasePage, textOn } from '../../lib/content';
 import { showPlaceholders } from '../../data/site';
 import { HOME_TEXT as t } from '../../data/home';
-const items = await getWorkItems();
+const items = (await getWorkItems()).filter((e) => e.data.onHome);
 const rows = items.map((e, i) => ({
   id: e.id, n: String(i + 1).padStart(2, '0'), c: e.data, linked: hasCasePage(e), fg: textOn(e.data.cardColor),
   srcset: e.data.cardImage ? srcsetFor(e.data.cardImage.src) : undefined,

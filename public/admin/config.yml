@@ -65,6 +65,11 @@ collections:
         value_type: "int"
         min: 1
         default: 99
+      - label: "Tonen op de home"
+        name: "onHome"
+        widget: "boolean"
+        hint: "Uit = project staat alleen op de pagina Werk. De volgorde hierboven geldt op beide plekken."
+        default: true
       - label: "Labels op de kaart"
         name: "tags"
         widget: "list"
